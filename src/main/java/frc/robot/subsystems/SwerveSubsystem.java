@@ -27,7 +27,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
 
     try {
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.SwerveConstants.kMaxSpeed);
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.SwerveSubsystemConstants.kMaxSpeed);
     } catch (Exception e) {
       throw new RuntimeException("Failed to create SwerveDrive", e);
     }
