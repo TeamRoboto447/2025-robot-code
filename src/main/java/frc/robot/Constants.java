@@ -15,11 +15,18 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
+  public static class ControllerConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
   }
 
-  public static class SwerveConstants {
+  public static class SwerveSubsystemConstants {
     public static final double kMaxSpeed = Units.feetToMeters(10);
+  }
+
+  public static class ExampleSubsystemConstants {
+    public static final int kExampleMotorID = 0;
+    public static final int kExampleLowerLimitSwitchChannel = 0;
+    public static final int kExampleUpperLimitSwitchChannel = 1;
   }
 }

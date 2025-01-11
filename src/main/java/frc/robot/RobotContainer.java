@@ -4,10 +4,18 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
+import java.io.File;
+
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ControllerConstants;
+import frc.robot.commands.drivebase.AbsoluteSwerveDriveAdv;
+import frc.robot.commands.example.ExampleCommand;
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,15 +24,23 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private SwerveSubsystem swerveSubsystem;
+  private AbsoluteSwerveDriveAdv absoluteDriveCommand;
+
+  private ExampleSubsystem exampleSubsystem;
+  private ExampleCommand exampleCommand;
+
+  private CommandJoystick driverController = new CommandJoystick(ControllerConstants.kDriverControllerPort);
+  private CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    initializeSwerveSubsystem();
+    initializeMultisystemCommands();
+
     // Configure the trigger bindings
     configureBindings();
+
   }
 
   /**
@@ -54,5 +70,19 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return null;
+  }
+
+  private void initializeSwerveSubsystem() {
+    this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
+    this.absoluteDriveCommand = new AbsoluteSwerveDriveAdv(swerveSubsystem);
+    this.swerveSubsystem.setDefaultCommand(absoluteDriveCommand);
+  }
+
+  private void initializeExampleSubsystem() {
+    this.exampleSubsystem = new ExampleSubsystem();
+    this.exampleCommand = new ExampleCommand(exampleSubsystem, operatorController);
+  }
+  
+  private void initializeMultisystemCommands() {
   }
 }
