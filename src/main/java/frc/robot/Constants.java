@@ -16,17 +16,17 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static class ControllerConstants {
-    public static final int kDriverControllerPort = 0;
-    public static final int kOperatorControllerPort = 1;
+    public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
   }
 
   public static class SwerveSubsystemConstants {
-    public static final double kMaxSpeed = Units.feetToMeters(10);
+    public static final double MAX_SPEED = Units.feetToMeters(10);
   }
 
   public static class ExampleSubsystemConstants {
-    public static final int kExampleMotorID = 0;
-    public static final int kExampleLowerLimitSwitchChannel = 0;
-    public static final int kExampleUpperLimitSwitchChannel = 1;
+    public static final int EXAMPLE_MOTOR_ID = 0;
+    public static final int EXAMPLE_LOWER_LIMIT_SWITCH_CHANNEL = 0;
+    public static final int EXAMPLE_UPPER_LIMIT_SWITCH_CHANNEL = 1;
   }
 }

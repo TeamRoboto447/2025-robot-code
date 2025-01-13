@@ -30,8 +30,8 @@ public class RobotContainer {
   private ExampleSubsystem exampleSubsystem;
   private ExampleCommand exampleCommand;
 
-  private CommandJoystick driverController = new CommandJoystick(ControllerConstants.kDriverControllerPort);
-  private CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
+  private CommandJoystick driverController = new CommandJoystick(ControllerConstants.DRIVER_CONTROLLER_PORT);
+  private CommandXboxController operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
