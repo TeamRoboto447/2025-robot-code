@@ -47,4 +47,10 @@ public final class Constants {
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }
+
+  public static class ElevatorSubsystemConstants {
+    public static final int ELEVATOR_MAX_SPEED = 10;
+
+    public static final int ELEVATOR_MOTOR_ID = 20;
+  }
 }
