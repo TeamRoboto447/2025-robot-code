@@ -52,4 +52,26 @@ public final class Constants {
     public static final int CLIMBER_MAX_SPEED = 10;
     public static final int CLIMBER_MOTOR_ID = 20;
   }
+
+  public static class ElevatorSubsystemConstants {
+    public static final int ELEVATOR_MOTOR_ID = 22;
+    public static final int ELEVATOR_UPPER_LIMIT_SWITCH_CHANNEL = 2;
+    public static final int ELEVATOR_LOWER_LIMIT_SWITCH_CHANNEL = 3;
+
+    public enum Level {
+      FLOOR,
+      TROUGH,
+      L2,
+      L3,
+      L4,
+      NET
+    }
+
+    public static final int FLOOR_LEVEL = 0;
+    public static final int TROUGH_LEVEL = 100;
+    public static final int L2_LEVEL = 200;
+    public static final int L3_LEVEL = 300;
+    public static final int L4_LEVEL = 400;
+    public static final int NET_LEVEL = 500;
+  }
 }
