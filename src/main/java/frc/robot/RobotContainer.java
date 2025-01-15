@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.drivebase.AbsoluteSwerveDriveAdv;
+import frc.robot.commands.elevator.ElevatorControlCommand;
 import frc.robot.commands.example.ExampleCommand;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -30,12 +32,16 @@ public class RobotContainer {
   private ExampleSubsystem exampleSubsystem;
   private ExampleCommand exampleCommand;
 
+  private ElevatorSubsystem elevatorSubsystem;
+  private ElevatorControlCommand elevatorControlCommand;
+
   private CommandJoystick driverController = new CommandJoystick(ControllerConstants.kDriverControllerPort);
   private CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     initializeSwerveSubsystem();
+    initializeElevatorSubsystem();
     initializeMultisystemCommands();
 
     // Configure the trigger bindings
@@ -81,6 +87,11 @@ public class RobotContainer {
   private void initializeExampleSubsystem() {
     this.exampleSubsystem = new ExampleSubsystem();
     this.exampleCommand = new ExampleCommand(exampleSubsystem, operatorController);
+  }
+  private void initializeElevatorSubsystem() {
+    this.elevatorSubsystem = new ElevatorSubsystem();
+    this.elevatorControlCommand = new ElevatorControlCommand(elevatorSubsystem, driverController);
+    this.elevatorSubsystem.setDefaultCommand(elevatorControlCommand);
   }
   
   private void initializeMultisystemCommands() {
