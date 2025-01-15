@@ -33,6 +33,6 @@ public final class Constants {
   public static class ElevatorSubsystemConstants {
     public static final int ELEVATOR_MAX_SPEED = 10;
 
-    public static final int ELEVATOR_MOTOR_ID = 0;
+    public static final int ELEVATOR_MOTOR_ID = 20;
   }
 }
