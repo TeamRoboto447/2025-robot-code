@@ -85,6 +85,7 @@ public class AbsoluteSwerveDriveAdv extends Command {
     swerve.getSwerveDriveConfiguration());
     SmartDashboard.putNumber("LimitedTranslation", translation.getX());
     SmartDashboard.putString("Translation", translation.toString());
+    SmartDashboard.putString("Rotation Stuff", List.of(resetHeading, headingX, headingY).toString());
     if (headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) > 0)
     {
        resetHeading = true;

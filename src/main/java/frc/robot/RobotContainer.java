@@ -36,7 +36,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     initializeSwerveSubsystem();
-    initializeExampleSubsystem();
+    // initializeExampleSubsystem();
     initializeMultisystemCommands();
 
     // Configure the trigger bindings
@@ -75,8 +75,9 @@ public class RobotContainer {
 
   private void initializeSwerveSubsystem() {
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
-    // this.absoluteDriveCommand = new AbsoluteSwerveDriveAdv(swerveSubsystem); //TODO: update with arguments
-    // this.swerveSubsystem.setDefaultCommand(absoluteDriveCommand);
+    this.absoluteDriveCommand = new AbsoluteSwerveDriveAdv(swerveSubsystem, 
+    () -> this.driverController.getX(), () -> this.driverController.getY(), () -> this.driverController.getZ(), () -> false, () -> false, () -> false, () -> false);
+    this.swerveSubsystem.setDefaultCommand(this.swerveSubsystem.driveCommand(() -> 0, () -> 0, () -> 0.1));
   }
 
   private void initializeExampleSubsystem() {

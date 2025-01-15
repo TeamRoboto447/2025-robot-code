@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -28,7 +29,7 @@ public class SwerveSubsystem extends SubsystemBase {
   /** Creates a new ServeSubsystem. */
   public SwerveSubsystem(File directory) {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
-
+    // swerveDrive = null;
     try {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.SwerveSubsystemConstants.MAX_SPEED);
     } catch (Exception e) {
