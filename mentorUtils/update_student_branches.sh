@@ -8,3 +8,4 @@ do
     git rebase origin/main
     git push
 done
+git checkout main

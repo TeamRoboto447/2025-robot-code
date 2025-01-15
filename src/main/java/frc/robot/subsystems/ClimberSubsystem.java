@@ -9,14 +9,14 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ElevatorSubsystemConstants;
+import frc.robot.Constants.ClimberSubsystemConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private SparkMax elevatorMotor;
+  private SparkMax climberMotor;
   private RelativeEncoder ClimberEncoder;
   private Double currentSpeed = 0.0;
 
-  /** Creates a new ElevatorSubsystem. */
+  /** Creates a new climberSubsystem. */
   public ClimberSubsystem() {
     initializeMotors();
   }
@@ -29,11 +29,11 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
-    elevatorMotor.set(speed);
+    climberMotor.set(speed);
   }
 
   public void stopEverything() {
-    elevatorMotor.stopMotor();
+    climberMotor.stopMotor();
   }
 
   public boolean setSpeed(double speed) {
@@ -43,7 +43,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   private void initializeMotors() {
-    elevatorMotor = new SparkMax(ElevatorSubsystemConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless);
-    ClimberEncoder = elevatorMotor.getEncoder();
+    climberMotor = new SparkMax(ClimberSubsystemConstants.CLIMBER_MOTOR_ID, MotorType.kBrushless);
+    ClimberEncoder = climberMotor.getEncoder();
   }
 }

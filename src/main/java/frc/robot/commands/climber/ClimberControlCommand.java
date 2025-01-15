@@ -11,15 +11,15 @@ import frc.robot.subsystems.ClimberSubsystem;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimberControlCommand extends Command {
 
-  private final ClimberSubsystem elevatorSubsystem;
+  private final ClimberSubsystem climberSubsystem;
   private final CommandJoystick commandJoystick;
-  /** Creates a new elevatorControl. */
+  /** Creates a new climberControl. */
   public ClimberControlCommand(ClimberSubsystem eSubsystem, CommandJoystick cJoystick) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.elevatorSubsystem = eSubsystem;
+    this.climberSubsystem = eSubsystem;
     this.commandJoystick = cJoystick;
 
-    addRequirements(this.elevatorSubsystem);
+    addRequirements(this.climberSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -32,11 +32,11 @@ public class ClimberControlCommand extends Command {
     double sliderValue = (this.commandJoystick.getThrottle() + 1) / 2;
 
     if (this.commandJoystick.button(11).getAsBoolean()) {
-      this.elevatorSubsystem.setSpeed(-sliderValue);
+      this.climberSubsystem.setSpeed(-sliderValue);
     } else if (this.commandJoystick.button(12).getAsBoolean()) {
-      this.elevatorSubsystem.setSpeed(sliderValue);
+      this.climberSubsystem.setSpeed(sliderValue);
     } else {
-      this.elevatorSubsystem.setSpeed(0.0);
+      this.climberSubsystem.setSpeed(0.0);
     }
   
   }

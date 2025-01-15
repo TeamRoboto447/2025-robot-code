@@ -48,9 +48,8 @@ public final class Constants {
     public static final double TURN_CONSTANT    = 6;
   }
 
-  public static class ElevatorSubsystemConstants {
-    public static final int ELEVATOR_MAX_SPEED = 10;
-
-    public static final int ELEVATOR_MOTOR_ID = 20;
+  public static class ClimberSubsystemConstants {
+    public static final int CLIMBER_MAX_SPEED = 10;
+    public static final int CLIMBER_MOTOR_ID = 20;
   }
 }
