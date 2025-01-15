@@ -72,9 +72,9 @@ public class ExampleSubsystem extends SubsystemBase {
   }
 
   private void initializeMotors() {
-    exampleMotor = new SparkMax(ExampleSubsystemConstants.kExampleMotorID, MotorType.kBrushless);
+    exampleMotor = new SparkMax(ExampleSubsystemConstants.EXAMPLE_MOTOR_ID, MotorType.kBrushless);
     exampleEncoder = exampleMotor.getEncoder();
-    exampleLowerLimitSwitch = new DigitalInput(ExampleSubsystemConstants.kExampleLowerLimitSwitchChannel);
-    exampleUpperLimitSwitch = new DigitalInput(ExampleSubsystemConstants.kExampleUpperLimitSwitchChannel);
+    exampleLowerLimitSwitch = new DigitalInput(ExampleSubsystemConstants.EXAMPLE_LOWER_LIMIT_SWITCH_CHANNEL);
+    exampleUpperLimitSwitch = new DigitalInput(ExampleSubsystemConstants.EXAMPLE_UPPER_LIMIT_SWITCH_CHANNEL);
   }
 }

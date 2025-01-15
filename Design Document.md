@@ -92,6 +92,17 @@ Our project follows a standard WPILib command-based structure, with a clear orga
 2. Configure default commands for subsystems
 3. Set up button bindings for operator interface
 4. Create methods for autonomous command selection
+5. Initialize and manage different controller types
+6. Handle file system operations for configuration
+7. Initialize multi-system commands
+
+### Implementation Guidelines
+
+1. Create separate initialization methods for each subsystem alongside commands that only interact with it
+2. Set default commands for subsystems that require continuous operation
+3. Use appropriate controller classes (e.g., CommandJoystick, CommandXboxController)
+4. Implement `getAutonomousCommand()` to return the requested autonomous routine
+5. Commands that interact with multiple sybsystems should be initialized in `initializeMultisystemCommands`
 
 ## Best Practices
 

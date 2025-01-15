@@ -31,17 +31,17 @@ public class RobotContainer {
 
   private ExampleSubsystem exampleSubsystem;
   private ExampleCommand exampleCommand;
-
   private ElevatorSubsystem elevatorSubsystem;
   private ElevatorControlCommand elevatorControlCommand;
-
-  private CommandJoystick driverController = new CommandJoystick(ControllerConstants.kDriverControllerPort);
-  private CommandXboxController operatorController = new CommandXboxController(ControllerConstants.kOperatorControllerPort);
+  private CommandJoystick driverController = new CommandJoystick(ControllerConstants.DRIVER_CONTROLLER_PORT);
+  private CommandXboxController operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     initializeSwerveSubsystem();
     initializeElevatorSubsystem();
+   
+    // initializeExampleSubsystem();
     initializeMultisystemCommands();
 
     // Configure the trigger bindings
@@ -80,14 +80,17 @@ public class RobotContainer {
 
   private void initializeSwerveSubsystem() {
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
-    this.absoluteDriveCommand = new AbsoluteSwerveDriveAdv(swerveSubsystem);
-    this.swerveSubsystem.setDefaultCommand(absoluteDriveCommand);
+    this.absoluteDriveCommand = new AbsoluteSwerveDriveAdv(swerveSubsystem, 
+    () -> this.driverController.getX(), () -> this.driverController.getY(), () -> this.driverController.getZ(), () -> false, () -> false, () -> false, () -> false);
+    this.swerveSubsystem.setDefaultCommand(this.swerveSubsystem.driveCommand(() -> 0, () -> 0, () -> 0.1));
   }
 
   private void initializeExampleSubsystem() {
     this.exampleSubsystem = new ExampleSubsystem();
     this.exampleCommand = new ExampleCommand(exampleSubsystem, operatorController);
+    this.exampleSubsystem.setDefaultCommand(exampleCommand);
   }
+  
   private void initializeElevatorSubsystem() {
     this.elevatorSubsystem = new ElevatorSubsystem();
     this.elevatorControlCommand = new ElevatorControlCommand(elevatorSubsystem, driverController);
