@@ -42,18 +42,16 @@ public final class Constants {
   public static class DriverConstants
   {
     // Joystick Deadband
-    public static final double X_DEADBAND        = 0.1;
-    public static final double Y_DEADBAND        = 0.1;
-    public static final double Z_DEADBAND        = 0.1;
+    public static final double DEADBAND        = 0.1;
+    public static final double LEFT_DEADBAND = 0.1;
+    public static final double RIGHT_DEADBAND = 0.1;
+    public static final double TURN_CONSTANT    = 6;
   }
 
   public static class OperatorConstants
   {
     // Joystick Deadband
     public static final double DEADBAND        = 0.1;
-    public static final double LEFT_Y_DEADBAND = 0.1;
-    public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double TURN_CONSTANT    = 6;
   }
 
   public static class ClimberSubsystemConstants {
