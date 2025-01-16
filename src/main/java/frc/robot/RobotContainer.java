@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.climber.ClimberControlCommand;
 import frc.robot.commands.drivebase.AbsoluteSwerveDriveAdv;
+import frc.robot.commands.elevator.ElevatorControlCommand;
 // import frc.robot.commands.example.ExampleCommand;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 // import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -31,8 +33,13 @@ public class RobotContainer {
 
   // private ExampleSubsystem exampleSubsystem;
   // private ExampleCommand exampleCommand;
+
   private ClimberSubsystem climberSubsystem;
   private ClimberControlCommand climberControlCommand;
+
+  private ElevatorSubsystem elevatorSubsystem;
+  private ElevatorControlCommand elevatorControlCommand;
+
   private CommandJoystick driverController = new CommandJoystick(ControllerConstants.DRIVER_CONTROLLER_PORT);
   private CommandXboxController operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
@@ -40,6 +47,7 @@ public class RobotContainer {
   public RobotContainer() {
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
+    initializeElevatorSubsystem();
    
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
@@ -95,6 +103,12 @@ public class RobotContainer {
     this.climberSubsystem = new ClimberSubsystem();
     this.climberControlCommand = new ClimberControlCommand(climberSubsystem, driverController);
     this.climberSubsystem.setDefaultCommand(climberControlCommand);
+  }
+
+  private void initializeElevatorSubsystem() {
+    this.elevatorSubsystem = new ElevatorSubsystem();
+    this.elevatorControlCommand = new ElevatorControlCommand(elevatorSubsystem, operatorController);
+    this.elevatorSubsystem.setDefaultCommand(elevatorControlCommand);
   }
   
   private void initializeMultisystemCommands() {

@@ -69,7 +69,7 @@ public final class Constants {
 
     public static final int FLOOR_LEVEL = 0;
     public static final int TROUGH_LEVEL = 100;
-    public static final int L2_LEVEL = 200;
+    public static final int L2_LEVEL = 200; // TODO: Update with correct values
     public static final int L3_LEVEL = 300;
     public static final int L4_LEVEL = 400;
     public static final int NET_LEVEL = 500;
