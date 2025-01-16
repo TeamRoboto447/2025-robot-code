@@ -34,24 +34,34 @@ public final class Constants {
   }
 
   public static class ExampleSubsystemConstants {
-    public static final int EXAMPLE_MOTOR_ID = 0;
+    public static final int EXAMPLE_MOTOR_ID = 0; // This isn't a valid CAN ID, in your real subsystems make sure this matches the ID programmed into the 
     public static final int EXAMPLE_LOWER_LIMIT_SWITCH_CHANNEL = 0;
     public static final int EXAMPLE_UPPER_LIMIT_SWITCH_CHANNEL = 1;
   }
 
   public static class DriverConstants
   {
-    // Joystick Deadband
+    // Default generic deadband value
     public static final double DEADBAND        = 0.1;
-    public static final double LEFT_DEADBAND = 0.1;
-    public static final double RIGHT_DEADBAND = 0.1;
+    
+    // While these feel redundant, it will allow for individual tuning of each axis in the future if necessary
+    public static final double LEFT_X_DEADBAND = DEADBAND;
+    public static final double LEFT_Y_DEADBAND = DEADBAND;
+    public static final double RIGHT_X_DEADBAND = DEADBAND;
+    public static final double RIGHT_Y_DEADBAND = DEADBAND;
     public static final double TURN_CONSTANT    = 6;
   }
 
   public static class OperatorConstants
   {
-    // Joystick Deadband
+    // Default generic deadband value
     public static final double DEADBAND        = 0.1;
+    
+    // While these feel redundant, it will allow for individual tuning of each axis in the future if necessary
+    public static final double LEFT_X_DEADBAND = DEADBAND;
+    public static final double LEFT_Y_DEADBAND = DEADBAND;
+    public static final double RIGHT_X_DEADBAND = DEADBAND;
+    public static final double RIGHT_Y_DEADBAND = DEADBAND;
   }
 
   public static class ClimberSubsystemConstants {

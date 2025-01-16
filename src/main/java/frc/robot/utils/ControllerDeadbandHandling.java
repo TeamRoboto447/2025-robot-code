@@ -1,54 +1,47 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.utils;
 
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
 /** Add your docs here. */
 public class ControllerDeadbandHandling {
-    public static double driverGetX(CommandJoystick driveController) {
-        if(Math.abs(driveController.getX()) > Constants.DriverConstants.X_DEADBAND)
-            return driveController.getX();
-        else return 0;
+
+    // Generic deadband function
+    public static double applyGenericDeadband(double value, double deadband) {
+        return Math.abs(value) > deadband ? value : 0;
     }
 
-    public static double driverGetY(CommandJoystick driveController) {
-        if(Math.abs(driveController.getY()) > Constants.DriverConstants.Y_DEADBAND)
-            return driveController.getY();
-        else return 0;
+    // Deadband handling pulling the deadband constants from the Constants file
+    public static double driverGetLeftX(CommandXboxController driveController) {
+        return applyGenericDeadband(driveController.getLeftX(), Constants.DriverConstants.LEFT_X_DEADBAND);
     }
 
-    public static double driverGetZ(CommandJoystick driveController) {
-        if(Math.abs(driveController.getZ()) > Constants.DriverConstants.Z_DEADBAND)
-            return driveController.getZ();
-        else return 0;
+    public static double driverGetLeftY(CommandXboxController driveController) {
+        return applyGenericDeadband(driveController.getLeftY(), Constants.DriverConstants.LEFT_Y_DEADBAND);
     }
 
-    public static double operatorGetLeftX(CommandXboxController driveController) {
-        if(Math.abs(driveController.getLeftX()) > Constants.OperatorConstants.DEADBAND)
-            return driveController.getLeftX();
-        else return 0;
+    public static double driverGetRightX(CommandXboxController driveController) {
+        return applyGenericDeadband(driveController.getRightX(), Constants.DriverConstants.RIGHT_X_DEADBAND);
     }
 
-    public static double operatorGetLeftY(CommandXboxController driveController) {
-        if(Math.abs(driveController.getLeftY()) > Constants.OperatorConstants.DEADBAND)
-            return driveController.getLeftY();
-        else return 0;
+    public static double driverGetRightY(CommandXboxController driveController) {
+        return applyGenericDeadband(driveController.getRightY(), Constants.DriverConstants.RIGHT_Y_DEADBAND);
     }
 
-    public static double operatorGetRightX(CommandXboxController driveController) {
-        if(Math.abs(driveController.getRightX()) > Constants.OperatorConstants.DEADBAND)
-            return driveController.getRightX();
-        else return 0;
+    // Operator Controller Deadband Handling
+    public static double operatorGetLeftX(CommandXboxController operatorController) {
+        return applyGenericDeadband(operatorController.getLeftX(), Constants.OperatorConstants.LEFT_X_DEADBAND);
     }
 
-    public static double operatorGetRightY(CommandXboxController driveController) {
-        if(Math.abs(driveController.getRightY()) > Constants.OperatorConstants.DEADBAND)
-            return driveController.getRightY();
-        else return 0;
+    public static double operatorGetLeftY(CommandXboxController operatorController) {
+        return applyGenericDeadband(operatorController.getLeftY(), Constants.OperatorConstants.LEFT_Y_DEADBAND);
+    }
+
+    public static double operatorGetRightX(CommandXboxController operatorController) {
+        return applyGenericDeadband(operatorController.getRightX(), Constants.OperatorConstants.RIGHT_X_DEADBAND);
+    }
+
+    public static double operatorGetRightY(CommandXboxController operatorController) {
+        return applyGenericDeadband(operatorController.getRightY(), Constants.OperatorConstants.RIGHT_Y_DEADBAND);
     }
 }

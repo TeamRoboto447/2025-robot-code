@@ -12,15 +12,14 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriverConstants;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.climber.ClimberControlCommand;
-import frc.robot.commands.drivebase.AbsoluteSwerveDriveAdv;
 import frc.robot.subsystems.ClimberSubsystem;
-// import frc.robot.subsystems.ExampleSubsystem;
-// import frc.robot.commands.example.ExampleCommand;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.utils.ControllerDeadbandHandling;
 import swervelib.SwerveInputStream;
+
+// Example code, TODO: remove before competition season begins
+import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.example.ExampleCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -33,13 +32,13 @@ import swervelib.SwerveInputStream;
  */
 public class RobotContainer {
   private SwerveSubsystem swerveSubsystem;
-  private AbsoluteSwerveDriveAdv absoluteDriveCommand; // TODO: Fix this command
 
-  // private ExampleSubsystem exampleSubsystem;
-  // private ExampleCommand exampleCommand;
+  private ExampleSubsystem exampleSubsystem;
+  private ExampleCommand exampleCommand;
   private ClimberSubsystem climberSubsystem;
   private ClimberControlCommand climberControlCommand;
-  private CommandXboxController driverController = new CommandXboxController(ControllerConstants.DRIVER_CONTROLLER_PORT);
+  private CommandXboxController driverController = new CommandXboxController(
+      ControllerConstants.DRIVER_CONTROLLER_PORT);
   private CommandXboxController operatorController = new CommandXboxController(
       ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
@@ -50,7 +49,7 @@ public class RobotContainer {
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
 
-    // initializeExampleSubsystem();
+    initializeExampleSubsystem();
     initializeMultisystemCommands();
 
     // Configure the trigger bindings
@@ -77,10 +76,17 @@ public class RobotContainer {
     // new Trigger(m_exampleSubsystem::exampleCondition)
     // .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
-    // pressed,
-    // cancelling on release.
-    // operatorController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // Example subsystem can be controlled without having a dedicated control
+    // command by using triggers
+    operatorController.x().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
+                                                                   // position to 700 when the x button is pressed
+      exampleSubsystem.setTargetPosition(700);
+    }));
+
+    operatorController.y().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
+                                                                   // position to 300 when the y button is pressed
+      exampleSubsystem.setTargetPosition(300);
+    }));
   }
 
   /**
@@ -95,7 +101,7 @@ public class RobotContainer {
 
   private void initializeSwerveSubsystem() {
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-    "swerve"));
+        "swerve"));
 
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.getLeftY() * -1,
@@ -119,12 +125,11 @@ public class RobotContainer {
     this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
   }
 
-  // private void initializeExampleSubsystem() {
-  // this.exampleSubsystem = new ExampleSubsystem();
-  // this.exampleCommand = new ExampleCommand(exampleSubsystem,
-  // operatorController);
-  // this.exampleSubsystem.setDefaultCommand(exampleCommand);
-  // }
+  private void initializeExampleSubsystem() {
+    this.exampleSubsystem = new ExampleSubsystem();
+    this.exampleCommand = new ExampleCommand(exampleSubsystem, operatorController);
+    this.exampleSubsystem.setDefaultCommand(exampleCommand);
+  }
 
   private void initializeClimberSubsystem() {
     this.climberSubsystem = new ClimberSubsystem();
