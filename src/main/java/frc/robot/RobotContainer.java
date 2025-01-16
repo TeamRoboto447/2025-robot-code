@@ -12,17 +12,23 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.climber.ClimberControlCommand;
 import frc.robot.commands.drivebase.AbsoluteSwerveDriveAdv;
 // import frc.robot.commands.example.ExampleCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 // import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.ControllerDeadbandHandling;
+import swervelib.SwerveInputStream;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -34,13 +40,16 @@ public class RobotContainer {
   private ClimberSubsystem climberSubsystem;
   private ClimberControlCommand climberControlCommand;
   private CommandJoystick driverController = new CommandJoystick(ControllerConstants.DRIVER_CONTROLLER_PORT);
-  private CommandXboxController operatorController = new CommandXboxController(ControllerConstants.OPERATOR_CONTROLLER_PORT);
+  private CommandXboxController operatorController = new CommandXboxController(
+      ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
-   
+
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
 
@@ -50,22 +59,28 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link
+   * CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
-    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
+    // .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is
+    // pressed,
     // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // operatorController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
@@ -79,24 +94,44 @@ public class RobotContainer {
   }
 
   private void initializeSwerveSubsystem() {
-    this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
-    // this.absoluteDriveCommand = new AbsoluteSwerveDriveAdv(swerveSubsystem, 
-    // () -> this.driverController.getX(), () -> this.driverController.getY(), () -> this.driverController.getZ(), () -> false, () -> false, () -> false, () -> false);
-    this.swerveSubsystem.setDefaultCommand(this.swerveSubsystem.driveCommand(() -> 0, () -> 0, () -> 0));
+    this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+    "swerve"));
+
+    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
+        () -> operatorController.getLeftY() * -1,
+        () -> operatorController.getLeftX() * -1)
+        .withControllerRotationAxis(operatorController::getRightX)
+        .deadband(OperatorConstants.DEADBAND)
+        .scaleTranslation(0.8)
+        .allianceRelativeControl(true);
+
+    SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
+        .withControllerHeadingAxis(operatorController::getRightX,
+            operatorController::getRightY)
+        .headingWhile(true);
+
+    Command driveFieldOrientedDirectAngle = swerveSubsystem.driveFieldOriented(driveDirectAngle);
+
+    Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
+
+    Command driveSetpointGen = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
+
+    this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
   }
 
   // private void initializeExampleSubsystem() {
-  //   this.exampleSubsystem = new ExampleSubsystem();
-  //   this.exampleCommand = new ExampleCommand(exampleSubsystem, operatorController);
-  //   this.exampleSubsystem.setDefaultCommand(exampleCommand);
+  // this.exampleSubsystem = new ExampleSubsystem();
+  // this.exampleCommand = new ExampleCommand(exampleSubsystem,
+  // operatorController);
+  // this.exampleSubsystem.setDefaultCommand(exampleCommand);
   // }
-  
+
   private void initializeClimberSubsystem() {
     this.climberSubsystem = new ClimberSubsystem();
     this.climberControlCommand = new ClimberControlCommand(climberSubsystem, driverController);
     this.climberSubsystem.setDefaultCommand(climberControlCommand);
   }
-  
+
   private void initializeMultisystemCommands() {
   }
 }
