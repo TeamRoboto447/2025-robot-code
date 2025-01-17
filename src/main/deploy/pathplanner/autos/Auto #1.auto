@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Reef #1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "exampleCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot in net"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
