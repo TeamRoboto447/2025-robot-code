@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.algae.AlgaeManipulatorCommand;
+import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.commands.climber.ClimberControlCommand;
 import frc.robot.commands.elevator.ElevatorControlCommand;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
@@ -182,6 +183,16 @@ public class RobotContainer {
   }
 
   private void initializeNamedCommands() {
-    NamedCommands.registerCommand("exampleCommand", Commands.runOnce(() -> System.out.println("Example named command has been run!"))); 
+    NamedCommands.registerCommand("exampleCommand", Commands.runOnce(() -> System.out.println("Example named command has been run!")));
+
+    NamedCommands.registerCommand("RaiseToLowerAlgae", Commands.runOnce(() -> {
+      this.elevatorSubsystem.setElevatorTargetHeight(Level.L2);
+    }, this.elevatorSubsystem));
+    NamedCommands.registerCommand("RaiseToUpperAlgae", Commands.runOnce(() -> {
+      this.elevatorSubsystem.setElevatorTargetHeight(Level.L3);
+    }, this.elevatorSubsystem));
+    NamedCommands.registerCommand("RaiseToNet", Commands.runOnce(() -> {
+      this.elevatorSubsystem.setElevatorTargetHeight(Level.NET);
+    }, this.elevatorSubsystem));
   }
 }
