@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.climber.ClimberControlCommand;
+import frc.robot.commands.elevator.ElevatorControlCommand;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -122,10 +124,13 @@ public class RobotContainer {
             driverController::getRightY)
         .headingWhile(true);
 
+    @SuppressWarnings("unused")
     Command driveFieldOrientedDirectAngle = swerveSubsystem.driveFieldOriented(driveDirectAngle);
 
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
 
+
+    @SuppressWarnings("unused")
     Command driveSetpointGen = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
 
     this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);

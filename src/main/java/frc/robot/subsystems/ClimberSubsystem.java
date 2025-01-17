@@ -13,6 +13,8 @@ import frc.robot.Constants.ClimberSubsystemConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
   private SparkMax climberMotor;
+
+  @SuppressWarnings("unused")
   private RelativeEncoder ClimberEncoder; // TODO: Implement this
   private Double currentSpeed = 0.0;
 
