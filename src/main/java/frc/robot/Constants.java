@@ -27,32 +27,48 @@ public final class Constants {
   }
 
   public static class SwerveSubsystemConstants {
-    public static final double MAX_SPEED = Units.feetToMeters(10);
+    public static final double MAX_SPEED = Units.feetToMeters(2);
     public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound TODO: update mass with actual value
-    public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS); //TODO: update with actual robot size
+    public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); //TODO: update with actual robot size
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
   }
 
   public static class ExampleSubsystemConstants {
-    public static final int EXAMPLE_MOTOR_ID = 0;
+    public static final int EXAMPLE_MOTOR_ID = 0; // This isn't a valid CAN ID, in your real subsystems make sure this matches the ID programmed into the 
     public static final int EXAMPLE_LOWER_LIMIT_SWITCH_CHANNEL = 0;
     public static final int EXAMPLE_UPPER_LIMIT_SWITCH_CHANNEL = 1;
   }
 
+  public static class DriverConstants
+  {
+    // Default generic deadband value
+    public static final double DEADBAND        = 0.1;
+    
+    // While these feel redundant, it will allow for individual tuning of each axis in the future if necessary
+    public static final double LEFT_X_DEADBAND = DEADBAND;
+    public static final double LEFT_Y_DEADBAND = DEADBAND;
+    public static final double RIGHT_X_DEADBAND = DEADBAND;
+    public static final double RIGHT_Y_DEADBAND = DEADBAND;
+    public static final double TURN_CONSTANT    = 6;
+  }
+
   public static class OperatorConstants
   {
-    // Joystick Deadband
+    // Default generic deadband value
     public static final double DEADBAND        = 0.1;
-    public static final double LEFT_Y_DEADBAND = 0.1;
-    public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double TURN_CONSTANT    = 6;
+    
+    // While these feel redundant, it will allow for individual tuning of each axis in the future if necessary
+    public static final double LEFT_X_DEADBAND = DEADBAND;
+    public static final double LEFT_Y_DEADBAND = DEADBAND;
+    public static final double RIGHT_X_DEADBAND = DEADBAND;
+    public static final double RIGHT_Y_DEADBAND = DEADBAND;
   }
 
   public static class ClimberSubsystemConstants {
     public static final int CLIMBER_MAX_SPEED = 10;
     public static final int CLIMBER_MOTOR_ID = 20;
   }
-
+  
   public static class ElevatorSubsystemConstants {
     public static final int ELEVATOR_MOTOR_ID = 22;
     public static final int ELEVATOR_UPPER_LIMIT_SWITCH_CHANNEL = 2;

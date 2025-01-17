@@ -5,19 +5,19 @@
 package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.ClimberSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimberControlCommand extends Command {
 
   private final ClimberSubsystem climberSubsystem;
-  private final CommandJoystick commandJoystick;
+  private final CommandXboxController driverController;
   /** Creates a new climberControl. */
-  public ClimberControlCommand(ClimberSubsystem eSubsystem, CommandJoystick cJoystick) {
+  public ClimberControlCommand(ClimberSubsystem eSubsystem, CommandXboxController dController) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.climberSubsystem = eSubsystem;
-    this.commandJoystick = cJoystick;
+    this.driverController = dController;
 
     addRequirements(this.climberSubsystem);
   }
@@ -29,12 +29,12 @@ public class ClimberControlCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double sliderValue = (this.commandJoystick.getThrottle() + 1) / 2;
+    double speed = 1;
 
-    if (this.commandJoystick.button(11).getAsBoolean()) {
-      this.climberSubsystem.setSpeed(-sliderValue);
-    } else if (this.commandJoystick.button(12).getAsBoolean()) {
-      this.climberSubsystem.setSpeed(sliderValue);
+    if (this.driverController.rightBumper().getAsBoolean()) {
+      this.climberSubsystem.setSpeed(-speed);
+    } else if (this.driverController.leftBumper().getAsBoolean()) {
+      this.climberSubsystem.setSpeed(speed);
     } else {
       this.climberSubsystem.setSpeed(0.0);
     }

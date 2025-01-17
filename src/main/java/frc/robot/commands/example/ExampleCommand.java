@@ -28,15 +28,15 @@ public class ExampleCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Boolean successfullySetTarget = null;
+    Boolean successfullySetTarget = null; // Initiallize to null to represent that the target has not been set
 
-    if (operatorController.b().getAsBoolean()) {
-      successfullySetTarget = exampleSubsystem.setTargetPosition(1000);
-    } else if (operatorController.a().getAsBoolean()) {
-      successfullySetTarget = exampleSubsystem.setTargetPosition(0);
+    if (operatorController.b().getAsBoolean()) { // Get a boolean representation of whether the b button on the operator controller is pressed
+      successfullySetTarget = exampleSubsystem.setTargetPosition(1000); // If the b button is pressed, set the target position to 1000
+    } else if (operatorController.a().getAsBoolean()) { // Get a boolean representation of whether the a button on the operator controller is pressed
+      successfullySetTarget = exampleSubsystem.setTargetPosition(0); // If the a button is pressed, set the target position to 0
     }
     
-    if (successfullySetTarget != null && !successfullySetTarget) {
+    if (successfullySetTarget != null && !successfullySetTarget) { // If the target was set and it failed, print a message to the console
       System.out.println("Failed to set target position");
     }
   }
@@ -44,7 +44,6 @@ public class ExampleCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.exampleSubsystem.stopEverything();
   }
 
   // Returns true when the command should end.
