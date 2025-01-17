@@ -5,15 +5,27 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "RaiseToLowerAlgae"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Reef #1"
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Move away from reef"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "exampleCommand"
+            "name": "RaiseToNet"
           }
         },
         {
