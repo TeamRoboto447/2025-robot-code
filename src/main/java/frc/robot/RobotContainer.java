@@ -35,8 +35,13 @@ public class RobotContainer {
 
   private ExampleSubsystem exampleSubsystem;
   private ExampleCommand exampleCommand;
+  
   private ClimberSubsystem climberSubsystem;
   private ClimberControlCommand climberControlCommand;
+  
+  private ElevatorSubsystem elevatorSubsystem;
+  private ElevatorControlCommand elevatorControlCommand;
+  
   private CommandXboxController driverController = new CommandXboxController(
       ControllerConstants.DRIVER_CONTROLLER_PORT);
   private CommandXboxController operatorController = new CommandXboxController(
@@ -48,6 +53,7 @@ public class RobotContainer {
   public RobotContainer() {
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
+    initializeElevatorSubsystem();
 
     initializeExampleSubsystem();
     initializeMultisystemCommands();
@@ -135,6 +141,12 @@ public class RobotContainer {
     this.climberSubsystem = new ClimberSubsystem();
     this.climberControlCommand = new ClimberControlCommand(climberSubsystem, driverController);
     this.climberSubsystem.setDefaultCommand(climberControlCommand);
+  }
+  
+  private void initializeElevatorSubsystem() {
+    this.elevatorSubsystem = new ElevatorSubsystem();
+    this.elevatorControlCommand = new ElevatorControlCommand(elevatorSubsystem, operatorController);
+    this.elevatorSubsystem.setDefaultCommand(elevatorControlCommand);
   }
 
   private void initializeMultisystemCommands() {
