@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Reef #1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "exampleCommand"
+            "pathName": "Example Path"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot in net"
+            "pathName": "Reef #1"
           }
         }
       ]
