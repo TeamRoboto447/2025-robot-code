@@ -55,7 +55,7 @@ public class RobotContainer {
   public RobotContainer() {
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
-    initializeElevatorSubsystem();
+    // initializeElevatorSubsystem();
 
     initializeExampleSubsystem();
     initializeMultisystemCommands();
@@ -86,15 +86,15 @@ public class RobotContainer {
 
     // Example subsystem can be controlled without having a dedicated control
     // command by using triggers
-    operatorController.x().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
-                                                                   // position to 700 when the x button is pressed
-      exampleSubsystem.setTargetPosition(700);
-    }));
+    // operatorController.x().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
+    //                                                                // position to 700 when the x button is pressed
+    //   exampleSubsystem.setTargetPosition(700);
+    // }));
 
-    operatorController.y().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
-                                                                   // position to 300 when the y button is pressed
-      exampleSubsystem.setTargetPosition(300);
-    }));
+    // operatorController.y().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
+    //                                                                // position to 300 when the y button is pressed
+    //   exampleSubsystem.setTargetPosition(300);
+    // }));
   }
 
   /**
