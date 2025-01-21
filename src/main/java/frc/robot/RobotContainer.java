@@ -55,9 +55,9 @@ public class RobotContainer {
   public RobotContainer() {
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
-    // initializeElevatorSubsystem();
+    initializeElevatorSubsystem();
 
-    initializeExampleSubsystem();
+    // initializeExampleSubsystem();
     initializeMultisystemCommands();
 
     // Configure the trigger bindings

@@ -14,13 +14,14 @@ import frc.robot.Constants.ElevatorSubsystemConstants;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  
+
   private SparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private DigitalInput elevatorUpperLimitSwitch;
   private DigitalInput elevatorLowerLimitSwitch;
 
   private double currentTargetPosition = 0;
+
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     initializeMotors();
@@ -51,18 +52,31 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   /**
    * Sets the target height of the elevator.
-   * Uses one of the pre-set heights (floor, trough, L2, L3, L4, and net) to set the height.
+   * Uses one of the pre-set heights (floor, trough, L2, L3, L4, and net) to set
+   * the height.
    * 
    * @param height Value to set the height to
    */
   public boolean setElevatorTargetHeight(Level height) {
-    switch(height) {
-      case FLOOR: currentTargetPosition = ElevatorSubsystemConstants.FLOOR_LEVEL;
-      case TROUGH: currentTargetPosition = ElevatorSubsystemConstants.TROUGH_LEVEL;
-      case L2: currentTargetPosition = ElevatorSubsystemConstants.L2_LEVEL;
-      case L3: currentTargetPosition = ElevatorSubsystemConstants.L3_LEVEL;
-      case L4: currentTargetPosition = ElevatorSubsystemConstants.L4_LEVEL;
-      case NET: currentTargetPosition = ElevatorSubsystemConstants.NET_LEVEL;
+    switch (height) {
+      case FLOOR:
+        currentTargetPosition = ElevatorSubsystemConstants.FLOOR_LEVEL;
+        break;
+      case TROUGH:
+        currentTargetPosition = ElevatorSubsystemConstants.TROUGH_LEVEL;
+        break;
+      case L2:
+        currentTargetPosition = ElevatorSubsystemConstants.L2_LEVEL;
+        break;
+      case L3:
+        currentTargetPosition = ElevatorSubsystemConstants.L3_LEVEL;
+        break;
+      case L4:
+        currentTargetPosition = ElevatorSubsystemConstants.L4_LEVEL;
+        break;
+      case NET:
+        currentTargetPosition = ElevatorSubsystemConstants.NET_LEVEL;
+        break;
     }
     return true;
   }
@@ -74,4 +88,3 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorLowerLimitSwitch = new DigitalInput(ElevatorSubsystemConstants.ELEVATOR_LOWER_LIMIT_SWITCH_CHANNEL);
   }
 }
- 
