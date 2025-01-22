@@ -11,21 +11,16 @@
  */
 package frc.robot.subsystems;
 
-
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeManipulatorSubsystemConstants;
 
 public class AlgaeManipulatorSubsystem extends SubsystemBase {
-  private SparkMax upperWheelMotor;
-  private SparkMax lowerWheelMotor;
-  private SparkMax angleMotor;
-  private RelativeEncoder upperWheelEncoder;
-  private RelativeEncoder lowerWheelEncoder;
-  private RelativeEncoder angleEncoder;
+  private final TalonFX upperWheelMotor;
+  private final TalonFX lowerWheelMotor;
+  private final TalonFX angleMotor;
 
   private double currentTargetAngle = 0.0;
   private boolean isPIDControlling = true;
@@ -33,19 +28,18 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   /** Creates a new AlgaeManipulator. */
   public AlgaeManipulatorSubsystem() {
-    this.upperWheelMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID, MotorType.kBrushless);
-    this.lowerWheelMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID, MotorType.kBrushless);
-    this.angleMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
-    this.upperWheelEncoder = upperWheelMotor.getEncoder();
-    this.lowerWheelEncoder = lowerWheelMotor.getEncoder();
-    this.angleEncoder = angleMotor.getEncoder();
-
+    // this.upperWheelMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID, MotorType.kBrushless);
+    // this.lowerWheelMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID, MotorType.kBrushless);
+    // this.angleMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
+    this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
+    this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
+    this.angleMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.ANGLE_MOTOR_ID);
   }
 
   @Override
   public void periodic() {
 
-    double currentAngle = this.angleEncoder.getPosition();
+    double currentAngle = getAngleMotorPosition();
 
     double error = this.currentTargetAngle - currentAngle;
 
@@ -71,11 +65,11 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void moveLowerWheelMotorRaw(double lowerWheelMotorSpeed) {
-    upperWheelMotor.set(lowerWheelMotorSpeed);
+    lowerWheelMotor.set(lowerWheelMotorSpeed);
   }
 
   public void moveAngleMotorRaw(double angleMotorSpeed) {
-    upperWheelMotor.set(angleMotorSpeed);
+    angleMotor.set(angleMotorSpeed);
   }
 
   public void setIsPIDControlled(boolean enabled) {
@@ -91,9 +85,14 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     if (!isPIDControlling) {
       motorOutput = operatorControlSpeed;
-      currentTargetAngle = angleEncoder.getPosition();
+      currentTargetAngle = getAngleMotorPosition();
     }
 
     moveAngleMotorRaw(motorOutput);
+  }
+
+  public double getAngleMotorPosition() {
+    Angle angle = (Angle) angleMotor.getPosition();
+    return angle.in(Units.Degrees) / 360; // convert returned value to rotations
   }
 }
