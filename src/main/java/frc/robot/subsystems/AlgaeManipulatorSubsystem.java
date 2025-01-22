@@ -22,23 +22,78 @@ import frc.robot.Constants.AlgaeManipulatorSubsystemConstants;
 public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private SparkMax upperWheelMotor;
   private SparkMax lowerWheelMotor;
+  private SparkMax angleMotor;
   private RelativeEncoder upperWheelEncoder;
   private RelativeEncoder lowerWheelEncoder;
+  private RelativeEncoder angleEncoder;
+
+  private double currentTargetAngle = 0.0;
+  private boolean isPIDControlling = true;
+  private double operatorControlSpeed = 0;
+
   /** Creates a new AlgaeManipulator. */
   public AlgaeManipulatorSubsystem() {
     this.upperWheelMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID, MotorType.kBrushless);
     this.lowerWheelMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID, MotorType.kBrushless);
+    this.angleMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
     this.upperWheelEncoder = upperWheelMotor.getEncoder();
     this.lowerWheelEncoder = lowerWheelMotor.getEncoder();
+    this.angleEncoder = angleMotor.getEncoder();
 
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+
+    double currentAngle = this.angleEncoder.getPosition();
+
+    double error = this.currentTargetAngle - currentAngle;
+
+    double kP = 0.1;
+
+    double angleMotorOutput = kP * error;
+
+    angleMotorOutput = Math.max(-1, Math.min(1, angleMotorOutput));
+    
+    // if (this.AlgaeManipulatorUpperLimitSwitch.get() && angleMotorOutput > 0) {
+    //   angleMotorOutput = 0;
+    // }
+
+    // if (this.AlgaeManipulatorLowerLimitSwitch.get() && angleMotorOutput < 0) {
+    //   angleMotorOutput = 0;
+    // }
+
+    checkForOperatorOverride(angleMotorOutput);
+  }
+
+  public void moveUpperWheelMotorRaw(double upperWheelMotorSpeed) {
+    upperWheelMotor.set(upperWheelMotorSpeed);
+  }
+
+  public void moveLowerWheelMotorRaw(double lowerWheelMotorSpeed) {
+    upperWheelMotor.set(lowerWheelMotorSpeed);
+  }
+
+  public void moveAngleMotorRaw(double angleMotorSpeed) {
+    upperWheelMotor.set(angleMotorSpeed);
+  }
+
+  public void setIsPIDControlled(boolean enabled) {
+    isPIDControlling = enabled;
+  }
+
+  public void setOperatorRequestedSpeed(double speed) {
+    operatorControlSpeed = speed;
+  }
+
+  public void checkForOperatorOverride(double pidControl) {
+    double motorOutput = pidControl;
+
+    if (!isPIDControlling) {
+      motorOutput = operatorControlSpeed;
+      currentTargetAngle = angleEncoder.getPosition();
+    }
+
+    moveAngleMotorRaw(motorOutput);
   }
 }
-
-
-
-

@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriverConstants;
+import frc.robot.commands.algae.AlgaeManipulatorCommand;
 import frc.robot.commands.climber.ClimberControlCommand;
 import frc.robot.commands.elevator.ElevatorControlCommand;
+import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -43,6 +45,9 @@ public class RobotContainer {
   
   private ElevatorSubsystem elevatorSubsystem;
   private ElevatorControlCommand elevatorControlCommand;
+
+  private AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
+  private AlgaeManipulatorCommand algaeManipulatorCommand;
   
   private CommandXboxController driverController = new CommandXboxController(
       ControllerConstants.DRIVER_CONTROLLER_PORT);
@@ -56,7 +61,8 @@ public class RobotContainer {
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
     initializeElevatorSubsystem();
-
+    initializeAlgaeManipulatorSubsystem();
+    
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
 
@@ -152,6 +158,15 @@ public class RobotContainer {
     this.elevatorSubsystem = new ElevatorSubsystem();
     this.elevatorControlCommand = new ElevatorControlCommand(elevatorSubsystem, operatorController);
     this.elevatorSubsystem.setDefaultCommand(elevatorControlCommand);
+  }
+
+  private void initializeAlgaeManipulatorSubsystem() {
+    this.algaeManipulatorSubsystem = new AlgaeManipulatorSubsystem();
+    this.algaeManipulatorCommand = new AlgaeManipulatorCommand(algaeManipulatorSubsystem, operatorController);
+    this.algaeManipulatorSubsystem.setDefaultCommand(algaeManipulatorCommand);
+
+    this.operatorController.leftBumper().onTrue(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(false)));
+    this.operatorController.leftBumper().onFalse(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(true)));
   }
 
   private void initializeMultisystemCommands() {
