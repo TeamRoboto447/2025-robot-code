@@ -22,6 +22,7 @@ import swervelib.SwerveInputStream;
 // Example code, TODO: remove before competition season begins
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.example.ExampleCommand;
+import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -61,7 +62,7 @@ public class RobotContainer {
     initializeMultisystemCommands();
 
     // Configure the trigger bindings
-    configureBindings();
+    configureMultisystemBindings();
 
   }
 
@@ -79,22 +80,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
+  private void configureMultisystemBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     // .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Example subsystem can be controlled without having a dedicated control
-    // command by using triggers
-    // operatorController.x().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
-    //                                                                // position to 700 when the x button is pressed
-    //   exampleSubsystem.setTargetPosition(700);
-    // }));
-
-    // operatorController.y().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
-    //                                                                // position to 300 when the y button is pressed
-    //   exampleSubsystem.setTargetPosition(300);
-    // }));
   }
 
   /**
@@ -140,6 +129,18 @@ public class RobotContainer {
     this.exampleSubsystem = new ExampleSubsystem();
     this.exampleCommand = new ExampleCommand(exampleSubsystem, operatorController);
     this.exampleSubsystem.setDefaultCommand(exampleCommand);
+
+    // Example subsystem can be controlled without having a dedicated control
+    // command by using triggers
+    operatorController.x().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
+                                                                   // position to 700 when the x button is pressed
+      exampleSubsystem.setTargetPosition(700);
+    }));
+
+    operatorController.y().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
+                                                                   // position to 300 when the y button is pressed
+      exampleSubsystem.setTargetPosition(300);
+    }));
   }
 
   private void initializeClimberSubsystem() {
@@ -150,8 +151,11 @@ public class RobotContainer {
   
   private void initializeElevatorSubsystem() {
     this.elevatorSubsystem = new ElevatorSubsystem();
-    this.elevatorControlCommand = new ElevatorControlCommand(elevatorSubsystem, operatorController);
-    this.elevatorSubsystem.setDefaultCommand(elevatorControlCommand);
+    // Elevator is now controlled via triggers, a full command is not needed
+    this.operatorController.a().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.increaseLevel()));
+    this.operatorController.b().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.decreaseLevel()));
+    this.operatorController.y().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
+    this.operatorController.x().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
   }
 
   private void initializeMultisystemCommands() {

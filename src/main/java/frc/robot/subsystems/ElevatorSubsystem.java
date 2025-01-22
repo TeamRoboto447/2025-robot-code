@@ -20,6 +20,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private DigitalInput elevatorUpperLimitSwitch;
   private DigitalInput elevatorLowerLimitSwitch;
 
+  private Level currentLevel = Level.FLOOR;
   private double currentTargetPosition = 0;
 
   /** Creates a new ElevatorSubsystem. */
@@ -30,6 +31,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    double currentTargetPosition = this.getPositionFromLevel(currentLevel);
+
     double currentPosition = elevatorEncoder.getPosition();
     double error = currentTargetPosition - currentPosition;
     double kP = 0.1; // Proportional gain, this value would need to be tuned
@@ -50,6 +53,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotor.set(speed);
   }
 
+  private double getPositionFromLevel(Level level) {
+    switch (level) {
+      case FLOOR:
+        return ElevatorSubsystemConstants.FLOOR_LEVEL;
+      case TROUGH:
+        return ElevatorSubsystemConstants.TROUGH_LEVEL;
+      case L2:
+        return ElevatorSubsystemConstants.L2_LEVEL;
+      case L3:
+        return ElevatorSubsystemConstants.L3_LEVEL;
+      case L4:
+        return ElevatorSubsystemConstants.L4_LEVEL;
+      case NET:
+        return ElevatorSubsystemConstants.NET_LEVEL;
+      default:
+        return 0;
+    }
+  }
+
   /**
    * Sets the target height of the elevator.
    * Uses one of the pre-set heights (floor, trough, L2, L3, L4, and net) to set
@@ -58,25 +80,52 @@ public class ElevatorSubsystem extends SubsystemBase {
    * @param height Value to set the height to
    */
   public boolean setElevatorTargetHeight(Level height) {
-    switch (height) {
+    this.currentLevel = height;
+    return true;
+  }
+
+  public boolean increaseLevel() {
+    switch (currentLevel) {
       case FLOOR:
-        currentTargetPosition = ElevatorSubsystemConstants.FLOOR_LEVEL;
+        this.currentLevel = Level.TROUGH;
         break;
       case TROUGH:
-        currentTargetPosition = ElevatorSubsystemConstants.TROUGH_LEVEL;
+        this.currentLevel = Level.L2;
         break;
       case L2:
-        currentTargetPosition = ElevatorSubsystemConstants.L2_LEVEL;
+        this.currentLevel = Level.L3;
         break;
       case L3:
-        currentTargetPosition = ElevatorSubsystemConstants.L3_LEVEL;
+        this.currentLevel = Level.L4;
         break;
       case L4:
-        currentTargetPosition = ElevatorSubsystemConstants.L4_LEVEL;
+        this.currentLevel = Level.NET;
         break;
+      default:
+        return false; // Already at the highest level
+    }
+    return true;
+  }
+
+  public boolean decreaseLevel() {
+    switch (currentLevel) {
       case NET:
-        currentTargetPosition = ElevatorSubsystemConstants.NET_LEVEL;
+        this.currentLevel = Level.L4;
         break;
+      case L4:
+        this.currentLevel = Level.L3;
+        break;
+      case L3:
+        this.currentLevel = Level.L2;
+        break;
+      case L2:
+        this.currentLevel = Level.TROUGH;
+        break;
+      case TROUGH:
+        this.currentLevel = Level.FLOOR;
+        break;
+      default:
+        return false; // Already at the lowest level
     }
     return true;
   }
