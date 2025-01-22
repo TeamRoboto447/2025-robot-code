@@ -90,4 +90,10 @@ public final class Constants {
     public static final int L4_LEVEL = 400;
     public static final int NET_LEVEL = 500;
   }
+
+  public static class AlgaeManipulatorSubsystemConstants {
+    public static final int UPPER_WHEEL_MOTOR_ID = 24;
+    public static final int LOWER_WHEEL_MOTOR_ID = 25;
+    public static final int WRIST_MOTOR_ID = 26;
+  }
 }
