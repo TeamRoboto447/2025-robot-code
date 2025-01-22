@@ -12,50 +12,46 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeManipulatorSubsystemConstants;
+import frc.robot.utils.MathUtils;
 
 public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final TalonFX upperWheelMotor;
   private final TalonFX lowerWheelMotor;
-  private final TalonFX angleMotor;
+  private final TalonFX wristMotor;
 
-  private double currentTargetAngle = 0.0;
+  private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
 
+  private double minRotationCount = 0;
+  private double maxRotationCount = 100;
+  private double minWristAngle = 0;
+  private double maxWristAngle = 90;
+
   /** Creates a new AlgaeManipulator. */
   public AlgaeManipulatorSubsystem() {
-    // this.upperWheelMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID, MotorType.kBrushless);
-    // this.lowerWheelMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID, MotorType.kBrushless);
-    // this.angleMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
-    this.angleMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.ANGLE_MOTOR_ID);
+    this.wristMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID);
   }
 
   @Override
   public void periodic() {
 
-    double currentAngle = getAngleMotorPosition();
+    double currentWristPosition = getWristMotorPosition();
 
-    double error = this.currentTargetAngle - currentAngle;
+    double error = this.currentTargetWristPosition - currentWristPosition;
 
     double kP = 0.1;
 
     double angleMotorOutput = kP * error;
 
     angleMotorOutput = Math.max(-1, Math.min(1, angleMotorOutput));
-    
-    // if (this.AlgaeManipulatorUpperLimitSwitch.get() && angleMotorOutput > 0) {
-    //   angleMotorOutput = 0;
-    // }
-
-    // if (this.AlgaeManipulatorLowerLimitSwitch.get() && angleMotorOutput < 0) {
-    //   angleMotorOutput = 0;
-    // }
 
     checkForOperatorOverride(angleMotorOutput);
   }
@@ -69,7 +65,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void moveAngleMotorRaw(double angleMotorSpeed) {
-    angleMotor.set(angleMotorSpeed);
+    wristMotor.set(angleMotorSpeed);
   }
 
   public void setIsPIDControlled(boolean enabled) {
@@ -85,14 +81,28 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     if (!isPIDControlling) {
       motorOutput = operatorControlSpeed;
-      currentTargetAngle = getAngleMotorPosition();
+      currentTargetWristPosition = getWristMotorPosition();
     }
 
     moveAngleMotorRaw(motorOutput);
   }
 
-  public double getAngleMotorPosition() {
-    Angle angle = (Angle) angleMotor.getPosition();
+  public double getWristMotorPosition() {
+    Angle angle = (Angle) wristMotor.getPosition();
     return angle.in(Units.Degrees) / 360; // convert returned value to rotations
+  }
+
+  public Angle getWristAngle(double rotations) {
+    double degrees = MathUtils.map(rotations, minRotationCount, maxRotationCount, minWristAngle, maxWristAngle);
+    return Angle.ofBaseUnits(degrees, Units.Degrees);
+  }
+
+  public double getWristMotorRotations(Angle angle) {
+    double degrees = angle.in(Units.Degrees);
+    return MathUtils.map(degrees, minWristAngle, maxWristAngle, minRotationCount, maxRotationCount);
+  }
+
+  public void setManipulatorAngle(Angle angle) {
+    currentTargetWristPosition = getWristMotorRotations(angle);
   }
 }
