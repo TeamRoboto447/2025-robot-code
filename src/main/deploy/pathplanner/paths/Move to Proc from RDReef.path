@@ -1,0 +1,63 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.79275,
+        "y": 2.8842499999999998
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.63675,
+        "y": 2.51375
+      },
+      "isLocked": false,
+      "linkedName": "Right Driverside Reef"
+    },
+    {
+      "anchor": {
+        "x": 6.376500000000001,
+        "y": 0.56375
+      },
+      "prevControl": {
+        "x": 6.582605037535225,
+        "y": 0.9588295645769082
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Processor"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.217454545454555,
+      "rotationDegrees": 65.0
+    },
+    {
+      "waypointRelativePos": 0.8763636363636321,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.97102193107912
+  },
+  "reversed": false,
+  "folder": "Ryan",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 59.03624346792647
+  },
+  "useDefaultConstraints": true
+}

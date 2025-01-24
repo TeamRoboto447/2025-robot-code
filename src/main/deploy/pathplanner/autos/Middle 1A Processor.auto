@@ -1,0 +1,100 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MP Move to MNReef from MSP"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToL3"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunAlgaeIntake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "TiltManipulatorForward"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "RunCoralOuttake"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "TiltManipulatorBack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToFloor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to Proc from MNReef"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunAlgaeOuttake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.25
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to Right Floor Algae"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Ryan",
+  "choreoAuto": false
+}
