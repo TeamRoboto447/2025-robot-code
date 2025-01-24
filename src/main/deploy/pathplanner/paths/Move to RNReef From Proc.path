@@ -3,32 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.388199999999999,
-        "y": 4.436171428571428
+        "x": 6.376500000000001,
+        "y": 0.56375
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.340914285714286,
-        "y": 5.088028571428571
+        "x": 6.291952772274703,
+        "y": 0.8559360274513372
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Processor"
     },
     {
       "anchor": {
-        "x": 7.595250000000001,
-        "y": 5.2925
+        "x": 5.15775,
+        "y": 2.8744999999999994
       },
       "prevControl": {
-        "x": 6.5085428571428565,
-        "y": 4.506371428571429
+        "x": 5.4415688657052,
+        "y": 2.100168324329579
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Netside Reef"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2785454545454599,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 0.803636363636362,
+      "rotationDegrees": 128.437
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 120.96375653207352
   },
   "reversed": false,
   "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -135.0
+    "rotation": -90.97102193107912
   },
   "useDefaultConstraints": true
 }
