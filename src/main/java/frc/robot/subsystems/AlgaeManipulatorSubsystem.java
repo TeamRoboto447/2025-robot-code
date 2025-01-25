@@ -12,6 +12,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -22,7 +25,10 @@ import frc.robot.utils.MathUtils;
 public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final TalonFX upperWheelMotor;
   private final TalonFX lowerWheelMotor;
-  private final TalonFX wristMotor;
+  private final SparkMax wristMotor;
+  private final SparkMax coralMotor;
+
+  private final RelativeEncoder wristEncoder;
 
   private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
@@ -37,7 +43,10 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   public AlgaeManipulatorSubsystem() {
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
-    this.wristMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID);
+    this.wristMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
+    this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
+
+    this.wristEncoder = this.wristMotor.getEncoder();
   }
 
   @Override
@@ -88,8 +97,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public double getWristMotorPosition() {
-    Angle angle = (Angle) wristMotor.getPosition();
-    return angle.in(Units.Degrees) / 360; // convert returned value to rotations
+    double angle = wristEncoder.getPosition();
+    return angle; // convert returned value to rotations
   }
 
   public Angle getWristAngle(double rotations) {
