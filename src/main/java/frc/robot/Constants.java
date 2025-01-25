@@ -95,5 +95,6 @@ public final class Constants {
     public static final int UPPER_WHEEL_MOTOR_ID = 24;
     public static final int LOWER_WHEEL_MOTOR_ID = 25;
     public static final int WRIST_MOTOR_ID = 26;
+    public static final int CORAL_MOTOR_ID = 27;
   }
 }
