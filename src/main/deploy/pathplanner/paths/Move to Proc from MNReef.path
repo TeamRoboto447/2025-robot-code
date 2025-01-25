@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.80125,
+        "y": 4.05425
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.051035490854383,
+        "y": 4.064604156587334
+      },
+      "isLocked": false,
+      "linkedName": "Middle Netside Reef"
+    },
+    {
+      "anchor": {
+        "x": 6.376500000000001,
+        "y": 0.56375
+      },
+      "prevControl": {
+        "x": 6.378799725250255,
+        "y": 1.4451950719835507
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Processor"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5063520871143511,
+      "rotationDegrees": 180.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.97102193107912
+  },
+  "reversed": false,
+  "folder": "Ryan",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -178.71747291728983
+  },
+  "useDefaultConstraints": true
+}
