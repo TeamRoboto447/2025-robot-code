@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.376500000000001,
-        "y": 0.56375
+        "x": 6.3375,
+        "y": 0.5442499999999996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.291952772274703,
-        "y": 0.8559360274513372
+        "x": 6.2529527722747025,
+        "y": 0.8364360274513368
       },
       "isLocked": false,
       "linkedName": "Processor"
@@ -43,7 +43,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 1.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

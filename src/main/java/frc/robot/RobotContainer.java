@@ -6,9 +6,12 @@ package frc.robot;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -62,6 +65,8 @@ public class RobotContainer {
   private CommandXboxController operatorController = new CommandXboxController(
       ControllerConstants.OPERATOR_CONTROLLER_PORT);
 
+  private final SendableChooser<Command> autoChooser;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -79,6 +84,8 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureMultisystemBindings();
 
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -108,7 +115,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return autoChooser.getSelected();
   }
 
   private void initializeSwerveSubsystem() {
@@ -118,7 +125,7 @@ public class RobotContainer {
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.getLeftY() * -1,
         () -> driverController.getLeftX() * -1)
-        .withControllerRotationAxis(driverController::getRightX)
+        .withControllerRotationAxis(() -> -driverController.getRightX())
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8)
         .allianceRelativeControl(true);
@@ -189,40 +196,40 @@ public class RobotContainer {
   }
 
   private void initializeNamedCommands() {
-    NamedCommands.registerCommand("exampleCommand",
-        Commands.runOnce(() -> System.out.println("Example named command has been run!")));
+    // NamedCommands.registerCommand("exampleCommand",
+    //     Commands.runOnce(() -> System.out.println("Example named command has been run!")));
 
-    // Utility Commands
-    Command runAlgaeIntake = this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0);
-      algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0);
-    });
+    // // Utility Commands
+    // Command runAlgaeIntake = this.algaeManipulatorSubsystem.run(() -> {
+    //   algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0);
+    //   algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0);
+    // });
 
-    NamedCommands.registerCommand("CollectAlgaeFromReef", new SequentialCommandGroup(
-        new ParallelRaceGroup(
-            runAlgaeIntake,
-            new SequentialCommandGroup(
-                // TODO: Tilt forward command,
-                new ParallelRaceGroup(
-                    //TODO: Add Coral Outtake
-                    new WaitCommand(0.25))
-            // TODO: Tilt back command
-            )),
-        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
+    // NamedCommands.registerCommand("CollectAlgaeFromReef", new SequentialCommandGroup(
+    //     new ParallelRaceGroup(
+    //         runAlgaeIntake,
+    //         new SequentialCommandGroup(
+    //             // TODO: Tilt forward command,
+    //             new ParallelRaceGroup(
+    //                 //TODO: Add Coral Outtake
+    //                 new WaitCommand(0.25))
+    //         // TODO: Tilt back command
+    //         )),
+    //     this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
 
-    NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
-        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)),
-        new ParallelRaceGroup(
-            runAlgaeIntake,
-            new SequentialCommandGroup(
-                // TODO: Tilt forward command,
-                new WaitCommand(0.25)
-            // TODO: Tilt back command
-            ))));
+    // NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
+    //     this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)),
+    //     new ParallelRaceGroup(
+    //         runAlgaeIntake,
+    //         new SequentialCommandGroup(
+    //             // TODO: Tilt forward command,
+    //             new WaitCommand(0.25)
+    //         // TODO: Tilt back command
+    //         ))));
 
-    // Elevator Commands
+    // // Elevator Commands
 
-    // Algae Manipulator Commands
-    NamedCommands.registerCommand("RunAlgaeIntake", runAlgaeIntake);
+    // // Algae Manipulator Commands
+    // NamedCommands.registerCommand("RunAlgaeIntake", runAlgaeIntake);
   }
 }

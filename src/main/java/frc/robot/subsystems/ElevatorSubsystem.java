@@ -21,7 +21,6 @@ public class ElevatorSubsystem extends SubsystemBase {
   private DigitalInput elevatorLowerLimitSwitch;
 
   private Level currentLevel = Level.FLOOR;
-  private double currentTargetPosition = 0;
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
@@ -32,19 +31,18 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     double currentTargetPosition = this.getPositionFromLevel(currentLevel);
-
     double currentPosition = elevatorEncoder.getPosition();
     double error = currentTargetPosition - currentPosition;
     double kP = 0.1; // Proportional gain, this value would need to be tuned
     double motorOutput = kP * error;
     motorOutput = Math.max(-1, Math.min(1, motorOutput)); // Clamp the output between -1 and 1
 
-    if (elevatorUpperLimitSwitch.get() && motorOutput > 0) {
-      motorOutput = 0; // Stop motor if upper limit switch is hit and output is positive
-    }
-    if (elevatorLowerLimitSwitch.get() && motorOutput < 0) {
-      motorOutput = 0; // Stop motor if lower limit switch is hit and output is negative
-    }
+    // if (elevatorUpperLimitSwitch.get() && motorOutput > 0) {
+    //   motorOutput = 0; // Stop motor if upper limit switch is hit and output is positive
+    // }
+    // if (elevatorLowerLimitSwitch.get() && motorOutput < 0) {
+    //   motorOutput = 0; // Stop motor if lower limit switch is hit and output is negative
+    // }
 
     moveMotorRaw(motorOutput);
   }

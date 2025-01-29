@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.79275,
-        "y": 2.8842499999999998
+        "x": 3.83175,
+        "y": 2.8744999999999994
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.63675,
-        "y": 2.51375
+        "x": 3.6757500000000003,
+        "y": 2.5039999999999996
       },
       "isLocked": false,
       "linkedName": "Right Driverside Reef"
     },
     {
       "anchor": {
-        "x": 6.376500000000001,
-        "y": 0.56375
+        "x": 6.3375,
+        "y": 0.5442499999999996
       },
       "prevControl": {
-        "x": 6.582605037535225,
-        "y": 0.9588295645769082
+        "x": 6.543605037535224,
+        "y": 0.9393295645769076
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 1.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
