@@ -24,7 +24,7 @@ import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.algae.AlgaeManipulatorCommand;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.commands.climber.ClimberControlCommand;
-import frc.robot.commands.elevator.ElevatorControlCommand;
+import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -55,7 +55,7 @@ public class RobotContainer {
   private ClimberControlCommand climberControlCommand;
 
   private ElevatorSubsystem elevatorSubsystem;
-  private ElevatorControlCommand elevatorControlCommand;
+  private ElevatorDebuggingControlCommand elevatorControlCommand;
 
   private AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private AlgaeManipulatorCommand algaeManipulatorCommand;
@@ -173,12 +173,16 @@ public class RobotContainer {
   private void initializeElevatorSubsystem() {
     this.elevatorSubsystem = new ElevatorSubsystem();
     // Elevator is now controlled via triggers, a full command is not needed
-    this.operatorController.a().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.increaseLevel()));
-    this.operatorController.b().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.decreaseLevel()));
-    this.operatorController.y()
-        .onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
-    this.operatorController.x()
-        .onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
+    if(this.elevatorSubsystem.debugging) {
+      this.elevatorSubsystem.setDefaultCommand(new ElevatorDebuggingControlCommand(elevatorSubsystem, operatorController));
+    } else {
+      this.operatorController.a().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.increaseLevel()));
+      this.operatorController.b().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.decreaseLevel()));
+      this.operatorController.y()
+          .onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
+      this.operatorController.x()
+          .onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
+    }
   }
 
   private void initializeAlgaeManipulatorSubsystem() {

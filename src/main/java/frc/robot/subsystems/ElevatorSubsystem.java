@@ -5,13 +5,24 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+
+import static edu.wpi.first.units.Units.Inches;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorSubsystemConstants;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
+import frc.robot.utils.MathUtils;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -20,7 +31,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   private DigitalInput elevatorUpperLimitSwitch;
   private DigitalInput elevatorLowerLimitSwitch;
 
-  private Level currentLevel = Level.FLOOR;
+  private Level currentTargetLevel = Level.FLOOR;
+
+  public boolean debugging = false;
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
@@ -30,21 +43,61 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    double currentTargetPosition = this.getPositionFromLevel(currentLevel);
-    double currentPosition = elevatorEncoder.getPosition();
-    double error = currentTargetPosition - currentPosition;
-    double kP = 0.1; // Proportional gain, this value would need to be tuned
-    double motorOutput = kP * error;
-    motorOutput = Math.max(-1, Math.min(1, motorOutput)); // Clamp the output between -1 and 1
+    if (!debugging) {
+      double currentTargetPosition = this.getPositionFromLevel(currentTargetLevel);
+      double currentPosition = elevatorEncoder.getPosition();
+      double error = currentTargetPosition - currentPosition;
+      double kP = 0.1; // Proportional gain, this value would need to be tuned
+      double motorOutput = kP * error;
 
+      double maxSpeed = 1;
+      motorOutput = Math.max(-maxSpeed, Math.min(maxSpeed, motorOutput)); // Clamp the output between -1 and 1
+      SmartDashboard.putNumber("Elevator Controller Output", motorOutput);
+      // SmartDashboard.putNumber("Current Position Raw", elevatorEncoder.getPosition());
+      // SmartDashboard.putNumber("Current Position Inch",
+      //     rawPositionToHeight(elevatorEncoder.getPosition()).in(Units.Inches));
+      SmartDashboard.putString("Current Target Level", this.currentTargetLevel.toString());
+      // SmartDashboard.putNumber("Current Target Raw", currentTargetPosition);
+      // SmartDashboard.putNumber("Current Target Inch", this.rawPositionToHeight(currentTargetPosition).in(Units.Inches));
+      moveMotorRaw(motorOutput);
+    }
+
+    // SmartDashboard.putNumber("Elevator Raw Position", this.elevatorEncoder.getPosition());
+    // SmartDashboard.putNumber("Elevator Height from Panel (in)",
+    //     rawPositionToHeight(this.elevatorEncoder.getPosition()).in(Units.Inches));
+    // SmartDashboard.putNumber("Position at 11.5 in", heightToRawPosition(Inches.of(11.5)));
+    // SmartDashboard.putNumber("Position at 92 in", heightToRawPosition(Inches.of(92)));
+    // SmartDashboard.putNumber("Height at 0", rawPositionToHeight(0).in(Units.Inches));
+    // SmartDashboard.putNumber("Height at 270", rawPositionToHeight(270).in(Units.Inches));
     // if (elevatorUpperLimitSwitch.get() && motorOutput > 0) {
-    //   motorOutput = 0; // Stop motor if upper limit switch is hit and output is positive
+    // motorOutput = 0; // Stop motor if upper limit switch is hit and output is
+    // positive
     // }
     // if (elevatorLowerLimitSwitch.get() && motorOutput < 0) {
-    //   motorOutput = 0; // Stop motor if lower limit switch is hit and output is negative
+    // motorOutput = 0; // Stop motor if lower limit switch is hit and output is
+    // negative
     // }
+  }
 
-    moveMotorRaw(motorOutput);
+  private double heightToRawPosition(Distance height) {
+    double inches = height.in(Units.Inches);
+    double rawPosition = MathUtils.map(inches, ElevatorSubsystemConstants.MIN_INCH_HEIGHT,
+        ElevatorSubsystemConstants.MAX_INCH_HEIGHT, ElevatorSubsystemConstants.MIN_RAW_HEIGHT,
+        ElevatorSubsystemConstants.MAX_RAW_HEIGHT);
+    return rawPosition;
+  }
+
+  private Distance rawPositionToHeight(double position) {
+    double inches = MathUtils.map(position, ElevatorSubsystemConstants.MIN_RAW_HEIGHT,
+        ElevatorSubsystemConstants.MAX_RAW_HEIGHT, ElevatorSubsystemConstants.MIN_INCH_HEIGHT,
+        ElevatorSubsystemConstants.MAX_INCH_HEIGHT);
+    Distance distance = Inches.of(inches);
+    return distance;
+  }
+
+  public void moveDebugMotorRaw(double speed) {
+    if (debugging)
+      elevatorMotor.set(speed + 0.05);
   }
 
   private void moveMotorRaw(double speed) {
@@ -52,22 +105,30 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private double getPositionFromLevel(Level level) {
+    Distance outputHeight;
     switch (level) {
       case FLOOR:
-        return ElevatorSubsystemConstants.FLOOR_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.FLOOR_LEVEL;
+        break;
       case TROUGH:
-        return ElevatorSubsystemConstants.TROUGH_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.TROUGH_LEVEL;
+        break;
       case L2:
-        return ElevatorSubsystemConstants.L2_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.L2_LEVEL;
+        break;
       case L3:
-        return ElevatorSubsystemConstants.L3_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.L3_LEVEL;
+        break;
       case L4:
-        return ElevatorSubsystemConstants.L4_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.L4_LEVEL;
+        break;
       case NET:
-        return ElevatorSubsystemConstants.NET_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.NET_LEVEL;
+        break;
       default:
-        return 0;
+        outputHeight = Inches.ofBaseUnits(ElevatorSubsystemConstants.MIN_INCH_HEIGHT);
     }
+    return heightToRawPosition(outputHeight);
   }
 
   /**
@@ -78,26 +139,26 @@ public class ElevatorSubsystem extends SubsystemBase {
    * @param height Value to set the height to
    */
   public boolean setElevatorTargetHeight(Level height) {
-    this.currentLevel = height;
+    this.currentTargetLevel = height;
     return true;
   }
 
   public boolean increaseLevel() {
-    switch (currentLevel) {
+    switch (currentTargetLevel) {
       case FLOOR:
-        this.currentLevel = Level.TROUGH;
+        this.currentTargetLevel = Level.TROUGH;
         break;
       case TROUGH:
-        this.currentLevel = Level.L2;
+        this.currentTargetLevel = Level.L2;
         break;
       case L2:
-        this.currentLevel = Level.L3;
+        this.currentTargetLevel = Level.L3;
         break;
       case L3:
-        this.currentLevel = Level.L4;
+        this.currentTargetLevel = Level.L4;
         break;
       case L4:
-        this.currentLevel = Level.NET;
+        this.currentTargetLevel = Level.NET;
         break;
       default:
         return false; // Already at the highest level
@@ -106,21 +167,21 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean decreaseLevel() {
-    switch (currentLevel) {
+    switch (currentTargetLevel) {
       case NET:
-        this.currentLevel = Level.L4;
+        this.currentTargetLevel = Level.L4;
         break;
       case L4:
-        this.currentLevel = Level.L3;
+        this.currentTargetLevel = Level.L3;
         break;
       case L3:
-        this.currentLevel = Level.L2;
+        this.currentTargetLevel = Level.L2;
         break;
       case L2:
-        this.currentLevel = Level.TROUGH;
+        this.currentTargetLevel = Level.TROUGH;
         break;
       case TROUGH:
-        this.currentLevel = Level.FLOOR;
+        this.currentTargetLevel = Level.FLOOR;
         break;
       default:
         return false; // Already at the lowest level
@@ -130,7 +191,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private void initializeMotors() {
     elevatorMotor = new SparkMax(ElevatorSubsystemConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless);
+    SparkMaxConfig elevatorMotorConfig = new SparkMaxConfig();
+    elevatorMotorConfig
+        .inverted(true)
+        .idleMode(IdleMode.kBrake);
+    elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     elevatorEncoder = elevatorMotor.getEncoder();
+    elevatorEncoder.setPosition(0);
     elevatorUpperLimitSwitch = new DigitalInput(ElevatorSubsystemConstants.ELEVATOR_UPPER_LIMIT_SWITCH_CHANNEL);
     elevatorLowerLimitSwitch = new DigitalInput(ElevatorSubsystemConstants.ELEVATOR_LOWER_LIMIT_SWITCH_CHANNEL);
   }

@@ -10,11 +10,11 @@ import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorControlCommand extends Command {
+public class ElevatorDebuggingControlCommand extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
   private final CommandXboxController operatorController;
   /** Creates a new ElevatorControlCommand. */
-  public ElevatorControlCommand(ElevatorSubsystem eSubsystem, CommandXboxController oController) {
+  public ElevatorDebuggingControlCommand(ElevatorSubsystem eSubsystem, CommandXboxController oController) {
     this.elevatorSubsystem = eSubsystem;
     this.operatorController = oController;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -27,19 +27,12 @@ public class ElevatorControlCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    if (this.operatorController.getRightTriggerAxis() > 0.5) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
-    } else if (this.operatorController.a().getAsBoolean()) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.TROUGH);
-    } else if (this.operatorController.b().getAsBoolean()) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.L2);
-    } else if (this.operatorController.x().getAsBoolean()) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.L3);
-    } else if (this.operatorController.y().getAsBoolean()) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.L4);
-    } else if (this.operatorController.rightBumper().getAsBoolean()) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.NET);
+  public void execute() {if (this.operatorController.pov(0).getAsBoolean()) {
+      this.elevatorSubsystem.moveDebugMotorRaw(1);
+    } else if (this.operatorController.pov(180).getAsBoolean()) {
+      this.elevatorSubsystem.moveDebugMotorRaw(-1);
+    } else if(this.elevatorSubsystem.debugging) {
+      this.elevatorSubsystem.moveDebugMotorRaw(0);
     }
   }
 

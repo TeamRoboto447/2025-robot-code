@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Inches;
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Distance;
 import swervelib.math.Matter;
 
 /**
@@ -83,12 +86,18 @@ public final class Constants {
       NET
     }
 
-    public static final int FLOOR_LEVEL = 0;
-    public static final int TROUGH_LEVEL = 100;
-    public static final int L2_LEVEL = 200; // TODO: Update with correct values
-    public static final int L3_LEVEL = 300;
-    public static final int L4_LEVEL = 400;
-    public static final int NET_LEVEL = 500;
+    public static final double MIN_INCH_HEIGHT = 11.5;
+    public static final double MAX_INCH_HEIGHT = 92;
+    public static final int MIN_RAW_HEIGHT = 0;
+    public static final int MAX_RAW_HEIGHT = 270;
+
+    public static final Distance FLOOR_LEVEL = Inches.of(0 + MIN_INCH_HEIGHT);
+    public static final Distance TROUGH_LEVEL = Inches.of(0 + MIN_INCH_HEIGHT);
+    public static final Distance L2_LEVEL = Inches.of(13
+    );
+    public static final Distance L3_LEVEL = Inches.of(27.5);
+    public static final Distance L4_LEVEL = Inches.of(35);
+    public static final Distance NET_LEVEL = Inches.of(MAX_INCH_HEIGHT);
   }
 
   public static class AlgaeManipulatorSubsystemConstants {
