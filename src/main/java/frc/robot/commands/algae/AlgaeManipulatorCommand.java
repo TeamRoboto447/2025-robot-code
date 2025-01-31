@@ -38,6 +38,10 @@ public class AlgaeManipulatorCommand extends Command {
       this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0);
     }
 
+    if (this.operatorController.rightBumper().getAsBoolean()) {
+      this.algaeManipulatorSubsystem.moveCoralMotorRaw(1);
+    }
+
     this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(this.operatorController.getLeftY());
   }
 

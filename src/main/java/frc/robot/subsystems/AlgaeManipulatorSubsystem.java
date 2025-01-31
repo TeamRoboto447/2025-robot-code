@@ -77,6 +77,10 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     wristMotor.set(angleMotorSpeed);
   }
 
+  public void moveCoralMotorRaw(double speed) {
+    coralMotor.set(speed);
+  }
+
   public void setIsPIDControlled(boolean enabled) {
     isPIDControlling = enabled;
   }
