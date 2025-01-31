@@ -1,37 +1,42 @@
 import os
 import threading
-from networktables import NetworkTables
+from networktables import NetworkTables, NetworkTablesInstance
 from ntcore import *
 from networktables.util import ntproperty
 from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
+from time import sleep
 
+# import logging
+# logging.basicConfig(level=logging.DEBUG)
 LIVE = False
 
 # Folder location of image assets used by this example.
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
 
+nt = NetworkTablesInstance.getDefault()
 # Set up NetworkTables
 if LIVE:
-    NetworkTables.initialize(server = "10.4.47.2")
+    nt.initialize(server = ("10.4.47.2", 1735))
 else:
     # If not connected in the live environment, we need to be in host mode
-    NetworkTables.initialize()
+    # nt = NetworkTables.initialize()
+    nt.initialize(server = "127.0.0.1")
+    
 
-while not NetworkTables.isConnected() and LIVE:
-    pass
+while not NetworkTables.isConnected():
+    sleep(.5)
 
-smartdashboard_table = NetworkTables.getTable("SmartDashboard") # Interact w/ smartdashboard
-streamdeck_network_table = NetworkTables.getTable("Streamdeck-Control") # Make table for values to be changed from this script
+smartdashboard_table = nt.getTable("SmartDashboard") # Interact w/ smartdashboard
+steamdeck_root = nt.getTable("Streamdeck-Control") # Make table for values to be changed from this script
+streamdeck_network_table = steamdeck_root.getSubTable("panel")
+button_table = streamdeck_network_table.getSubTable("states")
 
 class Button:
-    def __init__(self, functionality, label = "", enabled_icon = "green.png", disabled_icon = "red.png"):
-        functionality = functionality.upper()
-        if not (functionality == "TOGGLE") and not (functionality == "HOLD"):
-            raise ValueError('Button functionality must be either "TOGGLE" or "HOLD"')
-        self.__label = label
-        self.__functionality = functionality
+    def __init__(self, functionality, label = "", enabled_icon = "green.png", disabled_icon = "empty.png"):
+        self.label = label
+        self.functionality = functionality
         self.__state = False
         self.__enabled_icon = enabled_icon
         self.__disabled_icon = disabled_icon
@@ -62,8 +67,8 @@ class Button:
     
     @label.setter
     def label(self, label):
-        if len(label) > 10:
-            raise ValueError("Label can't be longer than 10 characters")
+        if len(label) > 15:
+            raise ValueError("Label can't be longer than 15 characters")
         self.__label = label
     
     @property
@@ -82,12 +87,14 @@ class Button:
             self.__state = not self.__state
         elif self.__functionality == "HOLD":
             self.__state = state
-        streamdeck_network_table.putBoolean(self.__label, self.__state)
+        button_table.putBoolean(self.__label, self.__state)
     
     def reset(self):
         self.__state = False
+        button_table.putBoolean(self.__label, self.__state)
     
     def reset_with_new_args(self, functionality = "", label = "", enabled_icon = "", disabled_icon = ""):
+        self.reset()
         if not (functionality == ""):
             self.functionality = functionality
         
@@ -99,8 +106,6 @@ class Button:
 
         if not (disabled_icon == ""):
             self.__disabled_icon = disabled_icon
-        
-        self.reset()
 
 class ControlPanel:
     def __init__(self):
@@ -108,6 +113,27 @@ class ControlPanel:
         for x in range(5):
             for y in range(3):
                 self.init_button_by_pos(x, y)
+        self.update_network_tables()
+    
+    def update_network_tables(self):
+        streamdeck_network_table.putStringArray("labels", self.get_labels_as_list())
+        for button in self.__buttons.values():
+            button_table.putBoolean(button.label, button.state)
+
+    def get_labels(self):
+        labels = {}
+        for x in range(5):
+            for y in range(3):
+                labels[(x, y)] = self.get_label_by_pos(x, y)
+        return labels
+
+    def get_labels_as_list(self):
+        label_dict = self.get_labels()
+        return [label_dict[key] for key in sorted(label_dict.keys(), key=lambda t: (t[0] + (t[1] * 5)))]
+
+        
+    def get_label_by_pos(self, x, y):
+        return self.get_button(x, y).label
 
     def reset_button_with_new_args(self, x, y, deck, functionality = "", label = "", enabled_icon = "", disabled_icon = ""):
         self.get_button(x, y).reset_with_new_args(functionality, label, enabled_icon, disabled_icon)
@@ -130,26 +156,48 @@ class ControlPanel:
                 button = Button("HOLD", "Reef Five", "reef_five.jpeg", "reef_five.jpeg")
             case (1, 2):
                 button = Button("HOLD", f"Reef Six", "reef_six.jpeg", "reef_six.jpeg")
+            case (3, 0):
+                button = Button("HOLD", "Algae Intake", "processor.jpeg", "processor.jpeg") # TODO: Use an image designed for the purpose
+            case (4, 0):
+                button = Button("HOLD", "Algae Outtake", "processor.jpeg", "processor.jpeg") # TODO: Use an image designed for the purpose
+            case (3, 1):
+                button = Button("HOLD", "Coral Intake", "coral_intake.png", "coral_intake.png") # TODO: Use an image designed for the purpose
+            case (4, 1):
+                button = Button("HOLD", "Coral Outtake", "coral_intake.png", "coral_intake.png") # TODO: Use an image designed for the purpose
+            case (2, 0):
+                button = Button("HOLD", "Shift Forward", "front.jpeg", "front.jpeg")
+            case (2, 1):
+                button = Button("HOLD", "Shift Back", "back.jpeg", "back.jpeg")
+            case (3, 2):
+                button = Button("HOLD", "Shift Left", "left.jpeg", "left.jpeg")
+            case (4, 2):
+                button = Button("HOLD", "Shift Right", "right.jpeg", "right.jpeg")
             case _:
-                button = Button("HOLD" if i < 10 else "HOLD", f"Button {i}")
+                button = Button("HOLD", f"Button {i}")
         self.__buttons[pos] = button
-        streamdeck_network_table.putBoolean(button.label, button.state)
     
     def reset_panel_buttons(self, deck):
-        for x in range(2, 5):
-            for y in range(3):
-                i = (x + (y * 5))
-                button = panel.get_button_by_index(i)
-                button.label = f"Button {i}"
-                button.set_enabled_icon("green.png")
-                button.set_disabled_icon("red.png")
-                update_key_image(deck, i, button.state)
+        self.update_network_tables()
+        self.reset_button_with_new_args(3, 0, deck, "HOLD", "Algae Intake", "processor.jpeg", "processor.jpeg")
+        self.reset_button_with_new_args(4, 0, deck, "HOLD", "Algae Outtake", "processor.jpeg", "processor.jpeg")
+        self.reset_button_with_new_args(3, 1, deck, "HOLD", "Coral Intake", "coral_intake.png", "coral_intake.png")
+        self.reset_button_with_new_args(4, 1, deck, "HOLD", "Coral Outtake", "coral_intake.png", "coral_intake.png")
+        self.reset_button_with_new_args(2, 0, deck, "HOLD", "Shift Forward", "front.jpeg", "front.jpeg")
+        self.reset_button_with_new_args(2, 1, deck, "HOLD", "Shift Back", "back.jpeg", "back.jpeg")
+        self.reset_button_with_new_args(3, 2, deck, "HOLD", "Shift Left", "left.jpeg", "left.jpeg")
+        self.reset_button_with_new_args(4, 2, deck, "HOLD", "Shift Right", "right.jpeg", "right.jpeg")
+        self.reset_button_with_new_args(2, 2, deck, "HOLD", "Button 12", "green.png", "empty.png")
 
     def enable_directions(self, deck):
-        self.reset_panel_buttons(deck)
-        self.reset_button_with_new_args(3, 0, deck, "HOLD", "Left", "left.jpeg", "left.jpeg")
-        self.reset_button_with_new_args(4, 0, deck, "HOLD", "Right", "right.jpeg", "right.jpeg")
-        self.reset_button_with_new_args(2, 2, deck, "HOLD", "Reset", "reset.jpeg", "reset.jpeg")
+        self.reset_button_with_new_args(2, 0, deck, "HOLD", "Button 2", "green.png", "empty.png")
+        self.reset_button_with_new_args(3, 0, deck, "HOLD", "Button 3", "green.png", "empty.png")
+        self.reset_button_with_new_args(4, 0, deck, "HOLD", "Button 4", "green.png", "empty.png")
+        self.reset_button_with_new_args(2, 1, deck, "HOLD", "Button 7", "green.png", "empty.png")
+        self.reset_button_with_new_args(3, 1, deck, "HOLD", "Button 8", "green.png", "empty.png")
+        self.reset_button_with_new_args(4, 1, deck, "HOLD", "Button 9", "green.png", "empty.png")
+        self.reset_button_with_new_args(3, 2, deck, "HOLD", "Left", "left.jpeg", "left.jpeg")
+        self.reset_button_with_new_args(4, 2, deck, "HOLD", "Right", "right.jpeg", "right.jpeg")
+        self.reset_button_with_new_args(2, 2, deck, "HOLD", "Reset Panel", "reset.jpeg", "reset.jpeg")
 
     def enable_levels(self, deck):
         self.reset_button_with_new_args(3, 2, deck, "HOLD", "Processor", "processor.jpeg", "processor.jpeg")
@@ -158,7 +206,7 @@ class ControlPanel:
         self.reset_button_with_new_args(4, 1, deck, "HOLD", "Level 3", "L3.jpeg", "L3.jpeg")
         self.reset_button_with_new_args(3, 0, deck, "HOLD", "Level 4", "L4.jpeg", "L4.jpeg")
         self.reset_button_with_new_args(4, 0, deck, "HOLD", "Net", "net.png", "net.png")
-        self.reset_button_with_new_args(2, 2, deck, "HOLD", "Reset", "reset.jpeg", "reset.jpeg")
+        self.reset_button_with_new_args(2, 2, deck, "HOLD", "Reset Panel", "reset.jpeg", "reset.jpeg")
     
     @property
     def buttons(self):
@@ -236,13 +284,13 @@ def key_change_callback(deck, key, state):
     button = panel.get_button_by_index(key)
     button.trigger(state)
     if button.state:
-        if("Left" in button.label or "Right" in button.label):
+        if("Left" == button.label or "Right" == button.label):
             panel.enable_levels(deck)
 
-        if("Reef" in button.label):
+        if(button.label in ["Reef One", "Reef Two", "Reef Three", "Reef Four", "Reef Five", "Reef Six"]):
             panel.enable_directions(deck)
         
-        if("Reset" in button.label):
+        if("Reset Panel" == button.label):
             panel.reset_panel_buttons(deck)
 
     # Don't try to draw an image on a touch button
