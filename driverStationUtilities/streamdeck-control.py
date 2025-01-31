@@ -30,8 +30,9 @@ while not NetworkTables.isConnected():
 
 smartdashboard_table = nt.getTable("SmartDashboard") # Interact w/ smartdashboard
 steamdeck_root = nt.getTable("Streamdeck-Control") # Make table for values to be changed from this script
-streamdeck_network_table = steamdeck_root.getSubTable("panel")
-button_table = streamdeck_network_table.getSubTable("states")
+panel_network_table = steamdeck_root.getSubTable("panel")
+robot_requesting_update_entry = panel_network_table.getEntry("robotRequestingUpdate")
+button_table = panel_network_table.getSubTable("states")
 
 class Button:
     def __init__(self, functionality, label = "", enabled_icon = "green.png", disabled_icon = "empty.png"):
@@ -116,7 +117,7 @@ class ControlPanel:
         self.update_network_tables()
     
     def update_network_tables(self):
-        streamdeck_network_table.putStringArray("labels", self.get_labels_as_list())
+        panel_network_table.putStringArray("labels", self.get_labels_as_list())
         for button in self.__buttons.values():
             button_table.putBoolean(button.label, button.state)
 
@@ -315,12 +316,23 @@ def key_change_callback(deck, key, state):
                 # Close deck handle, terminating internal worker threads.
                 deck.close()
 
+
+def valueChanged(table, key, value, isNew):
+    print("valueChanged: key: '%s'; value: %s; isNew: %s" % (key, value, isNew))
+    if key == "robotRequestingUpdate" and value:
+        panel.update_network_tables()
+        robot_requesting_update_entry.setBoolean(False)
+        
+
 deck_reference = None
 def main_func():
     global deck_reference
     streamdecks = DeviceManager().enumerate()
 
     print("Found {} Stream Deck(s).\n".format(len(streamdecks)))
+
+    panel_network_table.addEntryListener(valueChanged)
+    robot_requesting_update_entry.setBoolean(True)
 
     for index, deck in enumerate(streamdecks):
         # This example only works with devices that have screens.
