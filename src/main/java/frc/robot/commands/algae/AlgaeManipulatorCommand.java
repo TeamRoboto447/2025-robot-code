@@ -27,19 +27,26 @@ public class AlgaeManipulatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (this.operatorController.getLeftTriggerAxis() > 0.1) {
-      this.algaeManipulatorSubsystem.moveUpperWheelMotorRaw(this.operatorController.getLeftTriggerAxis());
-      this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(-this.operatorController.getLeftTriggerAxis());
-    } else if (this.operatorController.getRightTriggerAxis() > 0.1) {
-      this.algaeManipulatorSubsystem.moveUpperWheelMotorRaw(-this.operatorController.getRightTriggerAxis());
-      this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(this.operatorController.getRightTriggerAxis());
+    double outtakeSpeed = this.operatorController.getLeftTriggerAxis();
+    double intakeSpeed = this.operatorController.getRightTriggerAxis();
+
+    if (this.operatorController.leftTrigger(0.1).getAsBoolean()) {
+      this.algaeManipulatorSubsystem.moveUpperWheelMotorRaw(outtakeSpeed);
+      this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(-outtakeSpeed);
+    } else if (this.operatorController.rightTrigger(0.1).getAsBoolean()) {
+      this.algaeManipulatorSubsystem.moveUpperWheelMotorRaw(-intakeSpeed);
+      this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(intakeSpeed);
     } else {
       this.algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0);
       this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0);
     }
 
-    if (this.operatorController.rightBumper().getAsBoolean()) {
+    if (this.operatorController.pov(90).getAsBoolean()) {
       this.algaeManipulatorSubsystem.moveCoralMotorRaw(1);
+    } else if (this.operatorController.pov(270).getAsBoolean()) {
+      this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1);
+    } else {
+      this.algaeManipulatorSubsystem.moveCoralMotorRaw(0);
     }
 
     this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(this.operatorController.getLeftY());

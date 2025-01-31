@@ -34,7 +34,6 @@ import swervelib.SwerveInputStream;
 // Example code, TODO: remove before competition season begins
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.example.ExampleCommand;
-import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 
 /**
  * This class is where the bulk of the robot should be declared. Since

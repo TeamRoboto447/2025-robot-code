@@ -65,16 +65,16 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     checkForOperatorOverride(angleMotorOutput);
   }
 
-  public void moveUpperWheelMotorRaw(double upperWheelMotorSpeed) {
-    upperWheelMotor.set(upperWheelMotorSpeed);
+  public void moveUpperWheelMotorRaw(double speed) {
+    upperWheelMotor.set(speed);
   }
 
-  public void moveLowerWheelMotorRaw(double lowerWheelMotorSpeed) {
-    lowerWheelMotor.set(lowerWheelMotorSpeed);
+  public void moveLowerWheelMotorRaw(double speed) {
+    lowerWheelMotor.set(speed);
   }
 
-  public void moveAngleMotorRaw(double angleMotorSpeed) {
-    wristMotor.set(angleMotorSpeed);
+  public void moveWritstMotorRaw(double speed) {
+    wristMotor.set(speed);
   }
 
   public void moveCoralMotorRaw(double speed) {
@@ -97,7 +97,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
       currentTargetWristPosition = getWristMotorPosition();
     }
 
-    moveAngleMotorRaw(motorOutput);
+    moveWritstMotorRaw(motorOutput);
   }
 
   public double getWristMotorPosition() {
