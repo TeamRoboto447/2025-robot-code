@@ -41,10 +41,12 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
+  private SparkMaxConfig wristConfig = new SparkMaxConfig();
+  private SoftLimitConfig wristLimits = new SoftLimitConfig();
 
 
   private final double absoluteEncoderOffset = 0.99;
-  private double minRotationCount = 15;
+  private double minRotationCount = 20;
   private double maxRotationCount = 65;
   private double minAbsoluteRotationCount = -0.5;
   private double maxAbsoluteRotationCount = 0;
@@ -58,8 +60,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.CORAL_MOTOR_ID, MotorType.kBrushless);
     
     this.wristMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
-    SparkMaxConfig wristConfig = new SparkMaxConfig();
-    SoftLimitConfig wristLimits = new SoftLimitConfig();
     wristLimits.forwardSoftLimit(maxRotationCount);
     wristLimits.forwardSoftLimitEnabled(true);
     wristLimits.reverseSoftLimit(minRotationCount);
@@ -70,6 +70,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
+    // this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
   }
 
   @Override
