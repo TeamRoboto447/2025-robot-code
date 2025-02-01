@@ -39,6 +39,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final RelativeEncoder wristEncoder;
   private final AbsoluteEncoder absoluteWristEncoder;
 
+  private final double absoluteEncoderOffset = 0;
+
   private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
@@ -74,7 +76,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    double currentWristPosition = getAbsoluteWristPosition();
+    double currentWristPosition = getAbsoluteWristPosition() + absoluteEncoderOffset;
 
     double error = this.currentTargetWristPosition - currentWristPosition;
 
@@ -135,7 +137,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     if (!isPIDControlling) {
       motorOutput = operatorControlSpeed;
-      currentTargetWristPosition = getAbsoluteWristPosition();
+      currentTargetWristPosition = getAbsoluteWristPosition() + absoluteEncoderOffset;
     }
 
     moveWristMotorRaw(motorOutput);
