@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.22475,
-        "y": 6.2675
+        "x": 1.7062499999980136,
+        "y": 7.369249999996606
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.254000000000001,
-        "y": 6.9152499999999995
+        "x": 2.7495000000000003,
+        "y": 6.27725
       },
       "isLocked": false,
-      "linkedName": "ST Point #1"
+      "linkedName": "Left Loading Station"
     },
     {
       "anchor": {
-        "x": 4.2315,
-        "y": 7.3302499999999995
+        "x": 3.79275,
+        "y": 5.18525
       },
       "prevControl": {
-        "x": 4.24125,
-        "y": 6.31625
+        "x": 2.8275000000000006,
+        "y": 6.17
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ST Point #2"
+      "linkedName": "Left Driverside Reef"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 1.25,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -62.31893843151474
   },
   "reversed": false,
-  "folder": "Tests",
+  "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -171.0850730428522
+    "rotation": 126.25383773744483
   },
   "useDefaultConstraints": true
 }

@@ -7,80 +7,73 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MP Move to MNReef from MSP"
+            "pathName": "Move to R1 from S2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "MoveToL3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CollectAlgaeFromReef"
+            "name": "CollectAlgaeFromReefL2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Proc from MNReef"
+            "pathName": "Move to NR from R1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "RunAlgaeOuttake"
+            "name": "ScoreInNet"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move to RNReef From Proc"
+            "pathName": "Move to R6 From NR"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "MoveToL4"
+            "name": "CollectAlgaeFromReefL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to NR From R6"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CollectAlgaeFromReef"
+            "name": "ScoreInNet"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Proc From RNReef "
+            "pathName": "Move to R2 from NR"
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunAlgaeOuttake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.25
-                }
-              }
-            ]
+            "name": "CollectAlgaeFromReefL3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Right Floor Algae"
+            "pathName": "Move to NR from R2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInNet"
           }
         }
       ]

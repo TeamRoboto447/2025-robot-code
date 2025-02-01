@@ -3,47 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.15775,
-        "y": 2.8744999999999994
+        "x": 5.80125,
+        "y": 4.05425
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.98671360738166,
-        "y": 3.1427324137498593
+        "x": 6.99075,
+        "y": 4.5515
       },
       "isLocked": false,
-      "linkedName": "Right Netside Reef"
+      "linkedName": "Middle Netside Reef"
     },
     {
       "anchor": {
-        "x": 6.3375,
-        "y": 0.5442499999999996
+        "x": 7.595250000000001,
+        "y": 5.0584999999999996
       },
       "prevControl": {
-        "x": 6.519811790543984,
-        "y": 0.19634595505607572
+        "x": 6.805499999999999,
+        "y": 4.707499999999999
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Processor"
+      "linkedName": "Net Right"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.21890909090909227,
-      "rotationDegrees": 128.437
-    },
-    {
-      "waypointRelativePos": 0.7061818181818053,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 1.25,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -51,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.97102193107912
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 120.96375653207352
+    "rotation": -178.71747291728983
   },
   "useDefaultConstraints": true
 }

@@ -3,39 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.3375,
-        "y": 0.5442499999999996
+        "x": 1.51125,
+        "y": 0.8172499999999991
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.2529527722747025,
-        "y": 0.8364360274513368
+        "x": 2.7982500000000003,
+        "y": 1.9579999999999995
       },
       "isLocked": false,
-      "linkedName": "Processor"
+      "linkedName": "Right Loading Station"
     },
     {
       "anchor": {
-        "x": 5.15775,
-        "y": 2.8744999999999994
+        "x": 3.79275,
+        "y": 2.8842499999999998
       },
       "prevControl": {
-        "x": 5.4415688657052,
-        "y": 2.100168324329579
+        "x": 2.8567499999999995,
+        "y": 1.9579999999999995
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Netside Reef"
+      "linkedName": "Right Driverside Reef"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.2785454545454599,
-      "rotationDegrees": -90.0
+      "waypointRelativePos": 0.06472727272727694,
+      "rotationDegrees": -127.29184063700036
     },
     {
-      "waypointRelativePos": 0.803636363636362,
-      "rotationDegrees": 128.437
+      "waypointRelativePos": 0.950545454545444,
+      "rotationDegrees": 60.293513381329014
     }
   ],
   "constraintZones": [],
@@ -43,7 +43,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 1.25,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -51,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 120.96375653207352
+    "rotation": 59.03624346792647
   },
   "reversed": false,
   "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.97102193107912
+    "rotation": -126.98290692634467
   },
   "useDefaultConstraints": true
 }

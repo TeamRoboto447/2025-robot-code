@@ -80,9 +80,11 @@ public final class Constants {
     public enum Level {
       FLOOR,
       TROUGH,
-      L2,
-      L3,
-      L4,
+      CORAL_L2,
+      CORAL_L3,
+      CORAL_L4,
+      ALGAE_L1,
+      ALGAE_L2,
       NET
     }
 
@@ -98,6 +100,14 @@ public final class Constants {
     public static final Distance L3_LEVEL = Inches.of(27.5);
     public static final Distance L4_LEVEL = Inches.of(35);
     public static final Distance NET_LEVEL = Inches.of(MAX_INCH_HEIGHT);
+    public static final int FLOOR_LEVEL = 0;
+    public static final int TROUGH_LEVEL = 100;
+    public static final int CORAL_L2_LEVEL = 200; // TODO: Update with correct values
+    public static final int CORAL_L3_LEVEL = 300;
+    public static final int CORAL_L4_LEVEL = 400;
+    public static final int ALGAE_L1_LEVEL = CORAL_L3_LEVEL;
+    public static final int ALGAE_L2_LEVEL = 350;
+    public static final int NET_LEVEL = 500;
   }
 
   public static class AlgaeManipulatorSubsystemConstants {

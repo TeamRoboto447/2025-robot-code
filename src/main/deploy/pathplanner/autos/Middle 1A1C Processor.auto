@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MP Move to MNReef from MSP"
+            "pathName": "Move to R1 from S2"
           }
         },
         {
@@ -63,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Proc from MNReef"
+            "pathName": "Move to Proc from R1"
           }
         },
         {
