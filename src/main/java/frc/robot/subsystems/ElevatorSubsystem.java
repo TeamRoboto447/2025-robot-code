@@ -59,12 +59,16 @@ public class ElevatorSubsystem extends SubsystemBase {
         return ElevatorSubsystemConstants.FLOOR_LEVEL;
       case TROUGH:
         return ElevatorSubsystemConstants.TROUGH_LEVEL;
-      case L2:
-        return ElevatorSubsystemConstants.L2_LEVEL;
-      case L3:
-        return ElevatorSubsystemConstants.L3_LEVEL;
-      case L4:
-        return ElevatorSubsystemConstants.L4_LEVEL;
+      case CORAL_L2:
+        return ElevatorSubsystemConstants.CORAL_L2_LEVEL;
+      case CORAL_L3:
+        return ElevatorSubsystemConstants.CORAL_L3_LEVEL;
+      case CORAL_L4:
+        return ElevatorSubsystemConstants.CORAL_L4_LEVEL;
+      case ALGAE_L1:
+        return ElevatorSubsystemConstants.ALGAE_L1_LEVEL;
+      case ALGAE_L2:
+        return ElevatorSubsystemConstants.ALGAE_L2_LEVEL;
       case NET:
         return ElevatorSubsystemConstants.NET_LEVEL;
       default:
@@ -90,15 +94,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.currentLevel = Level.TROUGH;
         break;
       case TROUGH:
-        this.currentLevel = Level.L2;
+        this.currentLevel = Level.CORAL_L2;
         break;
-      case L2:
-        this.currentLevel = Level.L3;
+      case CORAL_L2:
+        this.currentLevel = Level.CORAL_L3;
         break;
-      case L3:
-        this.currentLevel = Level.L4;
+      case CORAL_L3:
+        this.currentLevel = Level.CORAL_L4;
         break;
-      case L4:
+      case CORAL_L4:
         this.currentLevel = Level.NET;
         break;
       default:
@@ -110,15 +114,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean decreaseLevel() {
     switch (currentLevel) {
       case NET:
-        this.currentLevel = Level.L4;
+        this.currentLevel = Level.CORAL_L4;
         break;
-      case L4:
-        this.currentLevel = Level.L3;
+      case CORAL_L4:
+        this.currentLevel = Level.CORAL_L3;
         break;
-      case L3:
-        this.currentLevel = Level.L2;
+      case CORAL_L3:
+        this.currentLevel = Level.CORAL_L2;
         break;
-      case L2:
+      case CORAL_L2:
         this.currentLevel = Level.TROUGH;
         break;
       case TROUGH:

@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RP Move to RDReef from RSP"
+            "pathName": "Move to R1 from S2"
           }
         },
         {
@@ -25,32 +25,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Proc from RDReef"
+            "pathName": "Move to Proc from R1"
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunAlgaeOuttake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.25
-                }
-              }
-            ]
+            "name": "RunAlgaeOuttake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move to RNReef From Proc"
+            "pathName": "Move to R2 From Proc"
           }
         },
         {
@@ -68,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Proc From RNReef "
+            "pathName": "Move to Proc From R2 "
           }
         },
         {

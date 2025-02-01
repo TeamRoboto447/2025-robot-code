@@ -1,0 +1,68 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R6 from S1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreOnL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to LL from R6"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunCoralIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R5 from LL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreOnL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": null
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Ryan",
+  "choreoAuto": false
+}

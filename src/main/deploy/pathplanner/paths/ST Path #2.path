@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.2315,
-        "y": 6.0
+        "x": 7.22475,
+        "y": 6.2675
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.260750000000001,
-        "y": 6.647749999999999
+        "x": 7.254000000000001,
+        "y": 6.9152499999999995
       },
       "isLocked": false,
       "linkedName": "ST Point #1"
@@ -48,7 +48,7 @@
   "folder": "Tests",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -171.0850730428522
   },
   "useDefaultConstraints": true
 }

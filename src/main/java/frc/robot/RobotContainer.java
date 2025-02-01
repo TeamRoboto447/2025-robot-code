@@ -198,7 +198,21 @@ public class RobotContainer {
       algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0);
     });
 
-    NamedCommands.registerCommand("CollectAlgaeFromReef", new SequentialCommandGroup(
+    NamedCommands.registerCommand("CollectAlgaeFromReefL2", new SequentialCommandGroup(
+      this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L1)),
+        new ParallelRaceGroup(
+            runAlgaeIntake,
+            new SequentialCommandGroup(
+                // TODO: Tilt forward command,
+                new ParallelRaceGroup(
+                    //TODO: Add Coral Outtake
+                    new WaitCommand(0.25))
+                // TODO: Tilt back command
+            )),
+        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
+      
+    NamedCommands.registerCommand("CollectAlgaeFromReefL3", new SequentialCommandGroup(
+      this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L2)),
         new ParallelRaceGroup(
             runAlgaeIntake,
             new SequentialCommandGroup(
@@ -224,5 +238,8 @@ public class RobotContainer {
 
     // Algae Manipulator Commands
     NamedCommands.registerCommand("RunAlgaeIntake", runAlgaeIntake);
+    NamedCommands.registerCommand("ScoreInNet", Commands.runOnce(() -> {
+      // TODO: Add code
+    }));
   }
 }

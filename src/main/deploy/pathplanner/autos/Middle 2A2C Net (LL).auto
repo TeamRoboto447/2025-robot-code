@@ -7,25 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RP Move to RDReef from RSP"
+            "pathName": "Move to R1 from S2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "MoveToL3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CollectAlgaeFromReef"
+            "name": "CollectAlgaeFromReefL2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Proc from RDReef"
+            "pathName": "Move to NR from R1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInNet"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to LL from NR"
           }
         },
         {
@@ -35,13 +41,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunAlgaeOuttake"
+                  "name": "RunCoralIntake"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.25
+                  "waitTime": 2.0
                 }
               }
             ]
@@ -50,7 +56,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to Right Floor Algae"
+            "pathName": "Move to R5 from LL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgaeFromReefL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to NR from R5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInNet"
           }
         }
       ]

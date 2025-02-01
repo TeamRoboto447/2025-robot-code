@@ -1,0 +1,74 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R5 from S1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgaeFromReefL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to NR from R5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInNet"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to LL from NR"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunCoralIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R5 from LL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreOnL2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Ryan",
+  "choreoAuto": false
+}

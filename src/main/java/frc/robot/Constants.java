@@ -77,17 +77,21 @@ public final class Constants {
     public enum Level {
       FLOOR,
       TROUGH,
-      L2,
-      L3,
-      L4,
+      CORAL_L2,
+      CORAL_L3,
+      CORAL_L4,
+      ALGAE_L1,
+      ALGAE_L2,
       NET
     }
 
     public static final int FLOOR_LEVEL = 0;
     public static final int TROUGH_LEVEL = 100;
-    public static final int L2_LEVEL = 200; // TODO: Update with correct values
-    public static final int L3_LEVEL = 300;
-    public static final int L4_LEVEL = 400;
+    public static final int CORAL_L2_LEVEL = 200; // TODO: Update with correct values
+    public static final int CORAL_L3_LEVEL = 300;
+    public static final int CORAL_L4_LEVEL = 400;
+    public static final int ALGAE_L1_LEVEL = CORAL_L3_LEVEL;
+    public static final int ALGAE_L2_LEVEL = 350;
     public static final int NET_LEVEL = 500;
   }
 

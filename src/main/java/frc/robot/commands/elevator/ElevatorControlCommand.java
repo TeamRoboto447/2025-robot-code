@@ -33,11 +33,11 @@ public class ElevatorControlCommand extends Command {
     } else if (this.operatorController.a().getAsBoolean()) {
       this.elevatorSubsystem.setElevatorTargetHeight(Level.TROUGH);
     } else if (this.operatorController.b().getAsBoolean()) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.L2);
+      this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L2);
     } else if (this.operatorController.x().getAsBoolean()) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.L3);
+      this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L3);
     } else if (this.operatorController.y().getAsBoolean()) {
-      this.elevatorSubsystem.setElevatorTargetHeight(Level.L4);
+      this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L4);
     } else if (this.operatorController.rightBumper().getAsBoolean()) {
       this.elevatorSubsystem.setElevatorTargetHeight(Level.NET);
     }

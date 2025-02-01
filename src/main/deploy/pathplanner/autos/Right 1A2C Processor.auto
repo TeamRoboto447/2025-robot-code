@@ -1,0 +1,74 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R3 from S3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgaeFromReefL2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to Proc from R3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInProcessor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to LR from Proc"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunCoralIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R3 from LR "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreOnL2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Ryan",
+  "choreoAuto": false
+}
