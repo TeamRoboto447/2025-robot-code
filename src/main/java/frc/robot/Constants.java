@@ -32,35 +32,41 @@ public final class Constants {
   public static class SwerveSubsystemConstants {
     public static final double MAX_SPEED = Units.feetToMeters(4);
     public static final double ROBOT_MASS = Units.lbsToKilograms(96.6); // TODO: update mass with actual value
-    public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); //TODO: update with actual robot size
+    public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); // TODO:
+                                                                                                                       // update
+                                                                                                                       // with
+                                                                                                                       // actual
+                                                                                                                       // robot
+                                                                                                                       // size
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
   }
 
   public static class ExampleSubsystemConstants {
-    public static final int EXAMPLE_MOTOR_ID = 0; // This isn't a valid CAN ID, in your real subsystems make sure this matches the ID programmed into the 
+    public static final int EXAMPLE_MOTOR_ID = 0; // This isn't a valid CAN ID, in your real subsystems make sure this
+                                                  // matches the ID programmed into the
     public static final int EXAMPLE_LOWER_LIMIT_SWITCH_CHANNEL = 0;
     public static final int EXAMPLE_UPPER_LIMIT_SWITCH_CHANNEL = 1;
   }
 
-  public static class DriverConstants
-  {
+  public static class DriverConstants {
     // Default generic deadband value
-    public static final double DEADBAND        = 0.1;
-    
-    // While these feel redundant, it will allow for individual tuning of each axis in the future if necessary
+    public static final double DEADBAND = 0.1;
+
+    // While these feel redundant, it will allow for individual tuning of each axis
+    // in the future if necessary
     public static final double LEFT_X_DEADBAND = DEADBAND;
     public static final double LEFT_Y_DEADBAND = DEADBAND;
     public static final double RIGHT_X_DEADBAND = DEADBAND;
     public static final double RIGHT_Y_DEADBAND = DEADBAND;
-    public static final double TURN_CONSTANT    = 6;
+    public static final double TURN_CONSTANT = 6;
   }
 
-  public static class OperatorConstants
-  {
+  public static class OperatorConstants {
     // Default generic deadband value
-    public static final double DEADBAND        = 0.1;
-    
-    // While these feel redundant, it will allow for individual tuning of each axis in the future if necessary
+    public static final double DEADBAND = 0.1;
+
+    // While these feel redundant, it will allow for individual tuning of each axis
+    // in the future if necessary
     public static final double LEFT_X_DEADBAND = DEADBAND;
     public static final double LEFT_Y_DEADBAND = DEADBAND;
     public static final double RIGHT_X_DEADBAND = DEADBAND;
@@ -71,7 +77,7 @@ public final class Constants {
     public static final int CLIMBER_MAX_SPEED = 10;
     public static final int CLIMBER_MOTOR_ID = 20;
   }
-  
+
   public static class ElevatorSubsystemConstants {
     public static final int ELEVATOR_MOTOR_ID = 22;
     public static final int ELEVATOR_UPPER_LIMIT_SWITCH_CHANNEL = 2;
@@ -95,19 +101,12 @@ public final class Constants {
 
     public static final Distance FLOOR_LEVEL = Inches.of(0 + MIN_INCH_HEIGHT);
     public static final Distance TROUGH_LEVEL = Inches.of(0 + MIN_INCH_HEIGHT);
-    public static final Distance L2_LEVEL = Inches.of(13
-    );
-    public static final Distance L3_LEVEL = Inches.of(27.5);
-    public static final Distance L4_LEVEL = Inches.of(35);
+    public static final Distance CORAL_L2_LEVEL = Inches.of(13);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(27.5);
+    public static final Distance CORAL_L4_LEVEL = Inches.of(35);
     public static final Distance NET_LEVEL = Inches.of(MAX_INCH_HEIGHT);
-    public static final int FLOOR_LEVEL = 0;
-    public static final int TROUGH_LEVEL = 100;
-    public static final int CORAL_L2_LEVEL = 200; // TODO: Update with correct values
-    public static final int CORAL_L3_LEVEL = 300;
-    public static final int CORAL_L4_LEVEL = 400;
-    public static final int ALGAE_L1_LEVEL = CORAL_L3_LEVEL;
-    public static final int ALGAE_L2_LEVEL = 350;
-    public static final int NET_LEVEL = 500;
+    public static final Distance ALGAE_L1_LEVEL = CORAL_L3_LEVEL;
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(35); // TODO: set correct value
   }
 
   public static class AlgaeManipulatorSubsystemConstants {

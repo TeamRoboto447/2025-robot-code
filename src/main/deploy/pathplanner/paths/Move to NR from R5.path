@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.79275,
-        "y": 5.18525
+        "x": 3.812090163934426,
+        "y": 5.1698258196721305
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9877499999999997,
-        "y": 6.189500000000001
+        "x": 4.007090163934425,
+        "y": 6.174075819672131
       },
       "isLocked": false,
       "linkedName": "Left Driverside Reef"
@@ -48,7 +48,7 @@
   "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -62.31893843151474
+    "rotation": -59.03624346792651
   },
   "useDefaultConstraints": true
 }

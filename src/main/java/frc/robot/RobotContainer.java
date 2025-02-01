@@ -78,7 +78,7 @@ public class RobotContainer {
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
 
-    initializeNamedCommands();
+    // initializeNamedCommands();
 
     // Configure the trigger bindings
     configureMultisystemBindings();
@@ -172,8 +172,9 @@ public class RobotContainer {
   private void initializeElevatorSubsystem() {
     this.elevatorSubsystem = new ElevatorSubsystem();
     // Elevator is now controlled via triggers, a full command is not needed
-    if(this.elevatorSubsystem.debugging) {
-      this.elevatorSubsystem.setDefaultCommand(new ElevatorDebuggingControlCommand(elevatorSubsystem, operatorController));
+    if (this.elevatorSubsystem.debugging) {
+      this.elevatorSubsystem
+          .setDefaultCommand(new ElevatorDebuggingControlCommand(elevatorSubsystem, operatorController));
     } else {
       this.operatorController.a().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.increaseLevel()));
       this.operatorController.b().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.decreaseLevel()));
@@ -199,40 +200,54 @@ public class RobotContainer {
   }
 
   private void initializeNamedCommands() {
-    // NamedCommands.registerCommand("exampleCommand",
-    //     Commands.runOnce(() -> System.out.println("Example named command has been run!")));
+    NamedCommands.registerCommand("exampleCommand",
+        Commands.runOnce(() -> System.out.println("Example named command has been run!")));
 
-    // // Utility Commands
-    // Command runAlgaeIntake = this.algaeManipulatorSubsystem.run(() -> {
-    //   algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0);
-    //   algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0);
-    // });
+    // Utility Commands
+    Command runAlgaeIntake = this.algaeManipulatorSubsystem.run(() -> {
+      algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0);
+      algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0);
+    });
 
-    // NamedCommands.registerCommand("CollectAlgaeFromReef", new SequentialCommandGroup(
-    //     new ParallelRaceGroup(
-    //         runAlgaeIntake,
-    //         new SequentialCommandGroup(
-    //             // TODO: Tilt forward command,
-    //             new ParallelRaceGroup(
-    //                 //TODO: Add Coral Outtake
-    //                 new WaitCommand(0.25))
-    //         // TODO: Tilt back command
-    //         )),
-    //     this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
+    Command runCoralOuttake = this.algaeManipulatorSubsystem.run(() -> {
+      algaeManipulatorSubsystem.moveCoralMotorRaw(1);
+    });
 
-    // NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
-    //     this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)),
-    //     new ParallelRaceGroup(
-    //         runAlgaeIntake,
-    //         new SequentialCommandGroup(
-    //             // TODO: Tilt forward command,
-    //             new WaitCommand(0.25)
-    //         // TODO: Tilt back command
-    //         ))));
+    Command runCoralIntake = this.algaeManipulatorSubsystem.run(() -> {
+      algaeManipulatorSubsystem.moveCoralMotorRaw(-1);
+    });
 
-    // // Elevator Commands
+    Command tiltManipulatorForward = this.algaeManipulatorSubsystem.run(() -> {
+      // TODO: Use new function to set angle of manipulator
+    });
 
-    // // Algae Manipulator Commands
-    // NamedCommands.registerCommand("RunAlgaeIntake", runAlgaeIntake);
+    // TODO: Look through autos in pathplanner to find named commands that need to be added
+
+    NamedCommands.registerCommand("CollectAlgaeFromReefL2", new SequentialCommandGroup(
+        new ParallelRaceGroup( // TODO: Add height control in here
+            runAlgaeIntake,
+            new SequentialCommandGroup(
+                tiltManipulatorForward,
+                new ParallelRaceGroup(
+                    runCoralOuttake,
+                    new WaitCommand(0.25))
+            // TODO: Tilt back command
+            )),
+        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
+
+    NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
+        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)),
+        new ParallelRaceGroup(
+            runAlgaeIntake,
+            new SequentialCommandGroup(
+                // TODO: Tilt forward command,
+                new WaitCommand(0.25)
+            // TODO: Tilt back command
+            ))));
+
+    // Elevator Commands
+
+    // Algae Manipulator Commands
+    NamedCommands.registerCommand("RunAlgaeIntake", runAlgaeIntake);
   }
 }

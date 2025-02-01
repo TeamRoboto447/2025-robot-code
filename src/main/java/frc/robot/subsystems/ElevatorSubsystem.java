@@ -113,14 +113,14 @@ public class ElevatorSubsystem extends SubsystemBase {
       case TROUGH:
         outputHeight = ElevatorSubsystemConstants.TROUGH_LEVEL;
         break;
-      case L2:
-        outputHeight = ElevatorSubsystemConstants.L2_LEVEL;
+      case CORAL_L2:
+        outputHeight = ElevatorSubsystemConstants.CORAL_L2_LEVEL;
         break;
-      case L3:
-        outputHeight = ElevatorSubsystemConstants.L3_LEVEL;
+      case CORAL_L3:
+        outputHeight = ElevatorSubsystemConstants.CORAL_L3_LEVEL;
         break;
-      case L4:
-        outputHeight = ElevatorSubsystemConstants.L4_LEVEL;
+      case CORAL_L4:
+        outputHeight = ElevatorSubsystemConstants.CORAL_L4_LEVEL;
         break;
       case NET:
         outputHeight = ElevatorSubsystemConstants.NET_LEVEL;
@@ -149,10 +149,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.currentTargetLevel = Level.TROUGH;
         break;
       case TROUGH:
-        this.currentTargetLevel = Level.L2;
+        this.currentTargetLevel = Level.CORAL_L2;
         break;
-      case L2:
-        this.currentTargetLevel = Level.L3;
+      case CORAL_L2:
+        this.currentTargetLevel = Level.CORAL_L3;
         break;
       // case L3:
       //   this.currentTargetLevel = Level.L4;
@@ -169,15 +169,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean decreaseLevel() {
     switch (currentTargetLevel) {
       case NET:
-        this.currentTargetLevel = Level.L4;
+        this.currentTargetLevel = Level.CORAL_L4;
         break;
-      case L4:
-        this.currentTargetLevel = Level.L3;
+      case CORAL_L4:
+        this.currentTargetLevel = Level.CORAL_L3;
         break;
-      case L3:
-        this.currentTargetLevel = Level.L2;
+      case CORAL_L3:
+        this.currentTargetLevel = Level.CORAL_L2;
         break;
-      case L2:
+      case CORAL_L2:
         this.currentTargetLevel = Level.TROUGH;
         break;
       case TROUGH:

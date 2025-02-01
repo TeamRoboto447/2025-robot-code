@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7062499999980136,
-        "y": 7.369249999996606
+        "x": 1.7861680327839005,
+        "y": 7.411526639351738
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7495000000000003,
-        "y": 6.27725
+        "x": 2.5031121258818714,
+        "y": 5.804925093504872
       },
       "isLocked": false,
       "linkedName": "Left Loading Station"
     },
     {
       "anchor": {
-        "x": 3.79275,
-        "y": 5.18525
+        "x": 3.812090163934426,
+        "y": 5.1698258196721305
       },
       "prevControl": {
-        "x": 2.8275000000000006,
-        "y": 6.17
+        "x": 3.1313526822649367,
+        "y": 6.255026697466083
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -62.31893843151474
+    "rotation": -59.03624346792651
   },
   "reversed": false,
   "folder": "Ryan",

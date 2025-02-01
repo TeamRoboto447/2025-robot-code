@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreOnL2"
+            "name": "ScoreOnL3"
           }
         },
         {
@@ -56,7 +56,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Move to LL from R5"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunCoralIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R5 2nd Coral from LL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreOnL3"
           }
         }
       ]

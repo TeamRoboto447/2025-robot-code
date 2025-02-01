@@ -147,4 +147,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   public void setManipulatorAngle(Angle angle) {
     currentTargetWristPosition = getWristMotorRotations(angle);
   }
+
+  // TODO: Add/edit a function to set the target angle of the wrist
 }

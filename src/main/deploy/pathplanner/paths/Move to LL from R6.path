@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.79275,
-        "y": 5.18525
+        "x": 5.226,
+        "y": 5.1754999999999995
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8810628053753096,
-        "y": 6.613610382120841
+        "x": 4.602639344262294,
+        "y": 6.122528688524589
       },
       "isLocked": false,
-      "linkedName": "Left Driverside Reef"
+      "linkedName": "Left Netside Reef"
     },
     {
       "anchor": {
-        "x": 1.7062499999980136,
-        "y": 7.369249999996606
+        "x": 1.7861680327839005,
+        "y": 7.411526639351738
       },
       "prevControl": {
-        "x": 2.3383164290573175,
-        "y": 6.506585423089287
+        "x": 2.418234461843204,
+        "y": 6.548862062444418
       },
       "nextControl": null,
       "isLocked": false,
@@ -53,7 +53,7 @@
   "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -62.31893843151474
+    "rotation": -122.12499844038744
   },
   "useDefaultConstraints": true
 }

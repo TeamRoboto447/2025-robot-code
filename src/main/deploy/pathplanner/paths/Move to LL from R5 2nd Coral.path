@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.22475,
-        "y": 6.2675
+        "x": 4.0638319672131145,
+        "y": 5.33765368852459
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.41125,
-        "y": 6.2675
+        "x": 2.7482384530656336,
+        "y": 6.519013042443008
       },
       "isLocked": false,
-      "linkedName": "ST Point #1"
+      "linkedName": "Left Driverside Reef 2nd Coral"
     },
     {
       "anchor": {
-        "x": 3.812090163934426,
-        "y": 5.1698258196721305
+        "x": 1.7861680327839005,
+        "y": 7.411526639351738
       },
       "prevControl": {
-        "x": 3.8218401639344264,
-        "y": 6.4860758196721315
+        "x": 3.051146829126635,
+        "y": 6.150998987161408
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Driverside Reef"
+      "linkedName": "Left Loading Station"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.9680000000000013,
-      "rotationDegrees": -62.127375847162064
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.03624346792651
+    "rotation": 126.25383773744483
   },
   "reversed": false,
   "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -171.0850730428522
+    "rotation": -60.01836063115063
   },
   "useDefaultConstraints": true
 }
