@@ -12,9 +12,15 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SoftLimitConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -29,13 +35,18 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final SparkMax coralMotor;
 
   private final RelativeEncoder wristEncoder;
+  private final AbsoluteEncoder absoluteWristEncoder;
+
+  private final double absoluteEncoderOffset = 0.993;
 
   private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
 
   private double minRotationCount = 0;
-  private double maxRotationCount = 100;
+  private double maxRotationCount = 10;
+  private double minAbsoluteRotationCount = 0;
+  private double maxAbsoluteRotationCount = 0.5;
   private double minWristAngle = 0;
   private double maxWristAngle = 90;
 
@@ -43,24 +54,33 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   public AlgaeManipulatorSubsystem() {
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
-    this.wristMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
     this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.CORAL_MOTOR_ID, MotorType.kBrushless);
+    
+    this.wristMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
+    SparkMaxConfig wristConfig = new SparkMaxConfig();
+    SoftLimitConfig wristLimits = new SoftLimitConfig();
+    wristLimits.forwardSoftLimit(maxRotationCount);
+    wristLimits.forwardSoftLimitEnabled(true);
+    wristLimits.reverseSoftLimit(minRotationCount);
+    wristLimits.reverseSoftLimitEnabled(true);
+    wristConfig.apply(wristLimits);
+    wristConfig.idleMode(IdleMode.kBrake);
+    this.wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     this.wristEncoder = this.wristMotor.getEncoder();
+    this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
   }
 
   @Override
   public void periodic() {
 
-    double currentWristPosition = getWristMotorPosition();
+    double currentWristPosition = getAbsoluteWristPosition();
 
     double error = this.currentTargetWristPosition - currentWristPosition;
 
     double kP = 0.1;
 
     double angleMotorOutput = kP * error;
-
-    angleMotorOutput = Math.max(-1, Math.min(1, angleMotorOutput));
 
     checkForOperatorOverride(angleMotorOutput);
   }
@@ -73,7 +93,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     lowerWheelMotor.set(speed);
   }
 
-  public void moveWritstMotorRaw(double speed) {
+  public void moveWristMotorRaw(double speed) {
+    speed = Math.max(-0.1, Math.min(0.2, speed));
     wristMotor.set(speed);
   }
 
@@ -94,18 +115,26 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     if (!isPIDControlling) {
       motorOutput = operatorControlSpeed;
-      currentTargetWristPosition = getWristMotorPosition();
+      currentTargetWristPosition = getAbsoluteWristPosition();
     }
 
-    moveWritstMotorRaw(motorOutput);
+    moveWristMotorRaw(motorOutput);
   }
 
   public double getWristMotorPosition() {
-    double angle = wristEncoder.getPosition();
-    return angle; // convert returned value to rotations
+    return wristEncoder.getPosition();
   }
 
-  public Angle getWristAngle(double rotations) {
+  public double getAbsoluteWristPosition() {
+    return absoluteWristEncoder.getPosition() - absoluteEncoderOffset;
+  }
+
+  public Angle getWristAngleFromAbsolute(double rotations) {
+    double degrees = MathUtils.map(rotations, minAbsoluteRotationCount, maxAbsoluteRotationCount, minWristAngle, maxWristAngle);
+    return Angle.ofBaseUnits(degrees, Units.Degrees);
+  }
+
+  public Angle getWristAngleFromRelative(double rotations) {
     double degrees = MathUtils.map(rotations, minRotationCount, maxRotationCount, minWristAngle, maxWristAngle);
     return Angle.ofBaseUnits(degrees, Units.Degrees);
   }
