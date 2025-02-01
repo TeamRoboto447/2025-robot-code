@@ -12,6 +12,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -29,6 +30,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final SparkMax coralMotor;
 
   private final RelativeEncoder wristEncoder;
+  private final AbsoluteEncoder absoluteWristEncoder;
 
   private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
@@ -47,12 +49,13 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.CORAL_MOTOR_ID, MotorType.kBrushless);
 
     this.wristEncoder = this.wristMotor.getEncoder();
+    this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
   }
 
   @Override
   public void periodic() {
 
-    double currentWristPosition = getWristMotorPosition();
+    double currentWristPosition = getAbsoluteWristPosition();
 
     double error = this.currentTargetWristPosition - currentWristPosition;
 
@@ -94,7 +97,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     if (!isPIDControlling) {
       motorOutput = operatorControlSpeed;
-      currentTargetWristPosition = getWristMotorPosition();
+      currentTargetWristPosition = getAbsoluteWristPosition();
     }
 
     moveWritstMotorRaw(motorOutput);
@@ -103,6 +106,11 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   public double getWristMotorPosition() {
     double angle = wristEncoder.getPosition();
     return angle; // convert returned value to rotations
+  }
+
+  public double getAbsoluteWristPosition() {
+    double angle = absoluteWristEncoder.getPosition();
+    return angle;
   }
 
   public Angle getWristAngle(double rotations) {
