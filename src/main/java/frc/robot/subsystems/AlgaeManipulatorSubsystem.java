@@ -39,8 +39,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final RelativeEncoder wristEncoder;
   private final AbsoluteEncoder absoluteWristEncoder;
 
-  private final double absoluteEncoderOffset = 0.993;
-
   private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
@@ -76,7 +74,9 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    double error = this.currentTargetWristPosition - getAbsoluteWristPosition();
+    double currentWristPosition = getAbsoluteWristPosition();
+
+    double error = this.currentTargetWristPosition - currentWristPosition;
 
     double kP = 0.1;
 
@@ -142,16 +142,13 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public double getWristMotorPosition() {
-    return wristEncoder.getPosition();
+    double angle = wristEncoder.getPosition();
+    return angle; // convert returned value to rotations
   }
 
   public double getAbsoluteWristPosition() {
-    return absoluteWristEncoder.getPosition() - absoluteEncoderOffset;
-  }
-
-  public Angle getWristAngleFromAbsolute(double rotations) {
-    double degrees = MathUtils.map(rotations, minAbsoluteRotationCount, maxAbsoluteRotationCount, minWristAngle, maxWristAngle);
-    return Angle.ofBaseUnits(degrees, Units.Degrees);
+    double angle = absoluteWristEncoder.getPosition();
+    return angle;
   }
 
   public Angle getWristAngleFromRelative(double rotations) {
