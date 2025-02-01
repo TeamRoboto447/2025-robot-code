@@ -39,7 +39,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final RelativeEncoder wristEncoder;
   private final AbsoluteEncoder absoluteWristEncoder;
 
-  private final double absoluteEncoderOffset = 0;
+  private final double absoluteEncoderOffset = -0.99;
 
   private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
