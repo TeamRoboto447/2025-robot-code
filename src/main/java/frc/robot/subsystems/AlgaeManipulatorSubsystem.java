@@ -24,6 +24,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeManipulatorSubsystemConstants;
 import frc.robot.utils.MathUtils;
@@ -37,16 +38,16 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final RelativeEncoder wristEncoder;
   private final AbsoluteEncoder absoluteWristEncoder;
 
-  private final double absoluteEncoderOffset = 0.993;
-
   private double currentTargetWristPosition = 0.0;
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
 
-  private double minRotationCount = 0;
-  private double maxRotationCount = 10;
-  private double minAbsoluteRotationCount = 0;
-  private double maxAbsoluteRotationCount = 0.5;
+
+  private final double absoluteEncoderOffset = 0.99;
+  private double minRotationCount = 15;
+  private double maxRotationCount = 65;
+  private double minAbsoluteRotationCount = -0.5;
+  private double maxAbsoluteRotationCount = 0;
   private double minWristAngle = 0;
   private double maxWristAngle = 90;
 
@@ -78,11 +79,13 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     double error = this.currentTargetWristPosition - currentWristPosition;
 
-    double kP = 0.1;
+    double kP = 0.5;
 
     double angleMotorOutput = kP * error;
 
     checkForOperatorOverride(angleMotorOutput);
+    SmartDashboard.putNumber("Absolute position", getAbsoluteWristPosition());
+    SmartDashboard.putNumber("Relative position", getWristMotorPosition());
   }
 
   public void intakeAlgae(double speed) {
@@ -109,7 +112,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void moveWristMotorRaw(double speed) {
-    speed = Math.max(-0.1, Math.min(0.2, speed));
+    speed = Math.max(-0.5, Math.min(1, speed));
     wristMotor.set(speed);
   }
 
@@ -130,7 +133,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     if (!isPIDControlling) {
       motorOutput = operatorControlSpeed;
-      currentTargetWristPosition = getAbsoluteWristPosition();
+      currentTargetWristPosition = Math.max(minAbsoluteRotationCount, Math.min(getAbsoluteWristPosition(), maxAbsoluteRotationCount));
     }
 
     moveWristMotorRaw(motorOutput);
