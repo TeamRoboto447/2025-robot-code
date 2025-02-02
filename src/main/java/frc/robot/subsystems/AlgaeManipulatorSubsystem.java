@@ -24,6 +24,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeManipulatorSubsystemConstants;
 import frc.robot.utils.MathUtils;
@@ -74,15 +76,33 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    double currentWristPosition = getAbsoluteWristPosition();
-
-    double error = this.currentTargetWristPosition - currentWristPosition;
+    double error = this.currentTargetWristPosition - getAbsoluteWristPosition();
 
     double kP = 0.1;
 
     double angleMotorOutput = kP * error;
 
     checkForOperatorOverride(angleMotorOutput);
+  }
+
+  public boolean atTarget() {
+    return Math.abs(this.currentTargetWristPosition - getAbsoluteWristPosition()) < 0.05;
+  }
+
+  public Command tiltToAngle(Angle angle) {
+    return new FunctionalCommand(
+        // Command init
+        () -> this.setManipulatorAngle(angle),
+        // Command execute/periodic
+        () -> {
+        },
+        // Command end
+        interrupted -> {
+        },
+        // Command isFinished
+        () -> this.atTarget(),
+        // Command requirements
+        this);
   }
 
   public void moveUpperWheelMotorRaw(double speed) {
@@ -144,9 +164,12 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     return MathUtils.map(degrees, minWristAngle, maxWristAngle, minRotationCount, maxRotationCount);
   }
 
-  public void setManipulatorAngle(Angle angle) {
-    currentTargetWristPosition = getWristMotorRotations(angle);
+  public double getWristAbsolutePosition(Angle angle) {
+    double degrees = angle.in(Units.Degrees);
+    return MathUtils.map(degrees, minWristAngle, maxWristAngle, minAbsoluteRotationCount, maxAbsoluteRotationCount);
   }
 
-  // TODO: Add/edit a function to set the target angle of the wrist
+  public void setManipulatorAngle(Angle angle) {
+    currentTargetWristPosition = getWristAbsolutePosition(angle);
+  }
 }

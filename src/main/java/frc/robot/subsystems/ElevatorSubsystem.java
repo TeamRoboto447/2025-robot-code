@@ -19,6 +19,8 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorSubsystemConstants;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
@@ -53,30 +55,27 @@ public class ElevatorSubsystem extends SubsystemBase {
       double maxSpeed = 1;
       motorOutput = Math.max(-maxSpeed, Math.min(maxSpeed, motorOutput)); // Clamp the output between -1 and 1
       SmartDashboard.putNumber("Elevator Controller Output", motorOutput);
-      // SmartDashboard.putNumber("Current Position Raw", elevatorEncoder.getPosition());
-      // SmartDashboard.putNumber("Current Position Inch",
-      //     rawPositionToHeight(elevatorEncoder.getPosition()).in(Units.Inches));
       SmartDashboard.putString("Current Target Level", this.currentTargetLevel.toString());
-      // SmartDashboard.putNumber("Current Target Raw", currentTargetPosition);
-      // SmartDashboard.putNumber("Current Target Inch", this.rawPositionToHeight(currentTargetPosition).in(Units.Inches));
       moveMotorRaw(motorOutput);
     }
+  }
 
-    // SmartDashboard.putNumber("Elevator Raw Position", this.elevatorEncoder.getPosition());
-    // SmartDashboard.putNumber("Elevator Height from Panel (in)",
-    //     rawPositionToHeight(this.elevatorEncoder.getPosition()).in(Units.Inches));
-    // SmartDashboard.putNumber("Position at 11.5 in", heightToRawPosition(Inches.of(11.5)));
-    // SmartDashboard.putNumber("Position at 92 in", heightToRawPosition(Inches.of(92)));
-    // SmartDashboard.putNumber("Height at 0", rawPositionToHeight(0).in(Units.Inches));
-    // SmartDashboard.putNumber("Height at 270", rawPositionToHeight(270).in(Units.Inches));
-    // if (elevatorUpperLimitSwitch.get() && motorOutput > 0) {
-    // motorOutput = 0; // Stop motor if upper limit switch is hit and output is
-    // positive
-    // }
-    // if (elevatorLowerLimitSwitch.get() && motorOutput < 0) {
-    // motorOutput = 0; // Stop motor if lower limit switch is hit and output is
-    // negative
-    // }
+  private boolean atTarget() {
+    return Math.abs(this.getPositionFromLevel(currentTargetLevel) - elevatorEncoder.getPosition()) < 10;
+  }
+
+  public Command moveElevatorToLevel(Level level) {
+    return new FunctionalCommand(
+        // Command init
+        () -> this.setElevatorTargetHeight(level),
+        // Command execute/periodic
+        () -> {},
+        // Command end
+        interrupted -> {},
+        // Command isFinished
+        () -> this.atTarget(),
+        // Command requirements
+        this);
   }
 
   private double heightToRawPosition(Distance height) {

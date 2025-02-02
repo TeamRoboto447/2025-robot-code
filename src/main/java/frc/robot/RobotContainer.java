@@ -9,11 +9,14 @@ import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -205,8 +208,13 @@ public class RobotContainer {
 
     // Utility Commands
     Command runAlgaeIntake = this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0);
-      algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0);
+      algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0.5);
+      algaeManipulatorSubsystem.moveUpperWheelMotorRaw(-0.5);
+    });
+
+    Command runAlgaeOuttake = this.algaeManipulatorSubsystem.run(() -> {
+      algaeManipulatorSubsystem.moveLowerWheelMotorRaw(-0.5);
+      algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0.5);
     });
 
     Command runCoralOuttake = this.algaeManipulatorSubsystem.run(() -> {
@@ -217,37 +225,64 @@ public class RobotContainer {
       algaeManipulatorSubsystem.moveCoralMotorRaw(-1);
     });
 
-    Command tiltManipulatorForward = this.algaeManipulatorSubsystem.run(() -> {
-      // TODO: Use new function to set angle of manipulator
-    });
+    Command tiltManipulatorForward = algaeManipulatorSubsystem.tiltToAngle(Angle.ofBaseUnits(0, Units.Degrees));
+    Command tiltManipulatorBack = algaeManipulatorSubsystem.tiltToAngle(Angle.ofBaseUnits(90, Units.Degrees));
 
-    // TODO: Look through autos in pathplanner to find named commands that need to be added
 
+    // Collection Commands
+    // TODO: CollectAlgaeFromReef (Or replace instances of it with more accurate commands)
     NamedCommands.registerCommand("CollectAlgaeFromReefL2", new SequentialCommandGroup(
-        new ParallelRaceGroup( // TODO: Add height control in here
+        elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L1),
+        new ParallelRaceGroup(
             runAlgaeIntake,
             new SequentialCommandGroup(
                 tiltManipulatorForward,
                 new ParallelRaceGroup(
                     runCoralOuttake,
-                    new WaitCommand(0.25))
-            // TODO: Tilt back command
-            )),
+                    new WaitCommand(0.25)),
+                tiltManipulatorBack)),
         this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
 
-    NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
-        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)),
+    NamedCommands.registerCommand("CollectAlgaeFromReefL3", new SequentialCommandGroup(
+        elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L2),
         new ParallelRaceGroup(
             runAlgaeIntake,
             new SequentialCommandGroup(
-                // TODO: Tilt forward command,
-                new WaitCommand(0.25)
-            // TODO: Tilt back command
-            ))));
+                tiltManipulatorForward,
+                new ParallelRaceGroup(
+                    runCoralOuttake,
+                    new WaitCommand(0.25)),
+                tiltManipulatorBack)),
+        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
+
+    NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
+        this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
+        new ParallelRaceGroup(
+            runAlgaeIntake,
+            new SequentialCommandGroup(
+                tiltManipulatorForward,
+                new WaitCommand(0.25),
+                tiltManipulatorBack))));
+
+    // Scoring Commands
+    // TODO: ScoreInProcessor
+    // TODO: ScoreOnL2
+    // TODO: ScoreOnL3
+    // TODO: ScoreInNet
 
     // Elevator Commands
-
+    // TODO: MoveToFloor
+    // TODO: MoveToL2
+    // TODO: MoveToL3
+    // TODO: MoveToL4
+    
     // Algae Manipulator Commands
     NamedCommands.registerCommand("RunAlgaeIntake", runAlgaeIntake);
+    NamedCommands.registerCommand("RunAlgaeOuttake", runAlgaeOuttake);
+    NamedCommands.registerCommand("RunCoralIntake", runCoralIntake);
+    NamedCommands.registerCommand("RunCoralOuttake", runCoralOuttake);
+    NamedCommands.registerCommand("TiltManipulatorForward", tiltManipulatorForward);
+    NamedCommands.registerCommand("TiltManipulatorBack", tiltManipulatorBack);
+
   }
 }
