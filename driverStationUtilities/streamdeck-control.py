@@ -196,13 +196,13 @@ class ControlPanel:
         self.reset_button_with_new_args(2, 1, deck, "HOLD", "Button 7", "green.png", "empty.png")
         self.reset_button_with_new_args(3, 1, deck, "HOLD", "Button 8", "green.png", "empty.png")
         self.reset_button_with_new_args(4, 1, deck, "HOLD", "Button 9", "green.png", "empty.png")
-        self.reset_button_with_new_args(3, 2, deck, "HOLD", "Left", "left.jpeg", "left.jpeg")
-        self.reset_button_with_new_args(4, 2, deck, "HOLD", "Right", "right.jpeg", "right.jpeg")
+        self.reset_button_with_new_args(3, 2, deck, "HOLD", "Select Left", "left.jpeg", "left.jpeg")
+        self.reset_button_with_new_args(4, 2, deck, "HOLD", "Select Right", "right.jpeg", "right.jpeg")
         self.reset_button_with_new_args(2, 2, deck, "HOLD", "Reset Panel", "reset.jpeg", "reset.jpeg")
 
     def enable_levels(self, deck):
         self.reset_button_with_new_args(3, 2, deck, "HOLD", "Processor", "processor.jpeg", "processor.jpeg")
-        self.reset_button_with_new_args(4, 2, deck, "HOLD", "Level 1", "L1.jpeg", "L1.jpeg")
+        self.reset_button_with_new_args(4, 2, deck, "HOLD", "Floor", "L1.jpeg", "L1.jpeg")
         self.reset_button_with_new_args(3, 1, deck, "HOLD", "Level 2", "L2.jpeg", "L2.jpeg")
         self.reset_button_with_new_args(4, 1, deck, "HOLD", "Level 3", "L3.jpeg", "L3.jpeg")
         self.reset_button_with_new_args(3, 0, deck, "HOLD", "Level 4", "L4.jpeg", "L4.jpeg")
@@ -285,7 +285,7 @@ def key_change_callback(deck, key, state):
     button = panel.get_button_by_index(key)
     button.trigger(state)
     if button.state:
-        if("Left" == button.label or "Right" == button.label):
+        if("Select Left" == button.label or "Select Right" == button.label):
             panel.enable_levels(deck)
 
         if(button.label in ["Reef One", "Reef Two", "Reef Three", "Reef Four", "Reef Five", "Reef Six"]):
