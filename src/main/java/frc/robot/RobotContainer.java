@@ -81,7 +81,7 @@ public class RobotContainer {
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
 
-    // initializeNamedCommands();
+    initializeNamedCommands();
 
     // Configure the trigger bindings
     configureMultisystemBindings();
@@ -230,7 +230,6 @@ public class RobotContainer {
 
 
     // Collection Commands
-    // TODO: CollectAlgaeFromReef (Or replace instances of it with more accurate commands)
     NamedCommands.registerCommand("CollectAlgaeFromReefL2", new SequentialCommandGroup(
         elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L1),
         new ParallelRaceGroup(
@@ -265,16 +264,48 @@ public class RobotContainer {
                 tiltManipulatorBack))));
 
     // Scoring Commands
-    // TODO: ScoreInProcessor
-    // TODO: ScoreOnL2
-    // TODO: ScoreOnL3
-    // TODO: ScoreInNet
+    NamedCommands.registerCommand("ScoreInProcessor", new SequentialCommandGroup(
+      this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
+      tiltManipulatorForward,
+      new ParallelRaceGroup(
+        runAlgaeOuttake,
+        new WaitCommand(0.25)
+      ),
+      tiltManipulatorBack
+    ));
+    NamedCommands.registerCommand("ScoreOnL2", new SequentialCommandGroup(
+      this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L2),
+      tiltManipulatorForward,
+      new ParallelRaceGroup(
+        runCoralOuttake,
+        new WaitCommand(0.25)
+      ),
+      tiltManipulatorBack
+    ));
+    NamedCommands.registerCommand("ScoreOnL3", new SequentialCommandGroup(
+      this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L3),
+      tiltManipulatorForward,
+      new ParallelRaceGroup(
+        runCoralOuttake,
+        new WaitCommand(0.25)
+      ),
+      tiltManipulatorBack
+    ));
+    NamedCommands.registerCommand("ScoreOnNet", new SequentialCommandGroup(
+      this.elevatorSubsystem.moveElevatorToLevel(Level.NET),
+      tiltManipulatorForward,
+      new ParallelRaceGroup(
+        runAlgaeOuttake,
+        new WaitCommand(0.25)
+      ),
+      tiltManipulatorBack
+    ));
 
     // Elevator Commands
-    // TODO: MoveToFloor
-    // TODO: MoveToL2
-    // TODO: MoveToL3
-    // TODO: MoveToL4
+    NamedCommands.registerCommand("MoveToFloor", this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR));
+    NamedCommands.registerCommand("MoveToL2", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L2));
+    NamedCommands.registerCommand("MoveToL3", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L3));
+    NamedCommands.registerCommand("MoveToL4", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L4));
     
     // Algae Manipulator Commands
     NamedCommands.registerCommand("RunAlgaeIntake", runAlgaeIntake);
