@@ -34,6 +34,7 @@ import swervelib.SwerveInputStream;
 // Example code, TODO: remove before competition season begins
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.example.ExampleCommand;
+import frc.robot.controllers.ReefscapeStreamdeckController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -63,6 +64,7 @@ public class RobotContainer {
       ControllerConstants.DRIVER_CONTROLLER_PORT);
   private CommandXboxController operatorController = new CommandXboxController(
       ControllerConstants.OPERATOR_CONTROLLER_PORT);
+  private ReefscapeStreamdeckController operatorStreamdeck = new ReefscapeStreamdeckController();
 
   private final SendableChooser<Command> autoChooser;
 
@@ -74,6 +76,7 @@ public class RobotContainer {
     initializeClimberSubsystem();
     initializeElevatorSubsystem();
     initializeAlgaeManipulatorSubsystem();
+    // initializeStreamdeckBasedControls();
 
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
@@ -122,29 +125,43 @@ public class RobotContainer {
         "swerve"));
 
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-        () -> driverController.getLeftY() * -1,
-        () -> driverController.getLeftX() * -1)
-        .withControllerRotationAxis(() -> -driverController.getRightX())
-        .deadband(DriverConstants.DEADBAND)
-        .scaleTranslation(0.8)
-        .allianceRelativeControl(true);
-
-    SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
-        .withControllerHeadingAxis(driverController::getRightX,
-            driverController::getRightY)
-        .headingWhile(true);
-
-    @SuppressWarnings("unused")
-    Command driveFieldOrientedDirectAngle = swerveSubsystem.driveFieldOriented(driveDirectAngle);
+      () -> driverController.getLeftY() * -1,
+      () -> driverController.getLeftX() * -1)
+      .withControllerRotationAxis(() -> -driverController.getRightX())
+      .deadband(DriverConstants.DEADBAND)
+      .scaleTranslation(0.8)
+      .allianceRelativeControl(true);
 
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
 
-    @SuppressWarnings("unused")
-    Command driveSetpointGen = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
+    // SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
+    //     .withControllerHeadingAxis(driverController::getRightX,
+    //         driverController::getRightY)
+    //     .headingWhile(true);
+
+    // Command driveFieldOrientedDirectAngle = swerveSubsystem.driveFieldOriented(driveDirectAngle);
+
+    // Command driveSetpointGen = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
 
     this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
   }
 
+  private void initializeStreamdeckBasedControls() {
+    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
+      () -> operatorStreamdeck.getYShiftSpeed(),
+      () -> operatorStreamdeck.getXShiftSpeed())
+      .withControllerRotationAxis(() -> 0)
+      .deadband(0)
+      .scaleTranslation(0.8);
+
+    Command operatorShifting = swerveSubsystem.drive(driveAngularVelocity);
+    this.operatorStreamdeck.shifting.whileTrue(operatorShifting);
+
+    this.operatorStreamdeck.algaeIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
+    this.operatorStreamdeck.algaeOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
+    this.operatorStreamdeck.coralIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(1)));
+    this.operatorStreamdeck.coralOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1)));
+  }
   private void initializeExampleSubsystem() {
     this.exampleSubsystem = new ExampleSubsystem();
     this.exampleCommand = new ExampleCommand(exampleSubsystem, operatorController);

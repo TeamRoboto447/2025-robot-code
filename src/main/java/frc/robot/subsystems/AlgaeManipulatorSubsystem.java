@@ -85,11 +85,26 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     checkForOperatorOverride(angleMotorOutput);
   }
 
-  public void moveUpperWheelMotorRaw(double speed) {
+  public void intakeAlgae(double speed) {
+    this.moveUpperWheelMotorRaw(-speed);
+    this.moveLowerWheelMotorRaw(speed);
+  }
+
+  public void outtakeAlgae(double speed) {
+    this.moveUpperWheelMotorRaw(speed);
+    this.moveLowerWheelMotorRaw(-speed);
+  }
+
+  public void holdAlgae() {
+    this.moveLowerWheelMotorRaw(0);
+    this.moveUpperWheelMotorRaw(0);
+  }
+
+  private void moveUpperWheelMotorRaw(double speed) {
     upperWheelMotor.set(speed);
   }
 
-  public void moveLowerWheelMotorRaw(double speed) {
+  private void moveLowerWheelMotorRaw(double speed) {
     lowerWheelMotor.set(speed);
   }
 
