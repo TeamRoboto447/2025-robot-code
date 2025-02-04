@@ -46,11 +46,9 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private SparkMaxConfig wristConfig = new SparkMaxConfig();
   private SoftLimitConfig wristLimits = new SoftLimitConfig();
 
-
-  private final double absoluteEncoderOffset = 0.99;
   private double minRotationCount = 20;
   private double maxRotationCount = 65;
-  private double minAbsoluteRotationCount = -0.5;
+  private double minAbsoluteRotationCount = 0.5;
   private double maxAbsoluteRotationCount = 0;
   private double minWristAngle = 0;
   private double maxWristAngle = 90;
@@ -72,7 +70,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
-    // this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
+    this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
   }
 
   @Override
@@ -88,7 +86,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     checkForOperatorOverride(angleMotorOutput);
     SmartDashboard.putNumber("Absolute position", getAbsoluteWristPosition());
-    SmartDashboard.putNumber("Relative position", getWristMotorPosition());
   }
 
   public void intakeAlgae(double speed) {
@@ -152,22 +149,12 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     moveWristMotorRaw(motorOutput);
   }
 
-  public double getWristMotorPosition() {
-    return wristEncoder.getPosition();
-  }
-
   public double getAbsoluteWristPosition() {
-    return absoluteWristEncoder.getPosition() - absoluteEncoderOffset;
+    return absoluteWristEncoder.getPosition();
   }
 
-  public Angle getWristAngleFromAbsolute(double rotations) {
-    double degrees = MathUtils.map(rotations, minAbsoluteRotationCount, maxAbsoluteRotationCount, minWristAngle, maxWristAngle);
-    return Angle.ofBaseUnits(degrees, Units.Degrees);
-  }
-
-  public Angle getWristAngleFromRelative(double rotations) {
-    double degrees = MathUtils.map(rotations, minRotationCount, maxRotationCount, minWristAngle, maxWristAngle);
-    return Angle.ofBaseUnits(degrees, Units.Degrees);
+  public double getAbsoluteFromWristAngle(Angle angle) {
+    return MathUtils.map(angle.in(Units.Degrees), minWristAngle, maxWristAngle, minAbsoluteRotationCount, maxAbsoluteRotationCount);
   }
 
   public double getWristMotorRotations(Angle angle) {
@@ -175,12 +162,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     return MathUtils.map(degrees, minWristAngle, maxWristAngle, minRotationCount, maxRotationCount);
   }
 
-  public double getWristAbsolutePosition(Angle angle) {
-    double degrees = angle.in(Units.Degrees);
-    return MathUtils.map(degrees, minWristAngle, maxWristAngle, minAbsoluteRotationCount, maxAbsoluteRotationCount);
-  }
-
   public void setManipulatorAngle(Angle angle) {
-    currentTargetWristPosition = getWristAbsolutePosition(angle);
+    currentTargetWristPosition = getAbsoluteFromWristAngle(angle);
   }
 }
