@@ -157,6 +157,10 @@ public class RobotContainer {
     Command operatorShifting = swerveSubsystem.drive(driveAngularVelocity);
     this.operatorStreamdeck.shifting.whileTrue(operatorShifting);
 
+    this.operatorStreamdeck.algaeIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
+    this.operatorStreamdeck.algaeOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
+    this.operatorStreamdeck.coralIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(1)));
+    this.operatorStreamdeck.coralOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1)));
   }
   private void initializeExampleSubsystem() {
     this.exampleSubsystem = new ExampleSubsystem();

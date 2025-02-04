@@ -1,7 +1,7 @@
 package frc.robot.controllers;
 
-import java.util.function.BooleanSupplier;
-
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class ReefscapeStreamdeckController extends StreamdeckController{
@@ -10,17 +10,21 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
     public final Trigger algaeIntake, algaeOuttake, coralIntake, coralOuttake;
     public final Trigger selectLeft, selectRight;
     public final Trigger processor, floor, levelTwo, levelThree, levelFour, net;
+    public final Trigger reset;
+    private TargetReef targetReef;
 
+    public enum TargetReef {
+        ReefOne,
+        ReefTwo,
+        ReefThree,
+        ReefFour,
+        ReefFive,
+        ReefSix,
+        NONE
+    }
     
     public ReefscapeStreamdeckController() {
         super();
-
-        reefOne = new Trigger(this.getButton("Reef One"));
-        reefTwo = new Trigger(this.getButton("Reef Two"));
-        reefThree = new Trigger(this.getButton("Reef Three"));
-        reefFour = new Trigger(this.getButton("Reef Four"));
-        reefFive = new Trigger(this.getButton("Reef Five"));
-        reefSix = new Trigger(this.getButton("Reef Six"));
 
         shiftLeft = new Trigger(this.getButton("Shift Left"));
         shiftForward = new Trigger(this.getButton("Shift Forward"));
@@ -42,6 +46,26 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
         levelThree = new Trigger(this.getButton("Level 3"));
         levelFour = new Trigger(this.getButton("Level 4"));
         net = new Trigger(this.getButton("Net"));
+
+        reefOne = new Trigger(this.getButton("Reef One"));
+        reefTwo = new Trigger(this.getButton("Reef Two"));
+        reefThree = new Trigger(this.getButton("Reef Three"));
+        reefFour = new Trigger(this.getButton("Reef Four"));
+        reefFive = new Trigger(this.getButton("Reef Five"));
+        reefSix = new Trigger(this.getButton("Reef Six"));
+        reset = new Trigger(this.getButton("Reset"));
+        
+        reset.onTrue(Commands.run(() -> this.targetReef = TargetReef.NONE));
+        reefOne.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefOne));
+        reefTwo.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefTwo));
+        reefThree.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefThree));
+        reefFour.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefFour));
+        reefFive.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefFive));
+        reefSix.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefSix));
+    }
+
+    public TargetReef getTargetReef() {
+        return this.targetReef;
     }
 
     public double getXShiftSpeed() {
