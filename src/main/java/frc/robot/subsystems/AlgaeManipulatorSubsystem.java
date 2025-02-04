@@ -111,7 +111,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     upperWheelMotor.set(speed);
   }
 
-  public void moveLowerWheelMotorRaw(double speed) {
+  private void moveLowerWheelMotorRaw(double speed) {
     lowerWheelMotor.set(speed);
   }
 

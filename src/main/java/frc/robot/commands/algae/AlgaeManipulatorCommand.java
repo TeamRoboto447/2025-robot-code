@@ -31,14 +31,11 @@ public class AlgaeManipulatorCommand extends Command {
     double intakeSpeed = this.operatorController.getRightTriggerAxis();
 
     if (this.operatorController.leftTrigger(0.1).getAsBoolean()) {
-      this.algaeManipulatorSubsystem.moveUpperWheelMotorRaw(outtakeSpeed);
-      this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(-outtakeSpeed);
+      this.algaeManipulatorSubsystem.outtakeAlgae(outtakeSpeed);
     } else if (this.operatorController.rightTrigger(0.1).getAsBoolean()) {
-      this.algaeManipulatorSubsystem.moveUpperWheelMotorRaw(-intakeSpeed);
-      this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(intakeSpeed);
+      this.algaeManipulatorSubsystem.intakeAlgae(intakeSpeed);
     } else {
-      this.algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0);
-      this.algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0);
+      this.algaeManipulatorSubsystem.holdAlgae();
     }
 
     if (this.operatorController.pov(90).getAsBoolean()) {
