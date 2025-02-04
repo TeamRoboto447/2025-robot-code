@@ -79,7 +79,7 @@ public class RobotContainer {
     initializeClimberSubsystem();
     initializeElevatorSubsystem();
     initializeAlgaeManipulatorSubsystem();
-    initializeStreamdeckBasedControls();
+    // initializeStreamdeckBasedControls();
 
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
