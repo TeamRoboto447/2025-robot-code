@@ -113,13 +113,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         outputHeight = ElevatorSubsystemConstants.TROUGH_LEVEL;
         break;
       case CORAL_L2:
-        outputHeight = ElevatorSubsystemConstants.CORAL_L2_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.L2_LEVEL;
         break;
       case CORAL_L3:
-        outputHeight = ElevatorSubsystemConstants.CORAL_L3_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.L3_LEVEL;
         break;
       case CORAL_L4:
-        outputHeight = ElevatorSubsystemConstants.CORAL_L4_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.L4_LEVEL;
         break;
       case NET:
         outputHeight = ElevatorSubsystemConstants.NET_LEVEL;
@@ -153,12 +153,12 @@ public class ElevatorSubsystem extends SubsystemBase {
       case CORAL_L2:
         this.currentTargetLevel = Level.CORAL_L3;
         break;
-      // case L3:
-      //   this.currentTargetLevel = Level.L4;
-      //   break;
-      // case L4:
-      //   this.currentTargetLevel = Level.NET;
-      //   break;
+      case CORAL_L3:
+        this.currentTargetLevel = Level.ALGAE_L2;
+        break;
+      case ALGAE_L2:
+        this.currentTargetLevel = Level.NET;
+        break;
       default:
         return false; // Already at the highest level
     }
