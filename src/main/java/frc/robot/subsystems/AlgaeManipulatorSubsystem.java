@@ -43,8 +43,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private double currentTargetWristPosition = 0.5;
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
-  private SparkMaxConfig wristConfig = new SparkMaxConfig();
-  private SoftLimitConfig wristLimits = new SoftLimitConfig();
 
   private double minRotationCount = 20;
   private double maxRotationCount = 65;
