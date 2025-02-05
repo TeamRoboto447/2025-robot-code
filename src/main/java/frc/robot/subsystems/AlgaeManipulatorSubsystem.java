@@ -14,7 +14,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -49,16 +52,17 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   public AlgaeManipulatorSubsystem() {
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
-    this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.CORAL_MOTOR_ID, MotorType.kBrushless);
+    
 
+    SparkMaxConfig coralCurrentConfig = new SparkMaxConfig();
+    coralCurrentConfig.smartCurrentLimit(20);
+    this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.CORAL_MOTOR_ID, MotorType.kBrushless);
+    this.coralMotor.configure(coralCurrentConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
+    SparkMaxConfig wristCurrentLimit = new SparkMaxConfig();
+    wristCurrentLimit.smartCurrentLimit(50);
     this.wristMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
-    wristLimits.forwardSoftLimit(maxRotationCount);
-    wristLimits.forwardSoftLimitEnabled(true);
-    wristLimits.reverseSoftLimit(minRotationCount);
-    wristLimits.reverseSoftLimitEnabled(true);
-    wristConfig.apply(wristLimits);
-    wristConfig.idleMode(IdleMode.kBrake);
-    this.wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    this.wristMotor.configure(wristCurrentLimit, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
