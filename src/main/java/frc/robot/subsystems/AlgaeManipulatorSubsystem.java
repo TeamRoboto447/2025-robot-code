@@ -38,7 +38,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final RelativeEncoder wristEncoder;
   private final AbsoluteEncoder absoluteWristEncoder;
 
-  private double currentTargetWristPosition = 0.0;
+  private double currentTargetWristPosition = 0.5;
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
   private SparkMaxConfig wristConfig = new SparkMaxConfig();
@@ -46,8 +46,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   private double minRotationCount = 20;
   private double maxRotationCount = 65;
-  private double minAbsoluteRotationCount = 0.5;
-  private double maxAbsoluteRotationCount = 0;
+  private double minAbsoluteRotationCount = 0;
+  private double maxAbsoluteRotationCount = 0.5;
   private double minWristAngle = 0;
   private double maxWristAngle = 90;
 
