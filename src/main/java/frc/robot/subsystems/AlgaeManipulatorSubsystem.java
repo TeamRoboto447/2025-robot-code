@@ -2,7 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
 /**The Subsystem will make use of three motors to intake, manipulate, and output both algae and coral 
  * the first motor will rotate clockwise and counterclockwise motion to pull in and put out algae:
  *  I intend to make use of positive and negative output values in order to identify motor direction 
@@ -15,12 +14,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SoftLimitConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
@@ -56,7 +50,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
     this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.CORAL_MOTOR_ID, MotorType.kBrushless);
-    
+
     this.wristMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
     wristLimits.forwardSoftLimit(maxRotationCount);
     wristLimits.forwardSoftLimitEnabled(true);
@@ -87,11 +81,13 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void intakeAlgae(double speed) {
+    speed /= 2;
     this.moveUpperWheelMotorRaw(-speed);
     this.moveLowerWheelMotorRaw(speed);
   }
 
   public void outtakeAlgae(double speed) {
+    speed /= 2;
     this.moveUpperWheelMotorRaw(speed);
     this.moveLowerWheelMotorRaw(-speed);
   }
@@ -111,6 +107,11 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   public void moveWristMotorRaw(double speed) {
     speed = Math.max(-0.5, Math.min(1, speed));
+    if (this.getAbsoluteWristPosition() >= maxAbsoluteRotationCount && speed > 0)
+      speed = 0;
+    else if (this.getAbsoluteWristPosition() <= minAbsoluteRotationCount && speed < 0)
+      speed = 0;
+    speed = Math.max(-0.25, Math.min(1, speed));
     wristMotor.set(speed);
   }
 
@@ -124,6 +125,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   public void setOperatorRequestedSpeed(double speed) {
     operatorControlSpeed = speed;
+    SmartDashboard.putNumber("Tilt Speed", speed);
   }
 
   public void checkForOperatorOverride(double pidControl) {
@@ -142,7 +144,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public Angle getWristAngleFromAbsolute(double rotations) {
-    double degrees = MathUtils.map(rotations, minAbsoluteRotationCount, maxAbsoluteRotationCount, minWristAngle, maxWristAngle);
+    double degrees = MathUtils.map(rotations, minAbsoluteRotationCount, maxAbsoluteRotationCount, minWristAngle,
+        maxWristAngle);
     return Angle.ofBaseUnits(degrees, Units.Degrees);
   }
 

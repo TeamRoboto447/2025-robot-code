@@ -154,12 +154,12 @@ public class ElevatorSubsystem extends SubsystemBase {
       case L2:
         this.currentTargetLevel = Level.L3;
         break;
-      // case L3:
-      //   this.currentTargetLevel = Level.L4;
-      //   break;
-      // case L4:
-      //   this.currentTargetLevel = Level.NET;
-      //   break;
+      case L3:
+        this.currentTargetLevel = Level.L4;
+        break;
+      case L4:
+        this.currentTargetLevel = Level.NET;
+        break;
       default:
         return false; // Already at the highest level
     }

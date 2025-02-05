@@ -38,6 +38,10 @@ public class AlgaeManipulatorCommand extends Command {
       this.algaeManipulatorSubsystem.holdAlgae();
     }
 
+    if (this.operatorController.start().getAsBoolean()) {
+      this.algaeManipulatorSubsystem.intakeAlgae(0.2);   
+    }
+
     if (this.operatorController.pov(90).getAsBoolean()) {
       this.algaeManipulatorSubsystem.moveCoralMotorRaw(1);
     } else if (this.operatorController.pov(270).getAsBoolean()) {

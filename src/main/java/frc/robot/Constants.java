@@ -96,8 +96,8 @@ public final class Constants {
     public static final Distance L2_LEVEL = Inches.of(13
     );
     public static final Distance L3_LEVEL = Inches.of(29);
-    public static final Distance L4_LEVEL = Inches.of(35);
-    public static final Distance NET_LEVEL = Inches.of(MAX_INCH_HEIGHT);
+    public static final Distance L4_LEVEL = Inches.of(66);
+    public static final Distance NET_LEVEL = Inches.of(80);
   }
 
   public static class AlgaeManipulatorSubsystemConstants {
