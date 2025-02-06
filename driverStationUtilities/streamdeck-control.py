@@ -10,7 +10,7 @@ from time import sleep
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
-LIVE = False
+LIVE = True
 
 # Folder location of image assets used by this example.
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")

@@ -1,7 +1,6 @@
 package frc.robot.controllers;
 
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class ReefscapeStreamdeckController extends StreamdeckController{
