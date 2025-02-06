@@ -88,15 +88,13 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void intakeAlgae(double speed) {
-    speed /= 2;
     this.moveUpperWheelMotorRaw(-speed);
     this.moveLowerWheelMotorRaw(speed);
   }
 
   public void outtakeAlgae(double speed) {
-    speed /= 2;
-    this.moveUpperWheelMotorRaw(-speed);
-    this.moveLowerWheelMotorRaw(speed);
+    this.moveUpperWheelMotorRaw(speed);
+    this.moveLowerWheelMotorRaw(-speed);
   }
 
 
@@ -130,7 +128,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     upperWheelMotor.set(speed);
   }
 
-  private void moveLowerWheelMotorRaw(double speed) {
+  public void moveLowerWheelMotorRaw(double speed) {
     lowerWheelMotor.set(speed);
   }
 
