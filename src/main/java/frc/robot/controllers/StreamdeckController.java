@@ -1,7 +1,6 @@
 package frc.robot.controllers;
 
 import java.util.EnumSet;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BooleanSupplier;
 
@@ -9,8 +8,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableType;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class StreamdeckController {
     private AtomicReference<String[]> buttonLabels;
@@ -26,6 +23,7 @@ public class StreamdeckController {
     public Boolean isConnected;
 
     public StreamdeckController() {
+        buttonLabels = new AtomicReference<String[]>();
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         panel = inst.getTable("Streamdeck-Control").getSubTable("panel");
         requestUpdate = panel.getEntry("robotRequestingUpdate");
