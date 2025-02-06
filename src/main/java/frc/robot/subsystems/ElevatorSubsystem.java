@@ -17,7 +17,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorSubsystemConstants;
@@ -28,8 +27,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private SparkMax elevatorMotor;
   private RelativeEncoder elevatorEncoder;
-  private DigitalInput elevatorUpperLimitSwitch;
-  private DigitalInput elevatorLowerLimitSwitch;
 
   private Level currentTargetLevel = Level.FLOOR;
 
@@ -85,14 +82,6 @@ public class ElevatorSubsystem extends SubsystemBase {
         ElevatorSubsystemConstants.MAX_INCH_HEIGHT, ElevatorSubsystemConstants.MIN_RAW_HEIGHT,
         ElevatorSubsystemConstants.MAX_RAW_HEIGHT);
     return rawPosition;
-  }
-
-  private Distance rawPositionToHeight(double position) {
-    double inches = MathUtils.map(position, ElevatorSubsystemConstants.MIN_RAW_HEIGHT,
-        ElevatorSubsystemConstants.MAX_RAW_HEIGHT, ElevatorSubsystemConstants.MIN_INCH_HEIGHT,
-        ElevatorSubsystemConstants.MAX_INCH_HEIGHT);
-    Distance distance = Inches.of(inches);
-    return distance;
   }
 
   public void moveDebugMotorRaw(double speed) {
@@ -154,12 +143,12 @@ public class ElevatorSubsystem extends SubsystemBase {
       case L2:
         this.currentTargetLevel = Level.L3;
         break;
-      // case L3:
-      //   this.currentTargetLevel = Level.L4;
-      //   break;
-      // case L4:
-      //   this.currentTargetLevel = Level.NET;
-      //   break;
+      case L3:
+        this.currentTargetLevel = Level.L4;
+        break;
+      case L4:
+        this.currentTargetLevel = Level.NET;
+        break;
       default:
         return false; // Already at the highest level
     }
@@ -194,11 +183,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     SparkMaxConfig elevatorMotorConfig = new SparkMaxConfig();
     elevatorMotorConfig
         .inverted(true)
-        .idleMode(IdleMode.kBrake);
+        .idleMode(IdleMode.kBrake)
+        .smartCurrentLimit(50);
     elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     elevatorEncoder = elevatorMotor.getEncoder();
     elevatorEncoder.setPosition(0);
-    elevatorUpperLimitSwitch = new DigitalInput(ElevatorSubsystemConstants.ELEVATOR_UPPER_LIMIT_SWITCH_CHANNEL);
-    elevatorLowerLimitSwitch = new DigitalInput(ElevatorSubsystemConstants.ELEVATOR_LOWER_LIMIT_SWITCH_CHANNEL);
   }
 }

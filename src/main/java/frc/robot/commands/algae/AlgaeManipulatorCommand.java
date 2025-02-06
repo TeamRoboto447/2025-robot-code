@@ -27,14 +27,19 @@ public class AlgaeManipulatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double outtakeSpeed = this.operatorController.getLeftTriggerAxis();
-    double intakeSpeed = this.operatorController.getRightTriggerAxis();
+    double outtakeSpeed = this.operatorController.getRightTriggerAxis();
+    double intakeSpeed = this.operatorController.getLeftTriggerAxis();
 
-    if (this.operatorController.leftTrigger(0.1).getAsBoolean()) {
+    if (this.operatorController.rightTrigger(0.2).getAsBoolean()) {
       this.algaeManipulatorSubsystem.outtakeAlgae(outtakeSpeed);
-    } else if (this.operatorController.rightTrigger(0.1).getAsBoolean()) {
+    } 
+    else if (this.operatorController.leftTrigger(0.2).getAsBoolean()) {
       this.algaeManipulatorSubsystem.intakeAlgae(intakeSpeed);
-    } else {
+    } 
+    else if (this.operatorController.start().getAsBoolean()) {
+      this.algaeManipulatorSubsystem.intakeAlgae(0.2);   
+    } 
+    else {
       this.algaeManipulatorSubsystem.holdAlgae();
     }
 
@@ -46,7 +51,7 @@ public class AlgaeManipulatorCommand extends Command {
       this.algaeManipulatorSubsystem.moveCoralMotorRaw(0);
     }
 
-    this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(this.operatorController.getLeftY());
+    this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(this.operatorController.getLeftY() / 2);
   }
 
   // Called once the command ends or is interrupted.

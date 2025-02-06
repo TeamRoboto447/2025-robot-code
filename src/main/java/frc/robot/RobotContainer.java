@@ -7,16 +7,11 @@ package frc.robot;
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
@@ -31,9 +26,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
-// Example code, TODO: remove before competition season begins
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.commands.example.ExampleCommand;
 import frc.robot.controllers.ReefscapeStreamdeckController;
 
 /**
@@ -48,14 +40,10 @@ import frc.robot.controllers.ReefscapeStreamdeckController;
 public class RobotContainer {
   private SwerveSubsystem swerveSubsystem;
 
-  private ExampleSubsystem exampleSubsystem;
-  private ExampleCommand exampleCommand;
-
   private ClimberSubsystem climberSubsystem;
   private ClimberControlCommand climberControlCommand;
 
   private ElevatorSubsystem elevatorSubsystem;
-  private ElevatorDebuggingControlCommand elevatorControlCommand;
 
   private AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private AlgaeManipulatorCommand algaeManipulatorCommand;
@@ -134,18 +122,10 @@ public class RobotContainer {
 
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
 
-    // SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
-    //     .withControllerHeadingAxis(driverController::getRightX,
-    //         driverController::getRightY)
-    //     .headingWhile(true);
-
-    // Command driveFieldOrientedDirectAngle = swerveSubsystem.driveFieldOriented(driveDirectAngle);
-
-    // Command driveSetpointGen = swerveSubsystem.driveWithSetpointGeneratorFieldRelative(driveDirectAngle);
-
     this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
   }
 
+  @SuppressWarnings("unused")
   private void initializeStreamdeckBasedControls() {
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
       () -> operatorStreamdeck.getYShiftSpeed(),
@@ -161,23 +141,6 @@ public class RobotContainer {
     this.operatorStreamdeck.algaeOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
     this.operatorStreamdeck.coralIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(1)));
     this.operatorStreamdeck.coralOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1)));
-  }
-  private void initializeExampleSubsystem() {
-    this.exampleSubsystem = new ExampleSubsystem();
-    this.exampleCommand = new ExampleCommand(exampleSubsystem, operatorController);
-    this.exampleSubsystem.setDefaultCommand(exampleCommand);
-
-    // Example subsystem can be controlled without having a dedicated control
-    // command by using triggers
-    operatorController.x().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
-                                                                   // position to 700 when the x button is pressed
-      exampleSubsystem.setTargetPosition(700);
-    }));
-
-    operatorController.y().onTrue(exampleSubsystem.runOnce(() -> { // Schedule a one-time command to set the target
-                                                                   // position to 300 when the y button is pressed
-      exampleSubsystem.setTargetPosition(300);
-    }));
   }
 
   private void initializeClimberSubsystem() {
@@ -206,10 +169,9 @@ public class RobotContainer {
     this.algaeManipulatorCommand = new AlgaeManipulatorCommand(algaeManipulatorSubsystem, operatorController);
     this.algaeManipulatorSubsystem.setDefaultCommand(algaeManipulatorCommand);
 
-    this.operatorController.leftBumper()
-        .onTrue(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(false)));
-    this.operatorController.leftBumper()
-        .onFalse(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(true)));
+    // Trigger leftYPastDeadzone = new Trigger(() -> Math.abs(this.operatorController.getLeftY()) > 0.5);
+    // leftYPastDeadzone.onTrue(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(false)));
+    // leftYPastDeadzone.onFalse(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(true)));
   }
 
   private void initializeMultisystemCommands() {
