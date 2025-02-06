@@ -137,10 +137,10 @@ public class RobotContainer {
     this.operatorStreamdeck.shifting.whileTrue(operatorShifting);
     this.operatorStreamdeck.reefOne.onChange(this.algaeManipulatorSubsystem.runOnce(() -> System.out.println("Reef One Status Changed")));
 
-    this.operatorStreamdeck.algaeIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
-    this.operatorStreamdeck.algaeOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
-    this.operatorStreamdeck.coralIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(1)));
-    this.operatorStreamdeck.coralOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1)));
+    this.operatorStreamdeck.algaeIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
+    this.operatorStreamdeck.algaeOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
+    this.operatorStreamdeck.coralIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1)));
+    this.operatorStreamdeck.coralOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(1)));
   }
 
   private void initializeClimberSubsystem() {
@@ -169,9 +169,9 @@ public class RobotContainer {
     this.algaeManipulatorCommand = new AlgaeManipulatorCommand(algaeManipulatorSubsystem, operatorController);
     this.algaeManipulatorSubsystem.setDefaultCommand(algaeManipulatorCommand);
 
-    // Trigger leftYPastDeadzone = new Trigger(() -> Math.abs(this.operatorController.getLeftY()) > 0.5);
-    // leftYPastDeadzone.onTrue(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(false)));
-    // leftYPastDeadzone.onFalse(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(true)));
+    Trigger leftYPastDeadzone = new Trigger(() -> Math.abs(this.operatorController.getLeftY()) > 0.5);
+    leftYPastDeadzone.onTrue(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(false)));
+    leftYPastDeadzone.onFalse(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(true)));
   }
 
   private void initializeMultisystemCommands() {
