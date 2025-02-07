@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class ReefscapeStreamdeckController extends StreamdeckController{
     public final Trigger reefOne, reefTwo, reefThree, reefFour, reefFive, reefSix;
+    public final Trigger manualNet, manualLevelThree, manualLevelTwo, manualFloor, tiltForward, tiltBack;
     public final Trigger shiftLeft, shiftForward, shiftRight, shiftBack, shifting;
     public final Trigger algaeIntake, algaeOuttake, coralIntake, coralOuttake;
     public final Trigger selectLeft, selectRight;
@@ -53,6 +54,14 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
         reefFive = new Trigger(this.getButton("Reef Five"));
         reefSix = new Trigger(this.getButton("Reef Six"));
         reset = new Trigger(this.getButton("Reset"));
+
+        manualFloor = new Trigger(this.getButton("Man Floor"));
+        manualLevelTwo = new Trigger(this.getButton("Man Level 2"));
+        manualLevelThree = new Trigger(this.getButton("Man Level 3"));
+        manualNet = new Trigger(this.getButton("Man Net"));
+
+        tiltBack = new Trigger(this.getButton("Tilt Back"));
+        tiltForward = new Trigger(this.getButton("Tilt Forward"));
         
         reset.onTrue(Commands.run(() -> this.targetReef = TargetReef.NONE));
         reefOne.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefOne));

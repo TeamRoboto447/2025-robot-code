@@ -69,7 +69,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
     this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
   
-    this.wristController = new PIDController(5, 0.5, 0);
+    this.wristController = new PIDController(5, 0, 0);
   }
 
   @Override
