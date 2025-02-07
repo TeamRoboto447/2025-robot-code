@@ -19,6 +19,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,6 +47,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private double minWristAngle = 0;
   private double maxWristAngle = 90;
 
+  private PIDController wristController;
+
   /** Creates a new AlgaeManipulator. */
   public AlgaeManipulatorSubsystem() {
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
@@ -65,19 +68,13 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
     this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
+  
+    this.wristController = new PIDController(5, 0.5, 0);
   }
 
   @Override
   public void periodic() {
-
-    double currentWristPosition = getAbsoluteWristPosition();
-
-    double error = this.currentTargetWristPosition - currentWristPosition;
-
-    double kP = 0.5;
-
-    double angleMotorOutput = kP * error;
-
+    double angleMotorOutput = this.wristController.calculate(getAbsoluteWristPosition(), this.currentTargetWristPosition);
     checkForOperatorOverride(angleMotorOutput);
     SmartDashboard.putNumber("Absolute position", getAbsoluteWristPosition());
   }
@@ -107,11 +104,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   public void moveWristMotorRaw(double speed) {
     speed = Math.max(-0.5, Math.min(1, speed));
-    if (this.getAbsoluteWristPosition() >= maxAbsoluteRotationCount && speed > 0)
-      speed = 0;
-    else if (this.getAbsoluteWristPosition() <= minAbsoluteRotationCount && speed < 0)
-      speed = 0;
-    speed = Math.max(-0.25, Math.min(1, speed));
     wristMotor.set(speed);
   }
 
@@ -140,7 +132,9 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public double getAbsoluteWristPosition() {
-    return absoluteWristEncoder.getPosition();
+    double pos = absoluteWristEncoder.getPosition();
+    if(pos > 0.9) pos = 0 - (1 - pos);
+    return pos;
   }
 
   public Angle getWristAngleFromAbsolute(double rotations) {
