@@ -27,6 +27,13 @@ public class AlgaeManipulatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(!this.operatorController.isConnected()){
+      // If no operator controller, this command should just tell the coral and algae to stop running
+      this.algaeManipulatorSubsystem.holdAlgae();
+      this.algaeManipulatorSubsystem.moveCoralMotorRaw(0);
+    } 
+    // This is all control for the operator controller, if it's not connected, don't run it
+    
     double outtakeSpeed = this.operatorController.getRightTriggerAxis();
     double intakeSpeed = this.operatorController.getLeftTriggerAxis();
 
