@@ -146,17 +146,17 @@ class ControlPanel:
         button = None
         match(pos):
             case (0, 0):
-                button = Button("HOLD", "Reef One", "reef_one.jpeg", "reef_one.jpeg")
+                button = Button("HOLD", "Man Net", "net.png", "net.png")
             case (1, 0):
-                button = Button("HOLD", "Reef Two", "reef_two.jpeg", "reef_two.jpeg")
+                button = Button("HOLD", "Man Level 3", "L3.jpeg", "L3.jpeg")
             case (0, 1):
-                button = Button("HOLD", "Reef Three", "reef_three.jpeg", "reef_three.jpeg")
+                button = Button("HOLD", "Man Level 2", "L2.jpeg", "L2.jpeg")
             case (1, 1):
-                button = Button("HOLD", "Reef Four", "reef_four.jpeg", "reef_four.jpeg")
+                button = Button("HOLD", "Man Floor", "L1.jpeg", "L1.jpeg")
             case (0, 2):
-                button = Button("HOLD", "Reef Five", "reef_five.jpeg", "reef_five.jpeg")
+                button = Button("HOLD", "Tilt Back", "empty.png", "empty.png")
             case (1, 2):
-                button = Button("HOLD", f"Reef Six", "reef_six.jpeg", "reef_six.jpeg")
+                button = Button("HOLD", "Tilt Forward", "empty.png", "empty.png")
             case (3, 0):
                 button = Button("HOLD", "Algae Intake", "processor.jpeg", "processor.jpeg") # TODO: Use an image designed for the purpose
             case (4, 0):
@@ -173,6 +173,8 @@ class ControlPanel:
                 button = Button("HOLD", "Shift Left", "left.jpeg", "left.jpeg")
             case (4, 2):
                 button = Button("HOLD", "Shift Right", "right.jpeg", "right.jpeg")
+            case (2, 2):
+                button = Button("TOGGLE", "Toggle Reefs", "L1.jpeg", "reef_one.jpeg")
             case _:
                 button = Button("HOLD", f"Button {i}")
         self.__buttons[pos] = button
@@ -187,7 +189,7 @@ class ControlPanel:
         self.reset_button_with_new_args(2, 1, deck, "HOLD", "Shift Back", "back.jpeg", "back.jpeg")
         self.reset_button_with_new_args(3, 2, deck, "HOLD", "Shift Left", "left.jpeg", "left.jpeg")
         self.reset_button_with_new_args(4, 2, deck, "HOLD", "Shift Right", "right.jpeg", "right.jpeg")
-        self.reset_button_with_new_args(2, 2, deck, "HOLD", "Button 12", "green.png", "empty.png")
+        self.reset_button_with_new_args(2, 2, deck, "TOGGLE", "Toggle Reefs", "L1.jpeg", "reef_one.jpeg")
 
     def enable_directions(self, deck):
         self.reset_button_with_new_args(2, 0, deck, "HOLD", "Button 2", "green.png", "empty.png")
@@ -208,6 +210,28 @@ class ControlPanel:
         self.reset_button_with_new_args(3, 0, deck, "HOLD", "Level 4", "L4.jpeg", "L4.jpeg")
         self.reset_button_with_new_args(4, 0, deck, "HOLD", "Net", "net.png", "net.png")
         self.reset_button_with_new_args(2, 2, deck, "HOLD", "Reset Panel", "reset.jpeg", "reset.jpeg")
+
+    def toggle_reefs(self, deck, state):
+        if state:
+            self.enable_reef_buttons(deck)
+        else:
+            self.enable_left_levels(deck)
+
+    def enable_left_levels(self, deck):
+        self.reset_button_with_new_args(0, 0, deck, "HOLD", "Man Net", "net.png", "net.png")
+        self.reset_button_with_new_args(1, 0, deck, "HOLD", "Man Level 3", "L3.jpeg", "L3.jpeg")
+        self.reset_button_with_new_args(0, 1, deck, "HOLD", "Man Level 2", "L2.jpeg", "L2.jpeg")
+        self.reset_button_with_new_args(1, 1, deck, "HOLD", "Man Floor", "L1.jpeg", "L1.jpeg")
+        self.reset_button_with_new_args(0, 2, deck, "HOLD", "Tilt Back", "empty.png", "empty.png")
+        self.reset_button_with_new_args(1, 2, deck, "HOLD", "Tilt Forward", "empty.png", "empty.png")
+
+    def enable_reef_buttons(self, deck):
+        self.reset_button_with_new_args(0, 0, deck, "HOLD", "Reef One", "reef_one.jpeg", "reef_one.jpeg")
+        self.reset_button_with_new_args(1, 0, deck, "HOLD", "Reef Two", "reef_two.jpeg", "reef_two.jpeg")
+        self.reset_button_with_new_args(0, 1, deck, "HOLD", "Reef Three", "reef_three.jpeg", "reef_three.jpeg")
+        self.reset_button_with_new_args(1, 1, deck, "HOLD", "Reef Four", "reef_four.jpeg", "reef_four.jpeg")
+        self.reset_button_with_new_args(0, 2, deck, "HOLD", "Reef Five", "reef_five.jpeg", "reef_five.jpeg")
+        self.reset_button_with_new_args(1, 2, deck, "HOLD", "Reef Six", "reef_six.jpeg", "reef_six.jpeg")
     
     @property
     def buttons(self):
@@ -251,7 +275,8 @@ def get_key_style(deck, key, state):
     name = "boolean"
     icon = panel.get_button_by_index(key).icon
     font = "Roboto-Regular.ttf"
-    label = "Pressed!" if state else panel.get_button_by_index(key).label
+    # label = "Pressed!" if state else panel.get_button_by_index(key).label
+    label = panel.get_button_by_index(key).label
 
     return {
         "name": name,
@@ -284,6 +309,10 @@ def key_change_callback(deck, key, state):
     
     button = panel.get_button_by_index(key)
     button.trigger(state)
+
+    if(button.label == "Toggle Reefs"):
+        panel.toggle_reefs(deck, button.state)
+
     if button.state:
         if("Select Left" == button.label or "Select Right" == button.label):
             panel.enable_levels(deck)
@@ -291,7 +320,7 @@ def key_change_callback(deck, key, state):
         if(button.label in ["Reef One", "Reef Two", "Reef Three", "Reef Four", "Reef Five", "Reef Six"]):
             panel.enable_directions(deck)
         
-        if("Reset Panel" == button.label):
+        if(button.label == "Reset Panel"):
             panel.reset_panel_buttons(deck)
 
     # Don't try to draw an image on a touch button

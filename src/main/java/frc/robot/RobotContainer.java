@@ -148,6 +148,23 @@ public class RobotContainer {
     this.operatorStreamdeck.algaeOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
     this.operatorStreamdeck.coralIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1)));
     this.operatorStreamdeck.coralOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(1)));
+
+    this.operatorStreamdeck.manualNet.onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
+    this.operatorStreamdeck.manualLevelTwo.onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.L2)));
+    this.operatorStreamdeck.manualLevelThree.onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.L3)));
+    this.operatorStreamdeck.manualFloor.onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
+
+    this.operatorStreamdeck.tiltBack.whileTrue(this.algaeManipulatorSubsystem.run(() -> {
+      this.algaeManipulatorSubsystem.setIsPIDControlled(false);
+      this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(0.5);
+    }));
+    this.operatorStreamdeck.tiltBack.onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
+
+    this.operatorStreamdeck.tiltForward.whileTrue(this.algaeManipulatorSubsystem.run(() -> {
+      this.algaeManipulatorSubsystem.setIsPIDControlled(false);
+      this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(-0.5);
+    }));
+    this.operatorStreamdeck.tiltForward.onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
   }
 
   private void initializeClimberSubsystem() {
