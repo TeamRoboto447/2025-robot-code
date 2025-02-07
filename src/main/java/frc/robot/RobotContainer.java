@@ -16,13 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriverConstants;
-import frc.robot.commands.algae.AlgaeManipulatorCommand;
-import frc.robot.Constants.ElevatorSubsystemConstants.Level;
-import frc.robot.commands.climber.ClimberControlCommand;
-import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
-import frc.robot.subsystems.AlgaeManipulatorSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -40,18 +33,8 @@ import frc.robot.controllers.ReefscapeStreamdeckController;
 public class RobotContainer {
   private SwerveSubsystem swerveSubsystem;
 
-  private ClimberSubsystem climberSubsystem;
-  private ClimberControlCommand climberControlCommand;
-
-  private ElevatorSubsystem elevatorSubsystem;
-
-  private AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
-  private AlgaeManipulatorCommand algaeManipulatorCommand;
-
   private CommandXboxController driverController = new CommandXboxController(
       ControllerConstants.DRIVER_CONTROLLER_PORT);
-  private CommandXboxController operatorController = new CommandXboxController(
-      ControllerConstants.OPERATOR_CONTROLLER_PORT);
   private ReefscapeStreamdeckController operatorStreamdeck = new ReefscapeStreamdeckController();
 
   private final SendableChooser<Command> autoChooser;
@@ -61,9 +44,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     initializeSwerveSubsystem();
-    initializeClimberSubsystem();
-    initializeElevatorSubsystem();
-    initializeAlgaeManipulatorSubsystem();
     // initializeStreamdeckBasedControls();
 
     // initializeExampleSubsystem();
@@ -136,42 +116,6 @@ public class RobotContainer {
 
     Command operatorShifting = swerveSubsystem.drive(driveAngularVelocity);
     this.operatorStreamdeck.shifting.whileTrue(operatorShifting);
-
-    this.operatorStreamdeck.algaeIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
-    this.operatorStreamdeck.algaeOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
-    this.operatorStreamdeck.coralIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(1)));
-    this.operatorStreamdeck.coralOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1)));
-  }
-
-  private void initializeClimberSubsystem() {
-    this.climberSubsystem = new ClimberSubsystem();
-    this.climberControlCommand = new ClimberControlCommand(climberSubsystem, driverController);
-    this.climberSubsystem.setDefaultCommand(climberControlCommand);
-  }
-
-  private void initializeElevatorSubsystem() {
-    this.elevatorSubsystem = new ElevatorSubsystem();
-    // Elevator is now controlled via triggers, a full command is not needed
-    if(this.elevatorSubsystem.debugging) {
-      this.elevatorSubsystem.setDefaultCommand(new ElevatorDebuggingControlCommand(elevatorSubsystem, operatorController));
-    } else {
-      this.operatorController.a().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.increaseLevel()));
-      this.operatorController.b().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.decreaseLevel()));
-      this.operatorController.y()
-          .onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
-      this.operatorController.x()
-          .onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
-    }
-  }
-
-  private void initializeAlgaeManipulatorSubsystem() {
-    this.algaeManipulatorSubsystem = new AlgaeManipulatorSubsystem();
-    this.algaeManipulatorCommand = new AlgaeManipulatorCommand(algaeManipulatorSubsystem, operatorController);
-    this.algaeManipulatorSubsystem.setDefaultCommand(algaeManipulatorCommand);
-
-    // Trigger leftYPastDeadzone = new Trigger(() -> Math.abs(this.operatorController.getLeftY()) > 0.5);
-    // leftYPastDeadzone.onTrue(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(false)));
-    // leftYPastDeadzone.onFalse(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(true)));
   }
 
   private void initializeMultisystemCommands() {
