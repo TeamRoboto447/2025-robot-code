@@ -214,13 +214,11 @@ public class RobotContainer {
 
     // Utility Commands
     Command runAlgaeIntake = this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.moveLowerWheelMotorRaw(0.5);
-      algaeManipulatorSubsystem.moveUpperWheelMotorRaw(-0.5);
+      algaeManipulatorSubsystem.intakeAlgae(0.5);
     });
 
     Command runAlgaeOuttake = this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.moveLowerWheelMotorRaw(-0.5);
-      algaeManipulatorSubsystem.moveUpperWheelMotorRaw(0.5);
+      algaeManipulatorSubsystem.outtakeAlgae(0.5);
     });
 
     Command runCoralOuttake = this.algaeManipulatorSubsystem.run(() -> {
