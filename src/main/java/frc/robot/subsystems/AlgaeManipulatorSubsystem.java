@@ -163,7 +163,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public Angle getWristAngleFromAbsolute(double rotations) {
-    double degrees = MathUtils.map(rotations, minAbsoluteRotationCount, maxAbsoluteRotationCount, minWristAngle, maxWristAngle);
+    double degrees = MathUtils.map(rotations, minAbsoluteRotationCount, maxAbsoluteRotationCount, minWristAngle,
+        maxWristAngle);
     return Angle.ofBaseUnits(degrees, Units.Degrees);
   }
 
