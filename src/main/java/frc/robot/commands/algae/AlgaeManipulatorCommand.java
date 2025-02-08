@@ -30,7 +30,8 @@ public class AlgaeManipulatorCommand extends Command {
     if(!this.operatorController.isConnected()){
       // If no operator controller, this command should just tell the coral and algae to stop running
       this.algaeManipulatorSubsystem.holdAlgae();
-      this.algaeManipulatorSubsystem.moveCoralMotorRaw(0);
+      this.algaeManipulatorSubsystem.holdCoral();
+      return;
     } 
     // This is all control for the operator controller, if it's not connected, don't run it
     
@@ -51,11 +52,11 @@ public class AlgaeManipulatorCommand extends Command {
     }
 
     if (this.operatorController.pov(90).getAsBoolean()) {
-      this.algaeManipulatorSubsystem.moveCoralMotorRaw(1);
+      this.algaeManipulatorSubsystem.outtakeCoral();
     } else if (this.operatorController.pov(270).getAsBoolean()) {
-      this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1);
+      this.algaeManipulatorSubsystem.intakeCoral();
     } else {
-      this.algaeManipulatorSubsystem.moveCoralMotorRaw(0);
+      this.algaeManipulatorSubsystem.holdCoral();
     }
 
     this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(this.operatorController.getLeftY() / 2);

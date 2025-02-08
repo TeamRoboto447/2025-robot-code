@@ -10,6 +10,8 @@
  */
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
@@ -45,12 +47,12 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private boolean isPIDControlling = true;
   private double operatorControlSpeed = 0;
 
-  private double minRotationCount = 20;
-  private double maxRotationCount = 65;
-  private double minAbsoluteRotationCount = 0;
-  private double maxAbsoluteRotationCount = 0.5;
-  private double minWristAngle = 0;
-  private double maxWristAngle = 90;
+  private final double minRotationCount = 20;
+  private final double maxRotationCount = 65;
+  private final double minAbsoluteRotationCount = 0;
+  private final double maxAbsoluteRotationCount = 0.506;
+  private final double minWristAngle = 0;
+  private final double maxWristAngle = 90;
 
   private PIDController wristController;
 
@@ -75,24 +77,26 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
   
     this.wristController = new PIDController(5, 0, 0);
-    this.wristController.setTolerance(0.05);
+    this.wristController.setTolerance(0.005);
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Wrist/Target Position", currentTargetWristPosition);
+    SmartDashboard.putNumber("Wrist/Current Position", getAbsoluteWristPosition());
     double angleMotorOutput = this.wristController.calculate(getAbsoluteWristPosition(), this.currentTargetWristPosition);
     checkForOperatorOverride(angleMotorOutput);
     SmartDashboard.putNumber("Absolute position", getAbsoluteWristPosition());
   }
 
   public void intakeAlgae(double speed) {
-    this.moveUpperWheelMotorRaw(-speed);
-    this.moveLowerWheelMotorRaw(speed);
+    this.moveUpperWheelMotorRaw(speed);
+    this.moveLowerWheelMotorRaw(-speed);
   }
 
   public void outtakeAlgae(double speed) {
-    this.moveUpperWheelMotorRaw(speed);
-    this.moveLowerWheelMotorRaw(-speed);
+    this.moveUpperWheelMotorRaw(-speed);
+    this.moveLowerWheelMotorRaw(speed);
   }
 
   public void holdAlgae() {
@@ -109,8 +113,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
         // Command init
         () -> this.setManipulatorAngle(angle),
         // Command execute/periodic
-        () -> {
-        },
+        () -> {},
         // Command end
         interrupted -> {
         },
@@ -133,7 +136,19 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     wristMotor.set(speed);
   }
 
-  public void moveCoralMotorRaw(double speed) {
+  public void intakeCoral() {
+    this.moveCoralMotorRaw(-1);
+  }
+
+  public void outtakeCoral() {
+    this.moveCoralMotorRaw(1);
+  }
+
+  public void holdCoral() {
+    this.moveCoralMotorRaw(0);
+  }
+
+  private void moveCoralMotorRaw(double speed) {
     coralMotor.set(speed);
   }
 

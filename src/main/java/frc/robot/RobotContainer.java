@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -82,6 +85,10 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureMultisystemBindings();
 
+    
+    
+    this.driverController.a().whileTrue(this.elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L2));
+
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -121,12 +128,12 @@ public class RobotContainer {
         "swerve"));
 
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-      () -> driverController.getLeftY() * -1,
-      () -> driverController.getLeftX() * -1)
-      .withControllerRotationAxis(() -> -driverController.getRightX())
-      .deadband(DriverConstants.DEADBAND)
-      .scaleTranslation(0.8)
-      .allianceRelativeControl(true);
+        () -> driverController.getLeftY() * -1,
+        () -> driverController.getLeftX() * -1)
+        .withControllerRotationAxis(() -> -driverController.getRightX())
+        .deadband(DriverConstants.DEADBAND)
+        .scaleTranslation(0.8)
+        .allianceRelativeControl(true);
 
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
 
@@ -135,37 +142,48 @@ public class RobotContainer {
 
   private void initializeStreamdeckBasedControls() {
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-      () -> operatorStreamdeck.getYShiftSpeed(),
-      () -> operatorStreamdeck.getXShiftSpeed())
-      .withControllerRotationAxis(() -> 0)
-      .deadband(0)
-      .scaleTranslation(0.8);
+        () -> operatorStreamdeck.getYShiftSpeed(),
+        () -> operatorStreamdeck.getXShiftSpeed())
+        .withControllerRotationAxis(() -> 0)
+        .deadband(0)
+        .scaleTranslation(0.8);
 
     Command operatorShifting = swerveSubsystem.drive(driveAngularVelocity);
     this.operatorStreamdeck.shifting.whileTrue(operatorShifting);
-    this.operatorStreamdeck.reefOne.onChange(this.algaeManipulatorSubsystem.runOnce(() -> System.out.println("Reef One Status Changed")));
+    this.operatorStreamdeck.reefOne
+        .onChange(this.algaeManipulatorSubsystem.runOnce(() -> System.out.println("Reef One Status Changed")));
 
-    this.operatorStreamdeck.algaeIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
-    this.operatorStreamdeck.algaeOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
-    this.operatorStreamdeck.coralIntake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1)));
-    this.operatorStreamdeck.coralOuttake.whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.moveCoralMotorRaw(1)));
+    this.operatorStreamdeck.algaeIntake
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
+    this.operatorStreamdeck.algaeOuttake
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
+    this.operatorStreamdeck.coralIntake
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeCoral()));
+    this.operatorStreamdeck.coralOuttake
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeCoral()));
 
-    this.operatorStreamdeck.manualNet.onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
-    this.operatorStreamdeck.manualLevelTwo.onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L2)));
-    this.operatorStreamdeck.manualLevelThree.onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L3)));
-    this.operatorStreamdeck.manualFloor.onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
+    this.operatorStreamdeck.manualNet
+        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
+    this.operatorStreamdeck.manualLevelTwo
+        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L2)));
+    this.operatorStreamdeck.manualLevelThree
+        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L3)));
+    this.operatorStreamdeck.manualFloor
+        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
 
     this.operatorStreamdeck.tiltBack.whileTrue(this.algaeManipulatorSubsystem.run(() -> {
       this.algaeManipulatorSubsystem.setIsPIDControlled(false);
       this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(0.5);
     }));
-    this.operatorStreamdeck.tiltBack.onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
+    this.operatorStreamdeck.tiltBack
+        .onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
 
     this.operatorStreamdeck.tiltForward.whileTrue(this.algaeManipulatorSubsystem.run(() -> {
       this.algaeManipulatorSubsystem.setIsPIDControlled(false);
       this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(-0.5);
     }));
-    this.operatorStreamdeck.tiltForward.onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
+    this.operatorStreamdeck.tiltForward
+        .onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
   }
 
   private void initializeClimberSubsystem() {
@@ -177,21 +195,22 @@ public class RobotContainer {
   private void initializeElevatorSubsystem() {
     this.elevatorSubsystem = new ElevatorSubsystem();
     // Elevator is now controlled via triggers, a full command is not needed
-    if(this.elevatorSubsystem.debugging) {
-      this.elevatorSubsystem.setDefaultCommand(new ElevatorDebuggingControlCommand(elevatorSubsystem, operatorController));
+    if (this.elevatorSubsystem.debugging) {
+      this.elevatorSubsystem
+          .setDefaultCommand(new ElevatorDebuggingControlCommand(elevatorSubsystem, operatorController));
       return;
     }
 
-    if(!this.operatorController.isConnected())
+    if (!this.operatorController.isConnected())
       return;
-      
+
     this.operatorController.a().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.increaseLevel()));
     this.operatorController.b().onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.decreaseLevel()));
     this.operatorController.y()
         .onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
     this.operatorController.x()
         .onTrue(elevatorSubsystem.runOnce(() -> elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
-    
+
   }
 
   private void initializeAlgaeManipulatorSubsystem() {
@@ -199,108 +218,97 @@ public class RobotContainer {
     this.algaeManipulatorCommand = new AlgaeManipulatorCommand(algaeManipulatorSubsystem, operatorController);
     this.algaeManipulatorSubsystem.setDefaultCommand(algaeManipulatorCommand);
 
-    if(!this.operatorController.isConnected())
+    if (!this.operatorController.isConnected())
       return;
     Trigger leftYPastDeadzone = new Trigger(() -> Math.abs(this.operatorController.getLeftY()) > 0.5);
-    leftYPastDeadzone.onTrue(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(false)));
-    leftYPastDeadzone.onFalse(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(true)));
+    leftYPastDeadzone
+        .onTrue(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(false)));
+    leftYPastDeadzone
+        .onFalse(algaeManipulatorSubsystem.runOnce(() -> algaeManipulatorSubsystem.setIsPIDControlled(true)));
   }
 
   private void initializeMultisystemCommands() {
   }
 
   private void initializeNamedCommands() {
-    NamedCommands.registerCommand("exampleCommand",
-        Commands.runOnce(() -> System.out.println("Example named command has been run!")));
-
-    // Utility Commands
-    Command runAlgaeIntake = this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.intakeAlgae(0.5);
-    });
-
-    Command runAlgaeOuttake = this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.outtakeAlgae(0.5);
-    });
-
-    Command runCoralOuttake = this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.moveCoralMotorRaw(1);
-    });
-
-    Command runCoralIntake = this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.moveCoralMotorRaw(-1);
-    });
-
-    Command tiltManipulatorForward = algaeManipulatorSubsystem.tiltToAngle(Angle.ofBaseUnits(0, Units.Degrees));
-    Command tiltManipulatorBack = algaeManipulatorSubsystem.tiltToAngle(Angle.ofBaseUnits(90, Units.Degrees));
-
-
     // Collection Commands
     NamedCommands.registerCommand("CollectAlgaeFromReefL2", new SequentialCommandGroup(
-        elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L1),
+        this.elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L1),
         new CollectAlgaeFromReef(algaeManipulatorSubsystem),
         this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
 
     NamedCommands.registerCommand("CollectAlgaeFromReefL3", new SequentialCommandGroup(
-        elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L2),
+        this.elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L2),
         new CollectAlgaeFromReef(algaeManipulatorSubsystem),
         this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
 
     NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
         this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
-        new CollectAlgaeFromReef(algaeManipulatorSubsystem)
-        ));
+        new CollectAlgaeFromReef(algaeManipulatorSubsystem)));
 
     // Scoring Commands
     NamedCommands.registerCommand("ScoreInProcessor", new SequentialCommandGroup(
-      this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
-      tiltManipulatorForward,
-      new ParallelRaceGroup(
-        runAlgaeOuttake,
-        new WaitCommand(0.25)
-      ),
-      tiltManipulatorBack
-    ));
-    NamedCommands.registerCommand("ScoreOnL2", new SequentialCommandGroup(
-      this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L2),
-      tiltManipulatorForward,
-      new ParallelRaceGroup(
-        runCoralOuttake,
-        new WaitCommand(0.25)
-      ),
-      tiltManipulatorBack
-    ));
+        this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(55)),
+        new ParallelRaceGroup(
+            this.algaeManipulatorSubsystem.run(() -> {
+              algaeManipulatorSubsystem.outtakeAlgae(0.5);
+            }),
+            new WaitCommand(0.25)),
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90))));
+
+    NamedCommands.registerCommand("ScoreOnL2",
+        new SequentialCommandGroup(this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L2),
+            algaeManipulatorSubsystem.tiltToAngle(Degrees.of(0)),
+            new ParallelRaceGroup(
+                this.algaeManipulatorSubsystem.run(() -> {
+                  algaeManipulatorSubsystem.outtakeCoral();
+                }),
+                new WaitCommand(0.25)),
+            algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90))));
+
     NamedCommands.registerCommand("ScoreOnL3", new SequentialCommandGroup(
       this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L3),
-      tiltManipulatorForward,
-      new ParallelRaceGroup(
-        runCoralOuttake,
-        new WaitCommand(0.25)
-      ),
-      tiltManipulatorBack
-    ));
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(0)),
+        new ParallelRaceGroup(
+            this.algaeManipulatorSubsystem.run(() -> {
+              algaeManipulatorSubsystem.outtakeCoral();
+            }),
+            new WaitCommand(0.25)),
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90))));
+
     NamedCommands.registerCommand("ScoreInNet", new SequentialCommandGroup(
       this.elevatorSubsystem.moveElevatorToLevel(Level.NET),
-      tiltManipulatorForward,
-      new ParallelRaceGroup(
-        runAlgaeOuttake,
-        new WaitCommand(0.25)
-      ),
-      tiltManipulatorBack
-    ));
+        new ParallelRaceGroup(
+            this.algaeManipulatorSubsystem.run(() -> {
+              algaeManipulatorSubsystem.outtakeAlgae(0.5);
+            }),
+            new WaitCommand(0.25)),
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90))));
 
     // Elevator Commands
     NamedCommands.registerCommand("MoveToFloor", this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR));
     NamedCommands.registerCommand("MoveToL2", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L2));
     NamedCommands.registerCommand("MoveToL3", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L3));
     NamedCommands.registerCommand("MoveToL4", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L4));
-    
+
     // Algae Manipulator Commands
-    NamedCommands.registerCommand("RunAlgaeIntake", runAlgaeIntake);
-    NamedCommands.registerCommand("RunAlgaeOuttake", runAlgaeOuttake);
-    NamedCommands.registerCommand("RunCoralIntake", runCoralIntake);
-    NamedCommands.registerCommand("RunCoralOuttake", runCoralOuttake);
-    NamedCommands.registerCommand("TiltManipulatorForward", tiltManipulatorForward);
-    NamedCommands.registerCommand("TiltManipulatorBack", tiltManipulatorBack);
+    NamedCommands.registerCommand("RunAlgaeIntake", this.algaeManipulatorSubsystem.run(() -> {
+      algaeManipulatorSubsystem.intakeAlgae(0.5);
+    }));
+    NamedCommands.registerCommand("RunAlgaeOuttake", this.algaeManipulatorSubsystem.run(() -> {
+      algaeManipulatorSubsystem.outtakeAlgae(0.5);
+    }));
+    NamedCommands.registerCommand("RunCoralIntake", this.algaeManipulatorSubsystem.run(() -> {
+      algaeManipulatorSubsystem.intakeCoral();
+    }));
+    NamedCommands.registerCommand("RunCoralOuttake", this.algaeManipulatorSubsystem.run(() -> {
+      algaeManipulatorSubsystem.outtakeCoral();
+    }));
+    NamedCommands.registerCommand("TiltForward",
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(0)));
+    NamedCommands.registerCommand("TiltBack",
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)));
 
   }
 }

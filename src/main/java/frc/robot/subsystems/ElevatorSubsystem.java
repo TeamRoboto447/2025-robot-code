@@ -8,8 +8,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
-import static edu.wpi.first.units.Units.Inches;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -51,14 +49,16 @@ public class ElevatorSubsystem extends SubsystemBase {
 
       double maxSpeed = 1;
       motorOutput = Math.max(-maxSpeed, Math.min(maxSpeed, motorOutput)); // Clamp the output between -1 and 1
-      SmartDashboard.putNumber("Elevator Controller Output", motorOutput);
-      SmartDashboard.putString("Current Target Level", this.currentTargetLevel.toString());
+      SmartDashboard.putNumber("Elevator/Elevator Controller Output", motorOutput);
+      SmartDashboard.putString("Elevator/Current Target Level", this.currentTargetLevel.toString());
       moveMotorRaw(motorOutput);
     }
   }
 
   private boolean atTarget() {
-    return Math.abs(this.getPositionFromLevel(currentTargetLevel) - elevatorEncoder.getPosition()) < 10;
+    SmartDashboard.putNumber("Elevator/Target Position", this.getPositionFromLevel(currentTargetLevel));
+    SmartDashboard.putNumber("Elevator/Current Position", elevatorEncoder.getPosition());
+    return Math.abs(this.getPositionFromLevel(currentTargetLevel) - elevatorEncoder.getPosition()) < 2;
   }
 
   public Command moveElevatorToLevel(Level level) {
@@ -102,19 +102,25 @@ public class ElevatorSubsystem extends SubsystemBase {
         outputHeight = ElevatorSubsystemConstants.TROUGH_LEVEL;
         break;
       case CORAL_L2:
-        outputHeight = ElevatorSubsystemConstants.L2_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.CORAL_L2_LEVEL;
         break;
       case CORAL_L3:
-        outputHeight = ElevatorSubsystemConstants.L3_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.CORAL_L3_LEVEL;
         break;
       case CORAL_L4:
-        outputHeight = ElevatorSubsystemConstants.L4_LEVEL;
+        outputHeight = ElevatorSubsystemConstants.CORAL_L4_LEVEL;
         break;
       case NET:
         outputHeight = ElevatorSubsystemConstants.NET_LEVEL;
         break;
+      case ALGAE_L1:
+        outputHeight = ElevatorSubsystemConstants.ALGAE_L1_LEVEL;
+        break;
+      case ALGAE_L2:
+        outputHeight = ElevatorSubsystemConstants.ALGAE_L2_LEVEL;
+        break;
       default:
-        outputHeight = Inches.ofBaseUnits(ElevatorSubsystemConstants.MIN_INCH_HEIGHT);
+        throw new UnsupportedOperationException("Unimplemented height " + level.name());
     }
     return heightToRawPosition(outputHeight);
   }

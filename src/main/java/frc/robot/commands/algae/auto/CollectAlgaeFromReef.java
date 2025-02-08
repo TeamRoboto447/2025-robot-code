@@ -4,6 +4,8 @@
 
 package frc.robot.commands.algae.auto;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
@@ -35,7 +37,7 @@ public class CollectAlgaeFromReef extends Command {
     this.algaeManipulatorSubsystem.intakeAlgae(0.5);
     switch(this.step) {
       case 0:
-        this.algaeManipulatorSubsystem.setManipulatorAngle(Angle.ofBaseUnits(0, Units.Degrees));
+        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
         if(this.algaeManipulatorSubsystem.atTarget()) {
           this.step += 1;
           this.waitTimer.reset();
@@ -43,13 +45,16 @@ public class CollectAlgaeFromReef extends Command {
         }
         break;
       case 1:
-        this.algaeManipulatorSubsystem.moveCoralMotorRaw(-1);
-        if(this.waitTimer.get() > 0.25) {
+        if(this.waitTimer.get() > 1)
+          this.algaeManipulatorSubsystem.outtakeCoral();
+
+        if(this.waitTimer.get() > 1.5) {
           this.step += 1;
           this.waitTimer.stop();
         }
+        break;
       case 2:
-        this.algaeManipulatorSubsystem.setManipulatorAngle(Angle.ofBaseUnits(90, Units.Degrees));
+        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
         if(this.algaeManipulatorSubsystem.atTarget()) {
           this.step += 1;
         }
@@ -59,7 +64,9 @@ public class CollectAlgaeFromReef extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    this.algaeManipulatorSubsystem.holdAlgae();
+  }
 
   // Returns true when the command should end.
   @Override
