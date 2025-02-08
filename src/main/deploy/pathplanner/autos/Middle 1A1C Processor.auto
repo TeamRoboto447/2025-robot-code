@@ -13,51 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "MoveToL3"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunAlgaeIntake"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "TiltManipulatorForward"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "RunCoralOuttake"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "TiltManipulatorBack"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "MoveToFloor"
+            "name": "CollectAlgaeFromReefL2"
           }
         },
         {
@@ -67,22 +23,9 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunAlgaeOuttake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.25
-                }
-              }
-            ]
+            "name": "ScoreInProcessor"
           }
         },
         {

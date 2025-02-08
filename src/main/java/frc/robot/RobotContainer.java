@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.algae.AlgaeManipulatorCommand;
+import frc.robot.commands.algae.auto.CollectAlgaeFromReef;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.commands.climber.ClimberControlCommand;
 import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
@@ -236,36 +237,18 @@ public class RobotContainer {
     // Collection Commands
     NamedCommands.registerCommand("CollectAlgaeFromReefL2", new SequentialCommandGroup(
         elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L1),
-        new ParallelRaceGroup(
-            runAlgaeIntake,
-            new SequentialCommandGroup(
-                tiltManipulatorForward,
-                new ParallelRaceGroup(
-                    runCoralOuttake,
-                    new WaitCommand(0.25)),
-                tiltManipulatorBack)),
+        new CollectAlgaeFromReef(algaeManipulatorSubsystem),
         this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
 
     NamedCommands.registerCommand("CollectAlgaeFromReefL3", new SequentialCommandGroup(
         elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L2),
-        new ParallelRaceGroup(
-            runAlgaeIntake,
-            new SequentialCommandGroup(
-                tiltManipulatorForward,
-                new ParallelRaceGroup(
-                    runCoralOuttake,
-                    new WaitCommand(0.25)),
-                tiltManipulatorBack)),
+        new CollectAlgaeFromReef(algaeManipulatorSubsystem),
         this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
 
     NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
         this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
-        new ParallelRaceGroup(
-            runAlgaeIntake,
-            new SequentialCommandGroup(
-                tiltManipulatorForward,
-                new WaitCommand(0.25),
-                tiltManipulatorBack))));
+        new CollectAlgaeFromReef(algaeManipulatorSubsystem)
+        ));
 
     // Scoring Commands
     NamedCommands.registerCommand("ScoreInProcessor", new SequentialCommandGroup(
@@ -295,7 +278,7 @@ public class RobotContainer {
       ),
       tiltManipulatorBack
     ));
-    NamedCommands.registerCommand("ScoreOnNet", new SequentialCommandGroup(
+    NamedCommands.registerCommand("ScoreInNet", new SequentialCommandGroup(
       this.elevatorSubsystem.moveElevatorToLevel(Level.NET),
       tiltManipulatorForward,
       new ParallelRaceGroup(

@@ -13,13 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "MoveToL3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CollectAlgaeFromReef"
+            "name": "CollectAlgaeFromReefL2"
           }
         },
         {
@@ -31,7 +25,7 @@
         {
           "type": "named",
           "data": {
-            "name": "RunAlgaeOuttake"
+            "name": "ScoreInProcessor"
           }
         },
         {
@@ -43,13 +37,7 @@
         {
           "type": "named",
           "data": {
-            "name": "MoveToL4"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CollectAlgaeFromReef"
+            "name": "CollectAlgaeFromReefL3"
           }
         },
         {

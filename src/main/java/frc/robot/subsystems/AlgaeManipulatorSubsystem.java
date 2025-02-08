@@ -75,6 +75,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
   
     this.wristController = new PIDController(5, 0, 0);
+    this.wristController.setTolerance(0.05);
   }
 
   @Override
@@ -100,7 +101,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public boolean atTarget() {
-    return Math.abs(this.currentTargetWristPosition - getAbsoluteWristPosition()) < 0.05;
+    return this.wristController.atSetpoint();
   }
 
   public Command tiltToAngle(Angle angle) {
