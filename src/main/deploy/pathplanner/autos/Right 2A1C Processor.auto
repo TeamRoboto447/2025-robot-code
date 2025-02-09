@@ -51,6 +51,12 @@
           "data": {
             "name": "ScoreInProcessor"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to S3 from Proc"
+          }
         }
       ]
     }

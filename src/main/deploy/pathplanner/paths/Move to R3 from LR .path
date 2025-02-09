@@ -16,34 +16,25 @@
     },
     {
       "anchor": {
-        "x": 3.835,
-        "y": 2.8
+        "x": 3.95,
+        "y": 2.795
       },
       "prevControl": {
-        "x": 2.8989999999999996,
-        "y": 1.8737499999999996
+        "x": 3.014,
+        "y": 1.86875
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Right Driverside Reef"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.06472727272727694,
-      "rotationDegrees": -127.29184063700036
-    },
-    {
-      "waypointRelativePos": 0.950545454545444,
-      "rotationDegrees": 60.293513381329014
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

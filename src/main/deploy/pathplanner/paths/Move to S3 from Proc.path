@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.329,
-        "y": 5.80925
+        "x": 5.9670000000000005,
+        "y": 0.6904999999999996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.849933733575352,
-        "y": 5.91026598804934
+        "x": 6.3375,
+        "y": 1.2852499999999998
       },
       "isLocked": false,
-      "linkedName": "CircleTestStart"
+      "linkedName": "Processor"
     },
     {
       "anchor": {
-        "x": 5.0468237704918035,
-        "y": 6.5484118852459
+        "x": 7.22475,
+        "y": 1.47
       },
       "prevControl": {
-        "x": 5.078282207207873,
-        "y": 6.300399049369648
-      },
-      "nextControl": {
-        "x": 4.998763153530064,
-        "y": 6.927313418536486
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.329,
-        "y": 7.155
-      },
-      "prevControl": {
-        "x": 4.576724543375521,
-        "y": 7.188653389270469
+        "x": 6.600750000000001,
+        "y": 1.4217499999999996
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CT Halfway"
+      "linkedName": "S3"
     }
   ],
   "rotationTargets": [],
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.77158190275188
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Tests",
+  "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.97102193107912
   },
   "useDefaultConstraints": true
 }

@@ -11,14 +11,10 @@ import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -87,7 +83,7 @@ public class RobotContainer {
 
     
     
-    this.driverController.a().whileTrue(this.elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L2));
+    this.driverController.a().whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(1)));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -130,7 +126,7 @@ public class RobotContainer {
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.getLeftY() * -1,
         () -> driverController.getLeftX() * -1)
-        .withControllerRotationAxis(() -> -driverController.getRightX())
+        .withControllerRotationAxis(() -> -driverController.getRightX()/2)
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8)
         .allianceRelativeControl(true);
@@ -165,9 +161,9 @@ public class RobotContainer {
     this.operatorStreamdeck.manualNet
         .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
     this.operatorStreamdeck.manualLevelTwo
-        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L2)));
+        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L1)));
     this.operatorStreamdeck.manualLevelThree
-        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L3)));
+        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L2)));
     this.operatorStreamdeck.manualFloor
         .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
 
@@ -249,7 +245,7 @@ public class RobotContainer {
     // Scoring Commands
     NamedCommands.registerCommand("ScoreInProcessor", new SequentialCommandGroup(
         this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
-        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(55)),
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(45)),
         new ParallelRaceGroup(
             this.algaeManipulatorSubsystem.run(() -> {
               algaeManipulatorSubsystem.outtakeAlgae(0.5);

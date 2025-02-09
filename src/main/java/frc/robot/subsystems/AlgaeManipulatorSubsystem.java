@@ -10,19 +10,14 @@
  */
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Degrees;
-
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SoftLimitConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Units;
@@ -77,7 +72,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
   
     this.wristController = new PIDController(5, 0, 0);
-    this.wristController.setTolerance(0.005);
+    this.wristController.setTolerance(0.02);
   }
 
   @Override

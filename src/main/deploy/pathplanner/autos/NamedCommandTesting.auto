@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToFloor"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgaeFromReefL2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": "Tests",
+  "choreoAuto": false
+}
