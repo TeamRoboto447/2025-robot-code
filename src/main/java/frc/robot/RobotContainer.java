@@ -261,7 +261,8 @@ public class RobotContainer {
                   algaeManipulatorSubsystem.outtakeCoral();
                 }),
                 new WaitCommand(0.25)),
-            algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90))));
+            algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
+        this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
 
     NamedCommands.registerCommand("ScoreOnL3", new SequentialCommandGroup(
       this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L3),
@@ -271,7 +272,8 @@ public class RobotContainer {
               algaeManipulatorSubsystem.outtakeCoral();
             }),
             new WaitCommand(0.25)),
-        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90))));
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
+      this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
 
     NamedCommands.registerCommand("ScoreInNet", new SequentialCommandGroup(
       this.elevatorSubsystem.moveElevatorToLevel(Level.NET),
@@ -280,7 +282,8 @@ public class RobotContainer {
               algaeManipulatorSubsystem.outtakeAlgae(0.5);
             }),
             new WaitCommand(0.25)),
-        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90))));
+        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
+      this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
 
     // Elevator Commands
     NamedCommands.registerCommand("MoveToFloor", this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR));

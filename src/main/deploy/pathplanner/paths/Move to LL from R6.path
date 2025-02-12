@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.226,
-        "y": 5.1754999999999995
+        "x": 5.51,
+        "y": 5.3
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.602639344262294,
-        "y": 6.122528688524589
+        "x": 4.886639344262294,
+        "y": 6.24702868852459
       },
       "isLocked": false,
       "linkedName": "Left Netside Reef"
@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

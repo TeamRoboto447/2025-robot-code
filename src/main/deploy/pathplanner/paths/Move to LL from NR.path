@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.595250000000001,
-        "y": 5.0584999999999996
+        "x": 6.97125,
+        "y": 5.039
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.945494418984897,
-        "y": 5.194277996142067
+        "x": 5.321494418984896,
+        "y": 5.174777996142067
       },
       "isLocked": false,
       "linkedName": "Net Right"
@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -53,7 +53,7 @@
   "folder": "Ryan",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 17.102728969052443
   },
   "useDefaultConstraints": true
 }

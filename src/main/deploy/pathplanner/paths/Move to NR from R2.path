@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.19,
-        "y": 2.78
+        "x": 5.13,
+        "y": 2.74
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.970000000000001,
-        "y": 2.6142500000000006
+        "x": 5.54589753325269,
+        "y": 1.927237709706231
       },
       "isLocked": false,
       "linkedName": "Right Netside Reef"
     },
     {
       "anchor": {
-        "x": 7.595250000000001,
-        "y": 5.0584999999999996
+        "x": 6.181500000000001,
+        "y": 2.962249999999999
       },
       "prevControl": {
-        "x": 7.107750000000001,
-        "y": 4.229749999999999
+        "x": 5.815104793198785,
+        "y": 2.5500734351635206
+      },
+      "nextControl": {
+        "x": 6.6239882637488385,
+        "y": 3.460027506765812
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.97125,
+        "y": 5.039
+      },
+      "prevControl": {
+        "x": 6.1466442008282565,
+        "y": 4.907637617704108
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +49,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 17.102728969052443
   },
   "reversed": false,
   "folder": "Ryan",
