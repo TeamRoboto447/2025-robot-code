@@ -76,7 +76,6 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
                 + ((estimation.targetsUsed.size() - 1)
                     * VisionConstants.TAG_PRESENCE_WEIGHT)));
     return VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
-    
   }
 
   public void estimatorChecker(PhotonRunnable estimator) {
@@ -87,7 +86,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     if (RobotState.isDisabled()) {
       swerveSubsystem.getSwerveDrive().resetOdometry(pose2d);
     } else {
-      swerveSubsystem.getSwerveDrive().addVisionMeasurement(pose2d, cameraPose.timestampSeconds, confidenceCalculator);
+      swerveSubsystem.getSwerveDrive().addVisionMeasurement(pose2d, cameraPose.timestampSeconds,
+          confidenceCalculator(cameraPose));
     }
   }
 }

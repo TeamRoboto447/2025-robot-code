@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
 
+import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -36,7 +37,12 @@ public final class Constants {
   public static class SwerveSubsystemConstants {
     public static final double MAX_SPEED = Units.feetToMeters(9.2); // 12.78 is max speed the robot is capable of
     public static final double ROBOT_MASS = Units.lbsToKilograms(107);
-    public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); //TODO: update with actual robot COG
+    public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); // TODO:
+                                                                                                                       // update
+                                                                                                                       // with
+                                                                                                                       // actual
+                                                                                                                       // robot
+                                                                                                                       // COG
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
   }
 
@@ -123,33 +129,28 @@ public final class Constants {
     public static final double NOISY_DISTANCE_METERS = 0;
     public static final double DISTANCE_WEIGHT = 0;
     public static final int TAG_PRESENCE_WEIGHT = 0;
-    /**
-         * Standard deviations of model states. Increase these numbers to trust your
-         * model's state estimates less. This
-         * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
-         * meters.
-         */
-        public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = new Matrix(Nat.N3(), Nat.N1())
-                .fill(
-                        // if these numbers are less than one, multiplying will do bad things
-                        1, // x
-                        1, // y
-                        1 * Math.PI // theta
-                );
 
-        /**
-         * Standard deviations of the vision measurements. Increase these numbers to
-         * trust global measurements from vision
-         * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and
-         * radians.
-         */
-        public static final Matrix<N3, N1> STATE_STANDARD_DEVIATIONS = Matrix.mat(Nat.N3(), Nat.N1())
-                .fill(
-                        // if these numbers are less than one, multiplying will do bad things
-                        .1, // x
-                        .1, // y
-                        .1);
-    }
+    /**
+     * Standard deviations of model states. Increase these numbers to trust your
+     * model's state estimates less. This
+     * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
+     * meters.
+     * These numbers should all be 1 or higher, anything lower can do bad things
+     * when multiplied
+     */
+    public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = MatBuilder.fill(Nat.N3(), Nat.N1(), 1,
+        1, 1 * Math.PI);
+
+    /**
+     * Standard deviations of the vision measurements. Increase these numbers to
+     * trust global measurements from vision
+     * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and
+     * radians.
+     * These numbers should all be 1 or higher, anything lower can do bad things
+     * when multiplied
+     */
+    public static final Matrix<N3, N1> STATE_STANDARD_DEVIATIONS = MatBuilder.fill(Nat.N3(), Nat.N1(), 1, 1,
+        1);
   }
 
   public static class FieldConstants {
