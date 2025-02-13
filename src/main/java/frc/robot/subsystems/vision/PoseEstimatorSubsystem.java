@@ -42,7 +42,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    if (VisionConstants.USE_VISION) {
+      estimatorChecker(leftCamera);
+      estimatorChecker(rightCamera);
+    }
   }
 
   private NotifierCommand createNotifierCommand() {
@@ -50,6 +53,18 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       leftCamera.run();
       rightCamera.run();
     }, 0.02);
+  }
+
+  public Pose2d getCurrentPose() {
+    return swerveSubsystem.getPose();
+  }
+
+  public void setCurrentPose(Pose2d newPose) {
+    swerveSubsystem.getSwerveDrive().resetOdometry(newPose);
+  }
+
+  public void resetFieldPosition() {
+    setCurrentPose(new Pose2d());
   }
 
   private Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {
