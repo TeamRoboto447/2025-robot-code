@@ -3,7 +3,7 @@ package frc.robot.controllers;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class ReefscapeStreamdeckController extends StreamdeckController{
+public class ReefscapeStreamdeckController extends StreamdeckController {
     public final Trigger reefOne, reefTwo, reefThree, reefFour, reefFive, reefSix;
     public final Trigger manualNet, manualLevelThree, manualLevelTwo, manualFloor, tiltForward, tiltBack;
     public final Trigger shiftLeft, shiftForward, shiftRight, shiftBack, shifting;
@@ -11,6 +11,9 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
     public final Trigger selectLeft, selectRight;
     public final Trigger processor, floor, levelTwo, levelThree, levelFour, net;
     public final Trigger reset;
+    public final Trigger floorCollect, coralLoading;
+    public final Trigger coralTrough, coralL2, coralL3, coralL4;
+    public final Trigger algaeL1, algaeNet, algaeProcessor;
     private TargetReef targetReef;
 
     public enum TargetReef {
@@ -22,7 +25,7 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
         ReefSix,
         NONE
     }
-    
+
     public ReefscapeStreamdeckController() {
         super();
 
@@ -30,7 +33,8 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
         shiftForward = new Trigger(this.getButton("Shift Forward"));
         shiftRight = new Trigger(this.getButton("Shift Right"));
         shiftBack = new Trigger(this.getButton("Shift Back"));
-        shifting = new Trigger(() -> shiftLeft.getAsBoolean() || shiftForward.getAsBoolean() || shiftRight.getAsBoolean() || shiftBack.getAsBoolean());
+        shifting = new Trigger(() -> shiftLeft.getAsBoolean() || shiftForward.getAsBoolean()
+                || shiftRight.getAsBoolean() || shiftBack.getAsBoolean());
 
         algaeIntake = new Trigger(this.getButton("Algae Intake"));
         algaeOuttake = new Trigger(this.getButton("Algae Outtake"));
@@ -62,7 +66,7 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
 
         tiltBack = new Trigger(this.getButton("Tilt Back"));
         tiltForward = new Trigger(this.getButton("Tilt Forward"));
-        
+
         reset.onTrue(Commands.run(() -> this.targetReef = TargetReef.NONE));
         reefOne.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefOne));
         reefTwo.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefTwo));
@@ -70,6 +74,18 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
         reefFour.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefFour));
         reefFive.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefFive));
         reefSix.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefSix));
+
+        floorCollect = new Trigger(this.getButton("Floor Collect"));
+        coralLoading = new Trigger(this.getButton("Coral Loading"));
+
+        coralTrough = new Trigger(this.getButton("Coral Trough"));
+        coralL2 = new Trigger(this.getButton("Coral L2"));
+        coralL3 = new Trigger(this.getButton("Coral L3"));
+        coralL4 = new Trigger(this.getButton("Coral L4"));
+
+        algaeL1 = new Trigger(this.getButton("Algae L1"));
+        algaeNet = new Trigger(this.getButton("Algae Net"));
+        algaeProcessor = new Trigger(this.getButton("Algae Processor"));
     }
 
     public TargetReef getTargetReef() {
@@ -77,17 +93,17 @@ public class ReefscapeStreamdeckController extends StreamdeckController{
     }
 
     public double getXShiftSpeed() {
-        if(this.shiftLeft.getAsBoolean())
+        if (this.shiftLeft.getAsBoolean())
             return 0.125;
-            if(this.shiftRight.getAsBoolean())
+        if (this.shiftRight.getAsBoolean())
             return -0.125;
         return 0;
     }
 
     public double getYShiftSpeed() {
-        if(this.shiftBack.getAsBoolean())
+        if (this.shiftBack.getAsBoolean())
             return -0.125;
-        if(this.shiftForward.getAsBoolean())
+        if (this.shiftForward.getAsBoolean())
             return 0.125;
         return 0;
     }
