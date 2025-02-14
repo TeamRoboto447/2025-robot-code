@@ -13,7 +13,7 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
     public final Trigger reset;
     public final Trigger floorCollect, coralLoading;
     public final Trigger coralTrough, coralL2, coralL3, coralL4;
-    public final Trigger algaeL1, algaeNet, algaeProcessor;
+    public final Trigger algaeL2, algaeNet, algaeProcessor;
     private TargetReef targetReef;
 
     public enum TargetReef {
@@ -83,7 +83,7 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         coralL3 = new Trigger(this.getButton("Coral L3"));
         coralL4 = new Trigger(this.getButton("Coral L4"));
 
-        algaeL1 = new Trigger(this.getButton("Algae L1"));
+        algaeL2 = new Trigger(this.getButton("Algae L2"));
         algaeNet = new Trigger(this.getButton("Algae Net"));
         algaeProcessor = new Trigger(this.getButton("Algae Processor"));
     }

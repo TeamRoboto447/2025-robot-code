@@ -29,7 +29,7 @@ public class ManualAlgaeNet extends Command {
   @Override
   public void initialize() {
     this.elevatorSubsystem.setElevatorTargetHeight(Level.NET);
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -28,19 +28,20 @@ public class ManualAlgaeL2 extends Command {
   @Override
   public void initialize() {
     this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L2);
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(10));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (this.elevatorSubsystem.atTarget())
+      this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
     this.algaeManipulatorSubsystem.intakeAlgae(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
     this.algaeManipulatorSubsystem.holdAlgae();
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }

@@ -239,6 +239,7 @@ class ControlPanel:
                 button = Button("HOLD", "Shift Back", "back.jpeg", "back.jpeg")
             case (4, 2):
                 button = Button("HOLD", "Shift Right", "right.jpeg", "right.jpeg")
+        self.__buttons[(x, y)] = button
 
     def reset_panel_buttons(self, deck):
         self.update_network_tables()
