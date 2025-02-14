@@ -16,11 +16,12 @@ public class ManualCoralPickup extends Command {
 
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
+
   /** Creates a new ManualCoralPickup. */
   public ManualCoralPickup(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
     this.elevatorSubsystem = eSubsystem;
-    
+
     addRequirements(amSubsystem, eSubsystem);
   }
 
@@ -42,6 +43,7 @@ public class ManualCoralPickup extends Command {
   public void end(boolean interrupted) {
     this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
     this.algaeManipulatorSubsystem.holdCoral();
+    this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }
 
   // Returns true when the command should end.

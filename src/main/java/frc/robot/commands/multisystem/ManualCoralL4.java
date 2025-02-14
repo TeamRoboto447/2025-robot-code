@@ -12,13 +12,13 @@ import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualCoralL2 extends Command {
+public class ManualCoralL4 extends Command {
 
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
 
-  /** Creates a new ManualCoralL2. */
-  public ManualCoralL2(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
+  /** Creates a new ManualCoralL4. */
+  public ManualCoralL4(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
     this.elevatorSubsystem = eSubsystem;
 
@@ -28,8 +28,8 @@ public class ManualCoralL2 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L2);
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(10));
+    this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L4);
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
