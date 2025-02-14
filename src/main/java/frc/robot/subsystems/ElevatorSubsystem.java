@@ -56,7 +56,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
-  private boolean atTarget() {
+  public boolean atTarget() {
     SmartDashboard.putNumber("Elevator/Target Position", this.getPositionFromLevel(currentTargetLevel));
     SmartDashboard.putNumber("Elevator/Current Position", elevatorEncoder.getPosition());
     return Math.abs(this.getPositionFromLevel(currentTargetLevel) - elevatorEncoder.getPosition()) < 2;
@@ -67,9 +67,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         // Command init
         () -> this.setElevatorTargetHeight(level),
         // Command execute/periodic
-        () -> {},
+        () -> {
+        },
         // Command end
-        interrupted -> {},
+        interrupted -> {
+        },
         // Command isFinished
         () -> this.atTarget(),
         // Command requirements
