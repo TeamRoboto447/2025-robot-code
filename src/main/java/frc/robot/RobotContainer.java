@@ -27,6 +27,15 @@ import frc.robot.commands.algae.auto.CollectAlgaeFromReef;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.commands.climber.ClimberControlCommand;
 import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
+import frc.robot.commands.multisystem.ManualAlgaeL2;
+import frc.robot.commands.multisystem.ManualAlgaeNet;
+import frc.robot.commands.multisystem.ManualAlgaeProcessor;
+import frc.robot.commands.multisystem.ManualCoralL1;
+import frc.robot.commands.multisystem.ManualCoralL2;
+import frc.robot.commands.multisystem.ManualCoralL3AlgaeL1;
+import frc.robot.commands.multisystem.ManualCoralL4;
+import frc.robot.commands.multisystem.ManualCoralPickup;
+import frc.robot.commands.multisystem.ManualFloorPickup;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -55,6 +64,16 @@ public class RobotContainer {
   private AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private AlgaeManipulatorCommand algaeManipulatorCommand;
 
+  private ManualFloorPickup manualFloorPickupCommand;
+  private ManualCoralPickup manualCoralPickupCommand;
+  private ManualCoralL1 manualCoralL1Command;
+  private ManualCoralL2 manualCoralL2Command;
+  private ManualCoralL3AlgaeL1 manualCoralL3AlgaeL1Command;
+  private ManualCoralL4 manualCoralL4Command;
+  private ManualAlgaeL2 manualAlgaeL2Command;
+  private ManualAlgaeNet manualAlgaeNetCommand;
+  private ManualAlgaeProcessor manualAlgaeProcessorCommand;
+
   private CommandXboxController driverController = new CommandXboxController(
       ControllerConstants.DRIVER_CONTROLLER_PORT);
   private CommandXboxController operatorController = new CommandXboxController(
@@ -71,7 +90,6 @@ public class RobotContainer {
     initializeClimberSubsystem();
     initializeElevatorSubsystem();
     initializeAlgaeManipulatorSubsystem();
-    initializeStreamdeckBasedControls();
 
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
@@ -80,6 +98,7 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureMultisystemBindings();
+    initializeStreamdeckBasedControls();
 
     
     
@@ -180,6 +199,16 @@ public class RobotContainer {
     }));
     this.operatorStreamdeck.tiltForward
         .onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
+      
+    this.operatorStreamdeck.floorCollect.whileTrue(this.manualFloorPickupCommand);
+    this.operatorStreamdeck.coralLoading.whileTrue(this.manualCoralPickupCommand);
+    this.operatorStreamdeck.algaeL2.whileTrue(this.manualAlgaeL2Command);
+    this.operatorStreamdeck.coralTrough.whileTrue(this.manualCoralL1Command);
+    this.operatorStreamdeck.coralL2.whileTrue(this.manualCoralL2Command);
+    this.operatorStreamdeck.coralL3.whileTrue(this.manualCoralL3AlgaeL1Command);
+    this.operatorStreamdeck.coralL4.whileTrue(this.manualCoralL4Command);
+    this.operatorStreamdeck.algaeNet.whileTrue(this.manualAlgaeNetCommand);
+    this.operatorStreamdeck.algaeProcessor.whileTrue(this.manualAlgaeProcessorCommand);
   }
 
   private void initializeClimberSubsystem() {
@@ -224,6 +253,15 @@ public class RobotContainer {
   }
 
   private void initializeMultisystemCommands() {
+    this.manualFloorPickupCommand = new ManualFloorPickup(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualCoralPickupCommand = new ManualCoralPickup(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualCoralL1Command = new ManualCoralL1(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualCoralL2Command = new ManualCoralL2(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualCoralL3AlgaeL1Command = new ManualCoralL3AlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualCoralL4Command = new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualAlgaeL2Command = new ManualAlgaeL2(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualAlgaeNetCommand = new ManualAlgaeNet(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualAlgaeProcessorCommand = new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem);
   }
 
   private void initializeNamedCommands() {

@@ -29,7 +29,7 @@ public class ManualCoralL1 extends Command {
   @Override
   public void initialize() {
     this.elevatorSubsystem.setElevatorTargetHeight(Level.TROUGH);
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,7 +45,7 @@ public class ManualCoralL1 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }
 
