@@ -42,6 +42,7 @@ public class ManualAlgaeL2 extends Command {
   public void end(boolean interrupted) {
     this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
     this.algaeManipulatorSubsystem.holdAlgae();
+    this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }
 
   // Returns true when the command should end.
