@@ -52,13 +52,14 @@ public class ElevatorSubsystem extends SubsystemBase {
       motorOutput = Math.max(-maxSpeed, Math.min(maxSpeed, motorOutput)); // Clamp the output between -1 and 1
       SmartDashboard.putNumber("Elevator/Elevator Controller Output", motorOutput);
       SmartDashboard.putString("Elevator/Current Target Level", this.currentTargetLevel.toString());
+      SmartDashboard.putNumber("Elevator/Target Position", this.getPositionFromLevel(currentTargetLevel));
+      SmartDashboard.putNumber("Elevator/Current Position", elevatorEncoder.getPosition());
+      SmartDashboard.putBoolean("Elevator/At Target", this.atTarget());
       moveMotorRaw(motorOutput);
     }
   }
 
   public boolean atTarget() {
-    SmartDashboard.putNumber("Elevator/Target Position", this.getPositionFromLevel(currentTargetLevel));
-    SmartDashboard.putNumber("Elevator/Current Position", elevatorEncoder.getPosition());
     return Math.abs(this.getPositionFromLevel(currentTargetLevel) - elevatorEncoder.getPosition()) < 2;
   }
 
