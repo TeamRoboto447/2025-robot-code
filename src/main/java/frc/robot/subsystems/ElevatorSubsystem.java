@@ -26,6 +26,7 @@ import frc.robot.utils.MathUtils;
 public class ElevatorSubsystem extends SubsystemBase {
 
   private SparkMax elevatorMotor;
+  private SparkMax auxillaryElevatorMotor;
   private RelativeEncoder elevatorEncoder;
 
   private Level currentTargetLevel = Level.FLOOR;
@@ -89,6 +90,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
+    speed = Math.max(-0.4, speed);
     elevatorMotor.set(speed);
   }
 
@@ -193,5 +195,14 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     elevatorEncoder = elevatorMotor.getEncoder();
     elevatorEncoder.setPosition(0);
+
+    auxillaryElevatorMotor = new SparkMax(ElevatorSubsystemConstants.AUXILLARY_ELEVATOR_MOTOR_ID, MotorType.kBrushless);
+    SparkMaxConfig auxElevatorMotorConfig = new SparkMaxConfig();
+    auxElevatorMotorConfig
+        .inverted(true)
+        .idleMode(IdleMode.kBrake)
+        .smartCurrentLimit(50)
+        .follow(elevatorMotor, true);
+    auxillaryElevatorMotor.configure(auxElevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 }
