@@ -72,16 +72,17 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
   
     this.wristController = new PIDController(5, 0, 0);
-    this.wristController.setTolerance(0.02);
+    this.wristController.setTolerance(0.04);
   }
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Wrist/Target Position", currentTargetWristPosition);
     SmartDashboard.putNumber("Wrist/Current Position", getAbsoluteWristPosition());
+    SmartDashboard.putBoolean("Wrist/At Target", this.atTarget());
+    SmartDashboard.putNumber("Wrist/Output Current", this.wristMotor.getOutputCurrent());
     double angleMotorOutput = this.wristController.calculate(getAbsoluteWristPosition(), this.currentTargetWristPosition);
     checkForOperatorOverride(angleMotorOutput);
-    SmartDashboard.putNumber("Absolute position", getAbsoluteWristPosition());
   }
 
   public void intakeAlgae(double speed) {

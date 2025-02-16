@@ -75,6 +75,7 @@ public final class Constants {
 
   public static class ElevatorSubsystemConstants {
     public static final int ELEVATOR_MOTOR_ID = 22;
+    public static final int AUXILLARY_ELEVATOR_MOTOR_ID = 23;
     public static final int ELEVATOR_UPPER_LIMIT_SWITCH_CHANNEL = 2;
     public static final int ELEVATOR_LOWER_LIMIT_SWITCH_CHANNEL = 3;
 
@@ -92,14 +93,14 @@ public final class Constants {
     public static final double MIN_INCH_HEIGHT = 11.5;
     public static final double MAX_INCH_HEIGHT = 92;
     public static final int MIN_RAW_HEIGHT = 0;
-    public static final int MAX_RAW_HEIGHT = 270;
+    public static final int MAX_RAW_HEIGHT = 90;
 
     public static final Distance FLOOR_LEVEL = Inches.of(0 + MIN_INCH_HEIGHT);
-    public static final Distance TROUGH_LEVEL = Inches.of(0 + MIN_INCH_HEIGHT);
-    public static final Distance CORAL_L2_LEVEL = Inches.of(13);
+    public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
+    public static final Distance CORAL_L2_LEVEL = Inches.of(17.5);
     public static final Distance CORAL_L3_LEVEL = Inches.of(29);
     public static final Distance ALGAE_L1_LEVEL = CORAL_L3_LEVEL;
-    public static final Distance ALGAE_L2_LEVEL = Inches.of(45);
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(50);
     public static final Distance CORAL_L4_LEVEL = Inches.of(66);
     public static final Distance NET_LEVEL = Inches.of(80);
   }
