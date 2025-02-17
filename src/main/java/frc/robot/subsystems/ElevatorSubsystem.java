@@ -21,9 +21,10 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorSubsystemConstants;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
-import frc.robot.utils.MathUtils;
 
 public class ElevatorSubsystem extends SubsystemBase {
+
+  private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
 
   private SparkMax elevatorMotor;
   private SparkMax auxillaryElevatorMotor;
@@ -34,7 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean debugging = false;
 
   /** Creates a new ElevatorSubsystem. */
-  public ElevatorSubsystem() {
+  public ElevatorSubsystem(AlgaeManipulatorSubsystem amSubsystem) {
+    this.algaeManipulatorSubsystem = amSubsystem;
     initializeMotors();
   }
 
@@ -80,11 +82,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private double heightToRawPosition(Distance height) {
-    double inches = height.in(Units.Inches);
-    double rawPosition = MathUtils.map(inches, ElevatorSubsystemConstants.MIN_INCH_HEIGHT,
-        ElevatorSubsystemConstants.MAX_INCH_HEIGHT, ElevatorSubsystemConstants.MIN_RAW_HEIGHT,
-        ElevatorSubsystemConstants.MAX_RAW_HEIGHT);
-    return rawPosition;
+    double inchesPerRotation = ElevatorSubsystemConstants.DISTANCE_PER_ROTATION.in(Units.Inches);
+    double targetRotations = height.in(Units.Inches) / inchesPerRotation;
+    return targetRotations * ElevatorSubsystemConstants.GEARING_MULTIPLIER;
   }
 
   public void moveDebugMotorRaw(double speed) {
@@ -93,7 +93,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
-    speed = Math.max(-0.4, speed);
+    if(!this.algaeManipulatorSubsystem.atTarget())
+      speed = 0;
+    if(this.elevatorEncoder.getPosition() < ElevatorSubsystemConstants.MAX_RAW_HEIGHT / 3)
+      speed = Math.max(-0.2, speed);
     elevatorMotor.set(speed);
   }
 

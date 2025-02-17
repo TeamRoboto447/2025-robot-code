@@ -14,16 +14,19 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeManipulatorSubsystemConstants;
@@ -37,6 +40,9 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   private final RelativeEncoder wristEncoder;
   private final AbsoluteEncoder absoluteWristEncoder;
+
+  private final PowerDistribution pdh;
+  private final MedianFilter powerDrawMedian;
 
   private double currentTargetWristPosition = 0.5;
   private boolean isPIDControlling = true;
@@ -52,11 +58,13 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private PIDController wristController;
 
   /** Creates a new AlgaeManipulator. */
-  public AlgaeManipulatorSubsystem() {
+  public AlgaeManipulatorSubsystem(PowerDistribution pdh) {
+    this.pdh = pdh;
+    this.powerDrawMedian = new MedianFilter(10);
+
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
     
-
     SparkMaxConfig coralCurrentConfig = new SparkMaxConfig();
     coralCurrentConfig.smartCurrentLimit(20);
     this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.CORAL_MOTOR_ID, MotorType.kBrushless);
@@ -64,25 +72,43 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     SparkMaxConfig wristCurrentLimit = new SparkMaxConfig();
     wristCurrentLimit.smartCurrentLimit(50);
+    SoftLimitConfig wristLimits = new SoftLimitConfig();
+    wristLimits.forwardSoftLimit(this.maxRotationCount);
+    wristLimits.reverseSoftLimit(this.minRotationCount - 20);
+    wristCurrentLimit.apply(wristLimits);
     this.wristMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
     this.wristMotor.configure(wristCurrentLimit, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
 
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
     this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
-  
-    this.wristController = new PIDController(5, 0, 0);
+    this.wristController = new PIDController(2, 0.000001, 0); // We don't actually use kI, but we do use it's error detection which is disabled when set to 0. So instead we set it to a very low number
     this.wristController.setTolerance(0.04);
+    this.wristController.setIntegratorRange(-0.3, 0.03);
   }
 
   @Override
   public void periodic() {
+    this.powerDrawMedian.calculate(this.pdh.getCurrent(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_PDH_CHANNEL));
     SmartDashboard.putNumber("Wrist/Target Position", currentTargetWristPosition);
     SmartDashboard.putNumber("Wrist/Current Position", getAbsoluteWristPosition());
     SmartDashboard.putBoolean("Wrist/At Target", this.atTarget());
-    SmartDashboard.putNumber("Wrist/Output Current", this.wristMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Wrist/Median Output Current", this.powerDrawMedian.lastValue());
+    SmartDashboard.putNumber("Wrist/Accumulated Error", this.wristController.getAccumulatedError());
+    SmartDashboard.putBoolean("Wrist/Stalled", isStalled());
     double angleMotorOutput = this.wristController.calculate(getAbsoluteWristPosition(), this.currentTargetWristPosition);
     checkForOperatorOverride(angleMotorOutput);
+  }
+
+  public void resetClawError() {
+    this.wristController.reset();
+    this.wristController.setTolerance(0.04);
+    this.wristController.setIntegratorRange(-0.3, 0.03);
+  }
+
+  public boolean isStalled() {
+    return Math.abs(this.wristController.getAccumulatedError()) > 0.25;
   }
 
   public void intakeAlgae(double speed) {
@@ -101,7 +127,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public boolean atTarget() {
-    return this.wristController.atSetpoint();
+    return this.wristController.atSetpoint() || this.isStalled();
   }
 
   public Command tiltToAngle(Angle angle) {
@@ -191,5 +217,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   public void setManipulatorAngle(Angle angle) {
     currentTargetWristPosition = getAbsoluteFromWristAngle(angle);
+    this.resetClawError();
   }
 }
