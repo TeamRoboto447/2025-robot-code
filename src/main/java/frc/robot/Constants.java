@@ -6,7 +6,12 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Inches;
 
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
 import swervelib.math.Matter;
@@ -32,7 +37,12 @@ public final class Constants {
   public static class SwerveSubsystemConstants {
     public static final double MAX_SPEED = Units.feetToMeters(9.2); // 12.78 is max speed the robot is capable of
     public static final double ROBOT_MASS = Units.lbsToKilograms(107);
-    public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); //TODO: update with actual robot COG
+    public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); // TODO:
+                                                                                                                       // update
+                                                                                                                       // with
+                                                                                                                       // actual
+                                                                                                                       // robot
+                                                                                                                       // COG
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
   }
 
@@ -90,25 +100,67 @@ public final class Constants {
       NET
     }
 
-    public static final double MIN_INCH_HEIGHT = 11.5;
-    public static final double MAX_INCH_HEIGHT = 92;
+    // public static final double MIN_INCH_HEIGHT = 11.5;
+    // public static final double MAX_INCH_HEIGHT = 92;
     public static final int MIN_RAW_HEIGHT = 0;
     public static final int MAX_RAW_HEIGHT = 90;
+    public static final double GEARING_MULTIPLIER = 4; // 4:1 gearbox
+    public static final Distance DISTANCE_PER_ROTATION = Inches.of(1 * Math.PI); // Circumferance of 1 inch pulley
 
-    public static final Distance FLOOR_LEVEL = Inches.of(0 + MIN_INCH_HEIGHT);
+    public static final Distance FLOOR_LEVEL = Inches.of(0);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
-    public static final Distance CORAL_L2_LEVEL = Inches.of(17.5);
-    public static final Distance CORAL_L3_LEVEL = Inches.of(29);
-    public static final Distance ALGAE_L1_LEVEL = CORAL_L3_LEVEL;
-    public static final Distance ALGAE_L2_LEVEL = Inches.of(50);
-    public static final Distance CORAL_L4_LEVEL = Inches.of(66);
-    public static final Distance NET_LEVEL = Inches.of(80);
+    public static final Distance CORAL_L2_LEVEL = Inches.of(8);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(15);
+    
+    public static final Distance ALGAE_L1_LEVEL = Inches.of(23);
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(32);
+
+    public static final Distance CORAL_L4_LEVEL = Inches.of(36);
+    public static final Distance NET_LEVEL = Inches.of(40);
   }
 
   public static class AlgaeManipulatorSubsystemConstants {
     public static final int UPPER_WHEEL_MOTOR_ID = 24;
     public static final int LOWER_WHEEL_MOTOR_ID = 25;
     public static final int WRIST_MOTOR_ID = 26;
+    public static final int WRIST_MOTOR_PDH_CHANNEL = 17;
     public static final int CORAL_MOTOR_ID = 27;
+  }
+
+  public static class VisionConstants {
+    public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
+    public static final boolean USE_VISION = true;
+    public static final double POSE_AMBIGUITY_SHIFTER = 0;
+    public static final double POSE_AMBIGUITY_MULTIPLIER = 0;
+    public static final double NOISY_DISTANCE_METERS = 0;
+    public static final double DISTANCE_WEIGHT = 0;
+    public static final int TAG_PRESENCE_WEIGHT = 0;
+
+    /**
+     * Standard deviations of model states. Increase these numbers to trust your
+     * model's state estimates less. This
+     * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
+     * meters.
+     * These numbers should all be 1 or higher, anything lower can do bad things
+     * when multiplied
+     */
+    public static final Matrix<N3, N1> VISION_MEASUREMENT_STANDARD_DEVIATIONS = MatBuilder.fill(Nat.N3(), Nat.N1(), 1,
+        1, 1 * Math.PI);
+
+    /**
+     * Standard deviations of the vision measurements. Increase these numbers to
+     * trust global measurements from vision
+     * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and
+     * radians.
+     * These numbers should all be 1 or higher, anything lower can do bad things
+     * when multiplied
+     */
+    public static final Matrix<N3, N1> STATE_STANDARD_DEVIATIONS = MatBuilder.fill(Nat.N3(), Nat.N1(), 1, 1,
+        1);
+  }
+
+  public static class FieldConstants {
+    public static final double FIELD_LENGTH_METERS = Units.inchesToMeters(651.25);
+    public static final double FIELD_WIDTH_METERS = Units.inchesToMeters(315.5);
   }
 }
