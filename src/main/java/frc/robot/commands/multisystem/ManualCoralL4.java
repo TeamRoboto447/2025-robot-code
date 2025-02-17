@@ -17,6 +17,8 @@ public class ManualCoralL4 extends Command {
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
 
+  private boolean tiltAngleSet;
+
   /** Creates a new ManualCoralL4. */
   public ManualCoralL4(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
@@ -29,14 +31,16 @@ public class ManualCoralL4 extends Command {
   @Override
   public void initialize() {
     this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L4);
+    this.tiltAngleSet = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (this.elevatorSubsystem.atTarget())
+    if (this.elevatorSubsystem.atTarget() && !this.tiltAngleSet) {
       this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
-    if (this.algaeManipulatorSubsystem.atTarget() && this.elevatorSubsystem.atTarget()) {
+      this.tiltAngleSet = true;
+    } else if (this.algaeManipulatorSubsystem.atTarget() && this.elevatorSubsystem.atTarget()) {
       this.algaeManipulatorSubsystem.outtakeCoral();
     } else {
       this.algaeManipulatorSubsystem.holdCoral();

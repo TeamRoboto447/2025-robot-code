@@ -100,25 +100,30 @@ public final class Constants {
       NET
     }
 
-    public static final double MIN_INCH_HEIGHT = 11.5;
-    public static final double MAX_INCH_HEIGHT = 92;
+    // public static final double MIN_INCH_HEIGHT = 11.5;
+    // public static final double MAX_INCH_HEIGHT = 92;
     public static final int MIN_RAW_HEIGHT = 0;
     public static final int MAX_RAW_HEIGHT = 90;
+    public static final double GEARING_MULTIPLIER = 4; // 4:1 gearbox
+    public static final Distance DISTANCE_PER_ROTATION = Inches.of(1 * Math.PI); // Circumferance of 1 inch pulley
 
-    public static final Distance FLOOR_LEVEL = Inches.of(0 + MIN_INCH_HEIGHT);
+    public static final Distance FLOOR_LEVEL = Inches.of(0);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
-    public static final Distance CORAL_L2_LEVEL = Inches.of(17.5);
-    public static final Distance CORAL_L3_LEVEL = Inches.of(29);
-    public static final Distance ALGAE_L1_LEVEL = CORAL_L3_LEVEL;
-    public static final Distance ALGAE_L2_LEVEL = Inches.of(50);
-    public static final Distance CORAL_L4_LEVEL = Inches.of(66);
-    public static final Distance NET_LEVEL = Inches.of(80);
+    public static final Distance CORAL_L2_LEVEL = Inches.of(8);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(15);
+    
+    public static final Distance ALGAE_L1_LEVEL = Inches.of(23);
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(32);
+
+    public static final Distance CORAL_L4_LEVEL = Inches.of(36);
+    public static final Distance NET_LEVEL = Inches.of(40);
   }
 
   public static class AlgaeManipulatorSubsystemConstants {
     public static final int UPPER_WHEEL_MOTOR_ID = 24;
     public static final int LOWER_WHEEL_MOTOR_ID = 25;
     public static final int WRIST_MOTOR_ID = 26;
+    public static final int WRIST_MOTOR_PDH_CHANNEL = 17;
     public static final int CORAL_MOTOR_ID = 27;
   }
 

@@ -12,6 +12,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -54,6 +55,8 @@ import frc.robot.controllers.ReefscapeStreamdeckController;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private PowerDistribution powerDistributionHub;
+
   private SwerveSubsystem swerveSubsystem;
 
   private ClimberSubsystem climberSubsystem;
@@ -61,7 +64,7 @@ public class RobotContainer {
 
   private ElevatorSubsystem elevatorSubsystem;
 
-  private AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
+  public AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private AlgaeManipulatorCommand algaeManipulatorCommand;
 
   private ManualFloorPickup manualFloorPickupCommand;
@@ -86,10 +89,12 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    this.powerDistributionHub = new PowerDistribution();
+
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
-    initializeElevatorSubsystem();
     initializeAlgaeManipulatorSubsystem();
+    initializeElevatorSubsystem();
 
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
@@ -202,10 +207,13 @@ public class RobotContainer {
       
     this.operatorStreamdeck.floorCollect.whileTrue(this.manualFloorPickupCommand);
     this.operatorStreamdeck.coralLoading.whileTrue(this.manualCoralPickupCommand);
-    this.operatorStreamdeck.algaeL2.whileTrue(this.manualAlgaeL2Command);
+    this.operatorStreamdeck.algaeL2.onTrue(this.manualAlgaeL2Command);
+
     this.operatorStreamdeck.coralTrough.whileTrue(this.manualCoralL1Command);
+
     this.operatorStreamdeck.coralL2.whileTrue(this.manualCoralL2Command);
-    this.operatorStreamdeck.coralL3.whileTrue(this.manualCoralL3AlgaeL1Command);
+    this.operatorStreamdeck.coralL3.onTrue(this.manualCoralL3AlgaeL1Command);
+
     this.operatorStreamdeck.coralL4.whileTrue(this.manualCoralL4Command);
     this.operatorStreamdeck.algaeNet.whileTrue(this.manualAlgaeNetCommand);
     this.operatorStreamdeck.algaeProcessor.whileTrue(this.manualAlgaeProcessorCommand);
@@ -218,7 +226,7 @@ public class RobotContainer {
   }
 
   private void initializeElevatorSubsystem() {
-    this.elevatorSubsystem = new ElevatorSubsystem();
+    this.elevatorSubsystem = new ElevatorSubsystem(this.algaeManipulatorSubsystem);
     // Elevator is now controlled via triggers, a full command is not needed
     if (this.elevatorSubsystem.debugging) {
       this.elevatorSubsystem
@@ -239,7 +247,7 @@ public class RobotContainer {
   }
 
   private void initializeAlgaeManipulatorSubsystem() {
-    this.algaeManipulatorSubsystem = new AlgaeManipulatorSubsystem();
+    this.algaeManipulatorSubsystem = new AlgaeManipulatorSubsystem(powerDistributionHub);
     this.algaeManipulatorCommand = new AlgaeManipulatorCommand(algaeManipulatorSubsystem, operatorController);
     this.algaeManipulatorSubsystem.setDefaultCommand(algaeManipulatorCommand);
 
