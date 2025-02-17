@@ -21,7 +21,6 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,7 +41,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final AbsoluteEncoder absoluteWristEncoder;
 
   private final PowerDistribution pdh;
-  private final MedianFilter powerDrawMedian;
 
   private double currentTargetWristPosition = 0.5;
   private boolean isPIDControlling = true;
@@ -60,7 +58,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   /** Creates a new AlgaeManipulator. */
   public AlgaeManipulatorSubsystem(PowerDistribution pdh) {
     this.pdh = pdh;
-    this.powerDrawMedian = new MedianFilter(10);
 
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
@@ -90,11 +87,9 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    this.powerDrawMedian.calculate(this.pdh.getCurrent(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_PDH_CHANNEL));
     SmartDashboard.putNumber("Wrist/Target Position", currentTargetWristPosition);
     SmartDashboard.putNumber("Wrist/Current Position", getAbsoluteWristPosition());
     SmartDashboard.putBoolean("Wrist/At Target", this.atTarget());
-    SmartDashboard.putNumber("Wrist/Median Output Current", this.powerDrawMedian.lastValue());
     SmartDashboard.putNumber("Wrist/Accumulated Error", this.wristController.getAccumulatedError());
     SmartDashboard.putBoolean("Wrist/Stalled", isStalled());
     double angleMotorOutput = this.wristController.calculate(getAbsoluteWristPosition(), this.currentTargetWristPosition);

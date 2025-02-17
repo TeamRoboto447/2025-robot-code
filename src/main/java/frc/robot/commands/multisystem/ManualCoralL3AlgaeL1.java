@@ -27,6 +27,7 @@ public class ManualCoralL3AlgaeL1 extends Command {
     this.elevatorSubsystem = eSubsystem;
 
     addRequirements(amSubsystem, eSubsystem);
+    this.waitTimer = new Timer();
   }
 
   // Called when the command is initially scheduled.
@@ -34,7 +35,7 @@ public class ManualCoralL3AlgaeL1 extends Command {
   public void initialize() {
     this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L3);
     this.step = 0;
-    this.waitTimer = new Timer();
+    this.waitTimer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

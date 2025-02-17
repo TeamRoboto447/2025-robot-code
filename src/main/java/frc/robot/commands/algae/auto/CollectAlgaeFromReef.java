@@ -22,13 +22,14 @@ public class CollectAlgaeFromReef extends Command {
     algaeManipulatorSubsystem = aManipulatorSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(algaeManipulatorSubsystem);
+    this.waitTimer = new Timer();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     this.step = 0;
-    this.waitTimer = new Timer();
+    this.waitTimer.reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
