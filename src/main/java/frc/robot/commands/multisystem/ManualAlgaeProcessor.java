@@ -28,7 +28,7 @@ public class ManualAlgaeProcessor extends Command {
   @Override
   public void initialize() {
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(60));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(40));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
