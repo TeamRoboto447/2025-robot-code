@@ -68,7 +68,8 @@ public class Robot extends TimedRobot {
                   continue;
                 }
                 // Put a line on the image in the center
-                Imgproc.line(mat, new Point(WIDTH/2, HEIGHT), new Point(WIDTH/2, 0), new Scalar(255, 255, 255), 1);
+                int middleLineX = 140;
+                Imgproc.line(mat, new Point(middleLineX, HEIGHT), new Point(middleLineX, 0), new Scalar(255, 255, 255), 1);
                 Imgproc.line(mat, new Point(WIDTH, HEIGHT/2), new Point(0, HEIGHT/2), new Scalar(255, 255, 255), 1);
                 // Give the output stream a new image to display
                 outputStream.putFrame(mat);
