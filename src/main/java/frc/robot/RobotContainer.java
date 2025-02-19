@@ -105,9 +105,8 @@ public class RobotContainer {
     configureMultisystemBindings();
     initializeStreamdeckBasedControls();
 
-    
-    
-    this.driverController.a().whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(1)));
+    this.driverController.a()
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(1)));
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -150,7 +149,7 @@ public class RobotContainer {
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.getLeftY() * -1,
         () -> driverController.getLeftX() * -1)
-        .withControllerRotationAxis(() -> -driverController.getRightX()/2)
+        .withControllerRotationAxis(() -> -driverController.getRightX() / 2)
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8)
         .allianceRelativeControl(true);
@@ -204,7 +203,7 @@ public class RobotContainer {
     }));
     this.operatorStreamdeck.tiltForward
         .onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
-      
+
     this.operatorStreamdeck.floorCollect.whileTrue(this.manualFloorPickupCommand);
     this.operatorStreamdeck.coralLoading.whileTrue(this.manualCoralPickupCommand);
     this.operatorStreamdeck.algaeL2.onTrue(this.manualAlgaeL2Command);
@@ -214,7 +213,7 @@ public class RobotContainer {
     this.operatorStreamdeck.coralL2.whileTrue(this.manualCoralL2Command);
     this.operatorStreamdeck.coralL3.onTrue(this.manualCoralL3AlgaeL1Command);
 
-    this.operatorStreamdeck.coralL4.whileTrue(this.manualCoralL4Command);
+    this.operatorStreamdeck.coralL4.onTrue(this.manualCoralL4Command);
     this.operatorStreamdeck.algaeNet.whileTrue(this.manualAlgaeNetCommand);
     this.operatorStreamdeck.algaeProcessor.whileTrue(this.manualAlgaeProcessorCommand);
   }
@@ -266,7 +265,7 @@ public class RobotContainer {
     this.manualCoralL1Command = new ManualCoralL1(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualCoralL2Command = new ManualCoralL2(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualCoralL3AlgaeL1Command = new ManualCoralL3AlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem);
-    this.manualCoralL4Command = new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualCoralL4Command = new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem);
     this.manualAlgaeL2Command = new ManualAlgaeL2(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualAlgaeNetCommand = new ManualAlgaeNet(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualAlgaeProcessorCommand = new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem);
@@ -308,10 +307,10 @@ public class RobotContainer {
                 }),
                 new WaitCommand(0.25)),
             algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
-        this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
+            this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
 
     NamedCommands.registerCommand("ScoreOnL3", new SequentialCommandGroup(
-      this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L3),
+        this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L3),
         algaeManipulatorSubsystem.tiltToAngle(Degrees.of(0)),
         new ParallelRaceGroup(
             this.algaeManipulatorSubsystem.run(() -> {
@@ -319,17 +318,17 @@ public class RobotContainer {
             }),
             new WaitCommand(0.25)),
         algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
-      this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
+        this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
 
     NamedCommands.registerCommand("ScoreInNet", new SequentialCommandGroup(
-      this.elevatorSubsystem.moveElevatorToLevel(Level.NET),
+        this.elevatorSubsystem.moveElevatorToLevel(Level.NET),
         new ParallelRaceGroup(
             this.algaeManipulatorSubsystem.run(() -> {
               algaeManipulatorSubsystem.outtakeAlgae(0.5);
             }),
             new WaitCommand(0.25)),
         algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
-      this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
+        this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
 
     // Elevator Commands
     NamedCommands.registerCommand("MoveToFloor", this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR));
