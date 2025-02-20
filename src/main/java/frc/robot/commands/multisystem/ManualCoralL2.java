@@ -71,8 +71,9 @@ public class ManualCoralL2 extends Command {
     // }
     switch (this.step) {
       case 0:
-        if (waitTimer.get() > 0.1) {
+        if (waitTimer.get() > 0.2) {
           this.step += 1;
+          this.shiftBack = false;
         }
         break;
       case 1:
