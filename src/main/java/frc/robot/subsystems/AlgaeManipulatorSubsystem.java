@@ -71,11 +71,12 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     wristCurrentLimit.smartCurrentLimit(50);
     SoftLimitConfig wristLimits = new SoftLimitConfig();
     wristLimits.forwardSoftLimit(this.maxRotationCount);
+    wristLimits.forwardSoftLimitEnabled(true);
     wristLimits.reverseSoftLimit(this.minRotationCount - 20);
+    wristLimits.reverseSoftLimitEnabled(true);
     wristCurrentLimit.apply(wristLimits);
     this.wristMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.WRIST_MOTOR_ID, MotorType.kBrushless);
     this.wristMotor.configure(wristCurrentLimit, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-
 
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();

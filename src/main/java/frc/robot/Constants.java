@@ -113,9 +113,9 @@ public final class Constants {
     public static final Distance CORAL_L3_LEVEL = Inches.of(15);
     
     public static final Distance ALGAE_L1_LEVEL = Inches.of(23);
-    public static final Distance ALGAE_L2_LEVEL = Inches.of(32);
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(34);
 
-    public static final Distance CORAL_L4_LEVEL = Inches.of(48);
+    public static final Distance CORAL_L4_LEVEL = Inches.of(50);
     public static final Distance NET_LEVEL = Inches.of(68);
   }
 

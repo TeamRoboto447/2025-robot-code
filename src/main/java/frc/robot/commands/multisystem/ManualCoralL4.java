@@ -31,8 +31,6 @@ public class ManualCoralL4 extends Command {
 
   private boolean shiftBack = false;
 
-  private boolean tiltAngleSet;
-
   /** Creates a new ManualCoralL4. */
   public ManualCoralL4(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem,
       SwerveSubsystem sSubsystem) {
@@ -40,13 +38,14 @@ public class ManualCoralL4 extends Command {
     this.elevatorSubsystem = eSubsystem;
     this.swerveSubsystem = sSubsystem;
 
-    addRequirements(amSubsystem, eSubsystem, sSubsystem);
+    addRequirements(amSubsystem, eSubsystem);
 
     this.waitTimer = new Timer();
     this.waitTimer.stop();
+
     // Shifting setup
     this.shiftBackCommand = this.swerveSubsystem
-        .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.125, () -> 0)
+        .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.3, () -> 0)
             .withControllerRotationAxis(() -> 0)
             .deadband(0)
             .scaleTranslation(0.8));
@@ -58,10 +57,8 @@ public class ManualCoralL4 extends Command {
   @Override
   public void initialize() {
     // this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L4);
-    this.tiltAngleSet = false;
 
     this.shiftBack = true;
-    System.out.println("start");
 
     this.step = 0;
     this.waitTimer.reset();
@@ -84,22 +81,18 @@ public class ManualCoralL4 extends Command {
     SmartDashboard.putNumber("ManualCoralL4/waitTimer", waitTimer.get());
     switch (this.step) {
       case 0:
-        System.out.println(waitTimer.get());
-        if (waitTimer.get() > 1.45) {
-          // this.step += 1;
-          System.out.println("waitTimer at time");
+        if (waitTimer.get() > 0.5) {
+          this.step += 1;
         }
         break;
       case 1:
         this.shiftBack = false;
         this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L4);
         this.step += 1;
-        System.out.println("set elevator height");
         break;
       case 2:
         if (this.elevatorSubsystem.atTarget()) {
           this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
-          System.out.println("set manipulator angle");
           this.step += 1;
         }
         break;
@@ -107,9 +100,14 @@ public class ManualCoralL4 extends Command {
         if (this.algaeManipulatorSubsystem.atTarget()) {
           System.out.println("spit coral");
           this.algaeManipulatorSubsystem.outtakeCoral();
+          this.waitTimer.reset();
+          this.waitTimer.start();
           this.step += 1;
         }
         break;
+      case 4:
+        if (this.waitTimer.get() > 0.5)
+          this.step += 1;
     }
   }
 
@@ -119,7 +117,6 @@ public class ManualCoralL4 extends Command {
     this.shiftBack = false;
     this.step = 0;
     this.waitTimer.stop();
-    System.out.println("end");
     this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }
@@ -127,7 +124,6 @@ public class ManualCoralL4 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    // return this.step > 3;
+    return this.step > 4;
   }
 }

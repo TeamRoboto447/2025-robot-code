@@ -210,7 +210,7 @@ public class RobotContainer {
 
     this.operatorStreamdeck.coralTrough.whileTrue(this.manualCoralL1Command);
 
-    this.operatorStreamdeck.coralL2.whileTrue(this.manualCoralL2Command);
+    this.operatorStreamdeck.coralL2.onTrue(this.manualCoralL2Command);
     this.operatorStreamdeck.coralL3.onTrue(this.manualCoralL3AlgaeL1Command);
 
     this.operatorStreamdeck.coralL4.onTrue(this.manualCoralL4Command);
@@ -263,7 +263,7 @@ public class RobotContainer {
     this.manualFloorPickupCommand = new ManualFloorPickup(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualCoralPickupCommand = new ManualCoralPickup(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualCoralL1Command = new ManualCoralL1(algaeManipulatorSubsystem, elevatorSubsystem);
-    this.manualCoralL2Command = new ManualCoralL2(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualCoralL2Command = new ManualCoralL2(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem);
     this.manualCoralL3AlgaeL1Command = new ManualCoralL3AlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualCoralL4Command = new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem);
     this.manualAlgaeL2Command = new ManualAlgaeL2(algaeManipulatorSubsystem, elevatorSubsystem);
