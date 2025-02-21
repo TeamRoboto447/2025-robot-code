@@ -98,7 +98,6 @@ public class ManualCoralL4 extends Command {
         break;
       case 3:
         if (this.algaeManipulatorSubsystem.atTarget()) {
-          System.out.println("spit coral");
           this.algaeManipulatorSubsystem.outtakeCoral();
           this.waitTimer.reset();
           this.waitTimer.start();

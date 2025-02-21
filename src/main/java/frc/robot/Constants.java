@@ -110,9 +110,9 @@ public final class Constants {
     public static final Distance FLOOR_LEVEL = Inches.of(0);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
-    public static final Distance CORAL_L3_LEVEL = Inches.of(15);
-    
-    public static final Distance ALGAE_L1_LEVEL = Inches.of(23);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(17);
+
+    public static final Distance ALGAE_L1_LEVEL = Inches.of(22);
     public static final Distance ALGAE_L2_LEVEL = Inches.of(34);
 
     public static final Distance CORAL_L4_LEVEL = Inches.of(50);

@@ -223,14 +223,14 @@ class ControlPanel:
                 button = Button(
                     "HOLD", "Algae Processor", "processor.jpeg", "processor.jpeg"
                 )
-            case (3, 0):
-                button = Button(
-                    "HOLD", "Algae Outtake", "processor.jpeg", "processor.jpeg"
-                )
-            case (3, 1):
-                button = Button(
-                    "HOLD", "Coral Outtake", "coral_intake.png", "coral_intake.png"
-                )
+            # case (3, 0):
+            #     button = Button(
+            #         "HOLD", "Algae Outtake", "processor.jpeg", "processor.jpeg"
+            #     )
+            # case (3, 1):
+            #     button = Button(
+            #         "HOLD", "Coral Outtake", "coral_intake.png", "coral_intake.png"
+            #     )
             case (3, 2):
                 button = Button("HOLD", "Shift Left", "left.jpeg", "left.jpeg")
             case (4, 0):
