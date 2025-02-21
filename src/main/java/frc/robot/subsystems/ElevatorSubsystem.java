@@ -93,10 +93,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
-    if(!this.algaeManipulatorSubsystem.atTarget())
+    if (!this.algaeManipulatorSubsystem.atTarget())
       speed = 0;
-    if(this.elevatorEncoder.getPosition() < ElevatorSubsystemConstants.MAX_RAW_HEIGHT / 3)
-      speed = Math.max(-0.2, speed);
+    if (this.elevatorEncoder.getPosition() < ElevatorSubsystemConstants.MAX_RAW_HEIGHT / 2)
+      speed = Math.max(-0.3, speed);
     elevatorMotor.set(speed);
   }
 
@@ -209,6 +209,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(50)
         .follow(elevatorMotor, true);
-    auxillaryElevatorMotor.configure(auxElevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    auxillaryElevatorMotor.configure(auxElevatorMotorConfig, ResetMode.kResetSafeParameters,
+        PersistMode.kPersistParameters);
   }
 }

@@ -13,7 +13,7 @@ import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualCoralL3AlgaeL1 extends Command {
+public class ManualAlgaeL1 extends Command {
 
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
@@ -22,7 +22,7 @@ public class ManualCoralL3AlgaeL1 extends Command {
   private Timer waitTimer;
 
   /** Creates a new ManualCoralL3AlgaeL1. */
-  public ManualCoralL3AlgaeL1(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
+  public ManualAlgaeL1(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
     this.elevatorSubsystem = eSubsystem;
 
@@ -33,7 +33,7 @@ public class ManualCoralL3AlgaeL1 extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L3);
+    this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L1);
     this.step = 0;
     this.waitTimer.reset();
   }
@@ -47,25 +47,12 @@ public class ManualCoralL3AlgaeL1 extends Command {
     this.algaeManipulatorSubsystem.intakeAlgae(0.5);
     switch (this.step) {
       case 0:
-        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(60));
+        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
+        this.waitTimer.reset();
+        this.waitTimer.start();
         this.step += 1;
         break;
       case 1:
-        if (this.algaeManipulatorSubsystem.atTarget()) {
-          this.algaeManipulatorSubsystem.outtakeCoral();
-          this.step += 1;
-        }
-        break;
-      case 2:
-        this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L1);
-        if (this.elevatorSubsystem.atTarget()) {
-          this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
-          this.waitTimer.reset();
-          this.waitTimer.start();
-          this.step += 1;
-        }
-        break;
-      case 3:
         if (this.algaeManipulatorSubsystem.atTarget())
           this.step += 1;
         break;
@@ -83,6 +70,6 @@ public class ManualCoralL3AlgaeL1 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return step > 3;
+    return step > 1;
   }
 }

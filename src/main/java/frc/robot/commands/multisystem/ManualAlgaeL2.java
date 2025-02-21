@@ -46,7 +46,7 @@ public class ManualAlgaeL2 extends Command {
       case 0:
         this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L2);
         if(this.elevatorSubsystem.atTarget()) {
-          this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(30));
+          this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(40));
           this.step += 1;
         }
         break;
