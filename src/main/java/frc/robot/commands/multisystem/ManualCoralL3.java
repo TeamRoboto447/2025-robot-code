@@ -53,8 +53,13 @@ public class ManualCoralL3 extends Command {
         if (this.algaeManipulatorSubsystem.atTarget()) {
           this.algaeManipulatorSubsystem.outtakeCoral();
           this.step += 1;
+          this.waitTimer.reset();
+          this.waitTimer.start();
         }
         break;
+      case 2:
+        if (this.waitTimer.get() > 0.25)
+          this.step += 1;
     }
   }
 
@@ -63,11 +68,12 @@ public class ManualCoralL3 extends Command {
   public void end(boolean interrupted) {
     this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
+    this.waitTimer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return step > 1;
+    return step > 2;
   }
 }

@@ -173,7 +173,7 @@ class ControlPanel:
         self.reset_button_with_new_args(1, 1, "HOLD", "Coral L2", "L2.jpeg", "L2.jpeg")
         self.reset_button_with_new_args(2, 1, "HOLD", "Coral Loading", "coral_intake.png", "coral_intake.png")
         self.reset_button_with_new_args(3, 1, "HOLD", "Shift Forward", "front.jpeg", "front.jpeg")
-        self.reset_button_with_new_args(4, 1, "HOLD", "L3 w/ Algae", "processor.jpeg", "processor.jpeg")
+        self.reset_button_with_new_args(4, 1, "HOLD", "L3 w/ Algae", "coral_algae_combined.png", "coral_algae_combined.png")
         self.reset_button_with_new_args(0, 2, "HOLD", "Coral L3", "L3.jpeg", "L3.jpeg")
         self.reset_button_with_new_args(1, 2, "HOLD", "Coral L4", "L4.jpeg", "L4.jpeg")
         self.reset_button_with_new_args(2, 2, "HOLD", "Shift Left", "left.jpeg", "left.jpeg")

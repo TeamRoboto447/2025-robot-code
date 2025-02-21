@@ -53,7 +53,7 @@ public class ManualAlgaeL1 extends Command {
         this.step += 1;
         break;
       case 1:
-        if (this.algaeManipulatorSubsystem.atTarget())
+        if (this.algaeManipulatorSubsystem.atTarget() || this.waitTimer.get() > 0.5)
           this.step += 1;
         break;
     }
@@ -65,6 +65,7 @@ public class ManualAlgaeL1 extends Command {
     this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
     this.algaeManipulatorSubsystem.holdAlgae();
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
+    this.waitTimer.stop();
   }
 
   // Returns true when the command should end.
