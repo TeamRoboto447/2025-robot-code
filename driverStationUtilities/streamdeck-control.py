@@ -40,7 +40,7 @@ button_table = panel_network_table.getSubTable("states")
 class Button:
     def __init__(
         self,
-        functionality,
+        functionality="HOLD",
         label="",
         enabled_icon="green.png",
         disabled_icon="empty.png",
@@ -123,6 +123,7 @@ class Button:
 class ControlPanel:
     def __init__(self):
         self.__buttons = {}
+        self.deck_reference = None
         for x in range(5):
             for y in range(3):
                 self.init_button_by_pos(x, y)
@@ -151,221 +152,33 @@ class ControlPanel:
         return self.get_button(x, y).label
 
     def reset_button_with_new_args(
-        self, x, y, deck, functionality="", label="", enabled_icon="", disabled_icon=""
+        self, x, y, functionality="", label="", enabled_icon="", disabled_icon=""
     ):
         self.get_button(x, y).reset_with_new_args(
             functionality, label, enabled_icon, disabled_icon
         )
-        update_key_image(deck, (x + (y * 5)), False)
+        update_key_image(self.deck_reference, (x + (y * 5)), False)
 
-    # def init_button_by_pos(self, x, y):
-    #     i = (x + (y * 5))
-    #     pos = (x, y)
-    #     button = None
-    #     match(pos):
-    #         case (0, 0):
-    #             button = Button("HOLD", "Man Net", "net.png", "net.png")
-    #         case (1, 0):
-    #             button = Button("HOLD", "Man Level 3", "L3.jpeg", "L3.jpeg")
-    #         case (0, 1):
-    #             button = Button("HOLD", "Man Level 2", "L2.jpeg", "L2.jpeg")
-    #         case (1, 1):
-    #             button = Button("HOLD", "Man Floor", "L1.jpeg", "L1.jpeg")
-    #         case (0, 2):
-    #             button = Button("HOLD", "Tilt Back", "empty.png", "empty.png")
-    #         case (1, 2):
-    #             button = Button("HOLD", "Tilt Forward", "empty.png", "empty.png")
-    #         case (3, 0):
-    #             button = Button("HOLD", "Algae Intake", "processor.jpeg", "processor.jpeg") # TODO: Use an image designed for the purpose
-    #         case (4, 0):
-    #             button = Button("HOLD", "Algae Outtake", "processor.jpeg", "processor.jpeg") # TODO: Use an image designed for the purpose
-    #         case (3, 1):
-    #             button = Button("HOLD", "Coral Intake", "coral_intake.png", "coral_intake.png") # TODO: Use an image designed for the purpose
-    #         case (4, 1):
-    #             button = Button("HOLD", "Coral Outtake", "coral_intake.png", "coral_intake.png") # TODO: Use an image designed for the purpose
-    #         case (2, 0):
-    #             button = Button("HOLD", "Shift Forward", "front.jpeg", "front.jpeg")
-    #         case (2, 1):
-    #             button = Button("HOLD", "Shift Back", "back.jpeg", "back.jpeg")
-    #         case (3, 2):
-    #             button = Button("HOLD", "Shift Left", "left.jpeg", "left.jpeg")
-    #         case (4, 2):
-    #             button = Button("HOLD", "Shift Right", "right.jpeg", "right.jpeg")
-    #         case (2, 2):
-    #             button = Button("TOGGLE", "Toggle Reefs", "L1.jpeg", "reef_one.jpeg")
-    #         case _:
-    #             button = Button("HOLD", f"Button {i}")
-    #     self.__buttons[pos] = button
     def init_button_by_pos(self, x, y):
-        button = None
-        match ((x, y)):
-            case (0, 0):
-                button = Button(
-                    "HOLD", "Floor Collect", "processor.jpeg", "processor.jpeg"
-                )
-            case (0, 1):
-                button = Button(
-                    "HOLD", "Coral Loading", "coral_intake.png", "coral_intake.png"
-                )
-            case (0, 2):
-                button = Button("HOLD", "Coral L4", "L4.jpeg", "L4.jpeg")
-            case (1, 0):
-                button = Button("HOLD", "Coral L3", "L3.jpeg", "L3.jpeg")
-            case (1, 1):
-                button = Button("HOLD", "Coral Trough", "L1.jpeg", "L1.jpeg")
-            case (1, 2):
-                button = Button("HOLD", "Algae Net", "net.png", "net.png")
-            case (2, 0):
-                button = Button("HOLD", "Algae L2", "processor.jpeg", "processor.jpeg")
-            case (2, 1):
-                button = Button("HOLD", "Coral L2", "L2.jpeg", "L2.jpeg")
-            case (2, 2):
-                button = Button(
-                    "HOLD", "Algae Processor", "processor.jpeg", "processor.jpeg"
-                )
-            # case (3, 0):
-            #     button = Button(
-            #         "HOLD", "Algae Outtake", "processor.jpeg", "processor.jpeg"
-            #     )
-            # case (3, 1):
-            #     button = Button(
-            #         "HOLD", "Coral Outtake", "coral_intake.png", "coral_intake.png"
-            #     )
-            case (3, 2):
-                button = Button("HOLD", "Shift Left", "left.jpeg", "left.jpeg")
-            case (4, 0):
-                button = Button("HOLD", "Shift Forward", "front.jpeg", "front.jpeg")
-            case (4, 1):
-                button = Button("HOLD", "Shift Back", "back.jpeg", "back.jpeg")
-            case (4, 2):
-                button = Button("HOLD", "Shift Right", "right.jpeg", "right.jpeg")
+        button = Button("HOLD", f"Button {(x + (y * 5))}")
         self.__buttons[(x, y)] = button
 
-    def reset_panel_buttons(self, deck):
-        self.update_network_tables()
-        self.reset_button_with_new_args(
-            3, 0, deck, "HOLD", "Algae Intake", "processor.jpeg", "processor.jpeg"
-        )
-        self.reset_button_with_new_args(
-            4, 0, deck, "HOLD", "Algae Outtake", "processor.jpeg", "processor.jpeg"
-        )
-        self.reset_button_with_new_args(
-            3, 1, deck, "HOLD", "Coral Intake", "coral_intake.png", "coral_intake.png"
-        )
-        self.reset_button_with_new_args(
-            4, 1, deck, "HOLD", "Coral Outtake", "coral_intake.png", "coral_intake.png"
-        )
-        self.reset_button_with_new_args(
-            2, 0, deck, "HOLD", "Shift Forward", "front.jpeg", "front.jpeg"
-        )
-        self.reset_button_with_new_args(
-            2, 1, deck, "HOLD", "Shift Back", "back.jpeg", "back.jpeg"
-        )
-        self.reset_button_with_new_args(
-            3, 2, deck, "HOLD", "Shift Left", "left.jpeg", "left.jpeg"
-        )
-        self.reset_button_with_new_args(
-            4, 2, deck, "HOLD", "Shift Right", "right.jpeg", "right.jpeg"
-        )
-        self.reset_button_with_new_args(
-            2, 2, deck, "TOGGLE", "Toggle Reefs", "L1.jpeg", "reef_one.jpeg"
-        )
-
-    def enable_directions(self, deck):
-        self.reset_button_with_new_args(
-            2, 0, deck, "HOLD", "Button 2", "green.png", "empty.png"
-        )
-        self.reset_button_with_new_args(
-            3, 0, deck, "HOLD", "Button 3", "green.png", "empty.png"
-        )
-        self.reset_button_with_new_args(
-            4, 0, deck, "HOLD", "Button 4", "green.png", "empty.png"
-        )
-        self.reset_button_with_new_args(
-            2, 1, deck, "HOLD", "Button 7", "green.png", "empty.png"
-        )
-        self.reset_button_with_new_args(
-            3, 1, deck, "HOLD", "Button 8", "green.png", "empty.png"
-        )
-        self.reset_button_with_new_args(
-            4, 1, deck, "HOLD", "Button 9", "green.png", "empty.png"
-        )
-        self.reset_button_with_new_args(
-            3, 2, deck, "HOLD", "Select Left", "left.jpeg", "left.jpeg"
-        )
-        self.reset_button_with_new_args(
-            4, 2, deck, "HOLD", "Select Right", "right.jpeg", "right.jpeg"
-        )
-        self.reset_button_with_new_args(
-            2, 2, deck, "HOLD", "Reset Panel", "reset.jpeg", "reset.jpeg"
-        )
-
-    def enable_levels(self, deck):
-        self.reset_button_with_new_args(
-            3, 2, deck, "HOLD", "Processor", "processor.jpeg", "processor.jpeg"
-        )
-        self.reset_button_with_new_args(
-            4, 2, deck, "HOLD", "Floor", "L1.jpeg", "L1.jpeg"
-        )
-        self.reset_button_with_new_args(
-            3, 1, deck, "HOLD", "Level 2", "L2.jpeg", "L2.jpeg"
-        )
-        self.reset_button_with_new_args(
-            4, 1, deck, "HOLD", "Level 3", "L3.jpeg", "L3.jpeg"
-        )
-        self.reset_button_with_new_args(
-            3, 0, deck, "HOLD", "Level 4", "L4.jpeg", "L4.jpeg"
-        )
-        self.reset_button_with_new_args(4, 0, deck, "HOLD", "Net", "net.png", "net.png")
-        self.reset_button_with_new_args(
-            2, 2, deck, "HOLD", "Reset Panel", "reset.jpeg", "reset.jpeg"
-        )
-
-    def toggle_reefs(self, deck, state):
-        if state:
-            self.enable_reef_buttons(deck)
-        else:
-            self.enable_left_levels(deck)
-
-    def enable_left_levels(self, deck):
-        self.reset_button_with_new_args(
-            0, 0, deck, "HOLD", "Man Net", "net.png", "net.png"
-        )
-        self.reset_button_with_new_args(
-            1, 0, deck, "HOLD", "Man Level 3", "L3.jpeg", "L3.jpeg"
-        )
-        self.reset_button_with_new_args(
-            0, 1, deck, "HOLD", "Man Level 2", "L2.jpeg", "L2.jpeg"
-        )
-        self.reset_button_with_new_args(
-            1, 1, deck, "HOLD", "Man Floor", "L1.jpeg", "L1.jpeg"
-        )
-        self.reset_button_with_new_args(
-            0, 2, deck, "HOLD", "Tilt Back", "empty.png", "empty.png"
-        )
-        self.reset_button_with_new_args(
-            1, 2, deck, "HOLD", "Tilt Forward", "empty.png", "empty.png"
-        )
-
-    def enable_reef_buttons(self, deck):
-        self.reset_button_with_new_args(
-            0, 0, deck, "HOLD", "Reef One", "reef_one.jpeg", "reef_one.jpeg"
-        )
-        self.reset_button_with_new_args(
-            1, 0, deck, "HOLD", "Reef Two", "reef_two.jpeg", "reef_two.jpeg"
-        )
-        self.reset_button_with_new_args(
-            0, 1, deck, "HOLD", "Reef Three", "reef_three.jpeg", "reef_three.jpeg"
-        )
-        self.reset_button_with_new_args(
-            1, 1, deck, "HOLD", "Reef Four", "reef_four.jpeg", "reef_four.jpeg"
-        )
-        self.reset_button_with_new_args(
-            0, 2, deck, "HOLD", "Reef Five", "reef_five.jpeg", "reef_five.jpeg"
-        )
-        self.reset_button_with_new_args(
-            1, 2, deck, "HOLD", "Reef Six", "reef_six.jpeg", "reef_six.jpeg"
-        )
+    def enable_semi_auto_layout(self):
+        self.reset_button_with_new_args(0, 0, "HOLD", "Floor Collect", "processor.jpeg", "processor.jpeg")
+        self.reset_button_with_new_args(1, 0, "HOLD", "Algae Processor", "processor.jpeg", "processor.jpeg")
+        self.reset_button_with_new_args(2, 0, "HOLD", "Algae Net", "net.png", "net.png")
+        self.reset_button_with_new_args(3, 0, "HOLD", "Algae L1", "processor.jpeg", "processor.jpeg")
+        self.reset_button_with_new_args(4, 0, "HOLD", "Algae L2", "processor.jpeg", "processor.jpeg")
+        self.reset_button_with_new_args(0, 1, "HOLD", "Coral Trough", "L1.jpeg", "L1.jpeg")
+        self.reset_button_with_new_args(1, 1, "HOLD", "Coral L2", "L2.jpeg", "L2.jpeg")
+        self.reset_button_with_new_args(2, 1, "HOLD", "Coral Loading", "coral_intake.png", "coral_intake.png")
+        self.reset_button_with_new_args(3, 1, "HOLD", "Shift Forward", "front.jpeg", "front.jpeg")
+        self.reset_button_with_new_args(4, 1, "HOLD", "L3 w/ Algae", "processor.jpeg", "processor.jpeg")
+        self.reset_button_with_new_args(0, 2, "HOLD", "Coral L3", "L3.jpeg", "L3.jpeg")
+        self.reset_button_with_new_args(1, 2, "HOLD", "Coral L4", "L4.jpeg", "L4.jpeg")
+        self.reset_button_with_new_args(2, 2, "HOLD", "Shift Left", "left.jpeg", "left.jpeg")
+        self.reset_button_with_new_args(3, 2, "HOLD", "Shift Back", "back.jpeg", "back.jpeg")
+        self.reset_button_with_new_args(4, 2, "HOLD", "Shift Right", "right.jpeg", "right.jpeg")
 
     @property
     def buttons(self):
@@ -454,26 +267,6 @@ def key_change_callback(deck, key, state):
     button = panel.get_button_by_index(key)
     button.trigger(state)
 
-    if button.label == "Toggle Reefs":
-        panel.toggle_reefs(deck, button.state)
-
-    if button.state:
-        if "Select Left" == button.label or "Select Right" == button.label:
-            panel.enable_levels(deck)
-
-        if button.label in [
-            "Reef One",
-            "Reef Two",
-            "Reef Three",
-            "Reef Four",
-            "Reef Five",
-            "Reef Six",
-        ]:
-            panel.enable_directions(deck)
-
-        if button.label == "Reset Panel":
-            panel.reset_panel_buttons(deck)
-
     # Don't try to draw an image on a touch button
     if key >= deck.key_count():
         return
@@ -504,11 +297,9 @@ def valueChanged(table, key, value, isNew):
         robot_requesting_update_entry.setBoolean(False)
 
 
-deck_reference = None
-
-
 def main_func():
-    global deck_reference
+    global panel
+
     streamdecks = DeviceManager().enumerate()
 
     print("Found {} Stream Deck(s).\n".format(len(streamdecks)))
@@ -523,7 +314,8 @@ def main_func():
 
         deck.open()
         deck.reset()
-        deck_reference = deck
+        panel.deck_reference = deck
+        panel.enable_semi_auto_layout()
 
         print(
             "Opened '{}' device (serial number: '{}', fw: '{}')".format(
@@ -554,6 +346,6 @@ if __name__ == "__main__":
     try:
         main_func()
     except KeyboardInterrupt:
-        if deck_reference:
-            deck_reference.reset()
-            deck_reference.close()
+        if panel.deck_reference:
+            panel.deck_reference.reset()
+            panel.deck_reference.close()
