@@ -13,7 +13,7 @@ import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualCoralL3AlgaeL1 extends Command {
+public class CoralL3AlgaeL1Command extends Command {
 
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
@@ -22,7 +22,7 @@ public class ManualCoralL3AlgaeL1 extends Command {
   private Timer waitTimer;
 
   /** Creates a new ManualCoralL3AlgaeL1. */
-  public ManualCoralL3AlgaeL1(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
+  public CoralL3AlgaeL1Command(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
     this.elevatorSubsystem = eSubsystem;
 
@@ -54,9 +54,17 @@ public class ManualCoralL3AlgaeL1 extends Command {
         if (this.algaeManipulatorSubsystem.atTarget()) {
           this.algaeManipulatorSubsystem.outtakeCoral();
           this.step += 1;
+          this.waitTimer.reset();
+          this.waitTimer.start();
         }
         break;
       case 2:
+        if (this.waitTimer.get() > 0.75) {
+          this.step += 1;
+          this.waitTimer.stop();
+        }
+        break;
+      case 3:
         this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L1);
         if (this.elevatorSubsystem.atTarget()) {
           this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
@@ -65,7 +73,7 @@ public class ManualCoralL3AlgaeL1 extends Command {
           this.step += 1;
         }
         break;
-      case 3:
+      case 4:
         if (this.algaeManipulatorSubsystem.atTarget())
           this.step += 1;
         break;
@@ -83,6 +91,6 @@ public class ManualCoralL3AlgaeL1 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return step > 3;
+    return step > 4;
   }
 }

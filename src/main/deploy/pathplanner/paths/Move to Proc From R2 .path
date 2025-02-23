@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.13,
-        "y": 2.74
+        "x": 5.1,
+        "y": 2.7699999999999996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.958963607381659,
-        "y": 3.00823241374986
+        "x": 4.928963607381659,
+        "y": 3.0382324137498595
       },
       "isLocked": false,
       "linkedName": "Right Netside Reef"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 5.9670000000000005,
-        "y": 0.6904999999999996
+        "y": 0.9
       },
       "prevControl": {
         "x": 6.149311790543984,
-        "y": 0.3425959550560757
+        "y": 0.5520959550560762
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,7 @@
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 120.96375653207352
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

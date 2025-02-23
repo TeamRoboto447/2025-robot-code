@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.1,
-        "y": 4.05425
+        "x": 5.89,
+        "y": 4.06
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.15766810619963,
-        "y": 4.565320730728202
+        "x": 6.94766810619963,
+        "y": 4.571070730728202
       },
       "isLocked": false,
       "linkedName": "Middle Netside Reef"

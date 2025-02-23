@@ -34,13 +34,13 @@ import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.commands.climber.ClimberControlCommand;
 import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
 import frc.robot.commands.multisystem.ManualAlgaeL1;
-import frc.robot.commands.multisystem.ManualAlgaeL2;
+import frc.robot.commands.multisystem.AlgaeL2Command;
 import frc.robot.commands.multisystem.ManualAlgaeNet;
 import frc.robot.commands.multisystem.ManualAlgaeProcessor;
 import frc.robot.commands.multisystem.ManualCoralL1;
 import frc.robot.commands.multisystem.ManualCoralL2;
 import frc.robot.commands.multisystem.ManualCoralL3;
-import frc.robot.commands.multisystem.ManualCoralL3AlgaeL1;
+import frc.robot.commands.multisystem.CoralL3AlgaeL1Command;
 import frc.robot.commands.multisystem.ManualCoralL4;
 import frc.robot.commands.multisystem.ManualCoralPickup;
 import frc.robot.commands.multisystem.ManualFloorPickup;
@@ -79,10 +79,10 @@ public class RobotContainer {
   private ManualCoralL1 manualCoralL1Command;
   private ManualCoralL2 manualCoralL2Command;
   private ManualCoralL3 manualCoralL3Command;
-  private ManualCoralL3AlgaeL1 manualCoralL3AlgaeL1Command;
+  private CoralL3AlgaeL1Command manualCoralL3AlgaeL1Command;
   private ManualCoralL4 manualCoralL4Command;
   private ManualAlgaeL1 manualAlgaeL1Command;
-  private ManualAlgaeL2 manualAlgaeL2Command;
+  private AlgaeL2Command manualAlgaeL2Command;
   private ManualAlgaeNet manualAlgaeNetCommand;
   private ManualAlgaeProcessor manualAlgaeProcessorCommand;
 
@@ -197,7 +197,7 @@ public class RobotContainer {
     this.operatorStreamdeck.coralL4.onTrue(this.manualCoralL4Command);
 
     this.operatorStreamdeck.algaeL1.onTrue(this.manualAlgaeL1Command);
-    this.operatorStreamdeck.algaeL1WithCoral.whileTrue(this.manualCoralL3AlgaeL1Command);
+    this.operatorStreamdeck.algaeL1WithCoral.onTrue(this.manualCoralL3AlgaeL1Command);
     this.operatorStreamdeck.algaeL2.onTrue(this.manualAlgaeL2Command);
 
     this.operatorStreamdeck.algaeNet.whileTrue(this.manualAlgaeNetCommand);
@@ -291,9 +291,9 @@ public class RobotContainer {
     this.manualCoralL4Command = new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem);
 
     this.manualAlgaeL1Command = new ManualAlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem);
-    this.manualAlgaeL2Command = new ManualAlgaeL2(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualAlgaeL2Command = new AlgaeL2Command(algaeManipulatorSubsystem, elevatorSubsystem);
     
-    this.manualCoralL3AlgaeL1Command = new ManualCoralL3AlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem);
+    this.manualCoralL3AlgaeL1Command = new CoralL3AlgaeL1Command(algaeManipulatorSubsystem, elevatorSubsystem);
 
     this.manualAlgaeNetCommand = new ManualAlgaeNet(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualAlgaeProcessorCommand = new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem);
@@ -301,30 +301,19 @@ public class RobotContainer {
 
   private void initializeNamedCommands() {
     // Collection Commands
-    NamedCommands.registerCommand("CollectAlgaeFromReefL2", new SequentialCommandGroup(
-        this.elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L1),
-        new CollectAlgaeFromReef(algaeManipulatorSubsystem),
-        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
+    NamedCommands.registerCommand("CollectAlgaeFromReefL2", new CoralL3AlgaeL1Command(algaeManipulatorSubsystem, elevatorSubsystem));
 
-    NamedCommands.registerCommand("CollectAlgaeFromReefL3", new SequentialCommandGroup(
-        this.elevatorSubsystem.moveElevatorToLevel(Level.ALGAE_L2),
-        new CollectAlgaeFromReef(algaeManipulatorSubsystem),
-        this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR))));
+    NamedCommands.registerCommand("CollectAlgaeFromReefL3", new AlgaeL2Command(algaeManipulatorSubsystem, elevatorSubsystem));
 
     NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
         this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
         new CollectAlgaeFromReef(algaeManipulatorSubsystem)));
 
     // Scoring Commands
-    NamedCommands.registerCommand("ScoreInProcessor", new SequentialCommandGroup(
-        this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
-        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(45)),
-        new ParallelRaceGroup(
-            this.algaeManipulatorSubsystem.run(() -> {
-              algaeManipulatorSubsystem.outtakeAlgae(0.5);
-            }),
-            new WaitCommand(0.25)),
-        algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90))));
+    NamedCommands.registerCommand("ScoreInProcessor", new ParallelRaceGroup(
+      new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem),
+      new WaitCommand(0.5)
+    ));
 
     NamedCommands.registerCommand("ScoreOnL2",
         new SequentialCommandGroup(this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L2),

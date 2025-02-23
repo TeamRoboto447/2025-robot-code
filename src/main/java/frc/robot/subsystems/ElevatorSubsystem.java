@@ -95,8 +95,17 @@ public class ElevatorSubsystem extends SubsystemBase {
   private void moveMotorRaw(double speed) {
     if (!this.algaeManipulatorSubsystem.atTarget())
       speed = 0;
-    if (this.elevatorEncoder.getPosition() < ElevatorSubsystemConstants.MAX_RAW_HEIGHT / 2)
-      speed = Math.max(-0.3, speed);
+
+    if (speed > 0){
+      elevatorMotor.set(speed);
+      return;
+    }
+
+    if (this.elevatorEncoder.getPosition() < ElevatorSubsystemConstants.MAX_RAW_HEIGHT / 3)
+      speed = Math.max(-0.2, speed);
+    else
+      speed = Math.max(-0.5, speed);
+
     elevatorMotor.set(speed);
   }
 
@@ -105,6 +114,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     switch (level) {
       case FLOOR:
         outputHeight = ElevatorSubsystemConstants.FLOOR_LEVEL;
+        break;
+      case CORAL_LOADING:
+        outputHeight = ElevatorSubsystemConstants.CORAL_LOADING_LEVEL;
         break;
       case TROUGH:
         outputHeight = ElevatorSubsystemConstants.TROUGH_LEVEL;

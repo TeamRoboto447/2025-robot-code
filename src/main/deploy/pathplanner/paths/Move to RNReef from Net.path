@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.13,
-        "y": 2.74
+        "x": 5.1,
+        "y": 2.7699999999999996
       },
       "prevControl": {
-        "x": 6.475498357065435,
-        "y": 1.881997423585327
+        "x": 6.445498357065435,
+        "y": 1.9119974235853263
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 120.96375653207352
+    "rotation": 119.99999999999999
   },
   "reversed": false,
   "folder": "Live",

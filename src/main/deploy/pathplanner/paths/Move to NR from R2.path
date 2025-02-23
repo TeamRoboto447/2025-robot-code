@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.13,
-        "y": 2.74
+        "x": 5.1,
+        "y": 2.7699999999999996
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.54589753325269,
-        "y": 1.927237709706231
+        "x": 5.51589753325269,
+        "y": 1.9572377097062303
       },
       "isLocked": false,
       "linkedName": "Right Netside Reef"
@@ -64,7 +64,7 @@
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 120.96375653207352
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

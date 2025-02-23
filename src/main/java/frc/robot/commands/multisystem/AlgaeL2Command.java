@@ -6,23 +6,26 @@ package frc.robot.commands.multisystem;
 
 import static edu.wpi.first.units.Units.Degrees;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ManualAlgaeL2 extends Command {
+public class AlgaeL2Command extends Command {
 
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
 
   private int step;
+  private Timer waitTimer;
 
   /** Creates a new ManualCoralL3AlgaeL1. */
-  public ManualAlgaeL2(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
+  public AlgaeL2Command(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
     this.elevatorSubsystem = eSubsystem;
+    this.waitTimer = new Timer();
 
     addRequirements(amSubsystem, eSubsystem);
   }
@@ -32,6 +35,8 @@ public class ManualAlgaeL2 extends Command {
   public void initialize() {
     this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_L3);
     this.step = 0;
+    this.waitTimer.reset();
+    this.waitTimer.stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,7 +55,23 @@ public class ManualAlgaeL2 extends Command {
         }
         break;
       case 1:
-        if(this.algaeManipulatorSubsystem.atTarget())
+        if(this.algaeManipulatorSubsystem.atTarget()){
+          this.step += 1;
+          this.waitTimer.reset();
+          this.waitTimer.start();
+        }
+        break;
+      case 2:
+        if (this.waitTimer.get() > 0.75) {
+          this.step += 1;
+          this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
+          this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+          this.waitTimer.reset();
+          this.waitTimer.start();
+        }
+        break;
+      case 3:
+        if (this.waitTimer.get() > 0.25)
           this.step += 1;
         break;
     }
@@ -59,14 +80,12 @@ public class ManualAlgaeL2 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
     this.algaeManipulatorSubsystem.holdAlgae();
-    this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return  step > 1;
+    return  step > 3;
   }
 }

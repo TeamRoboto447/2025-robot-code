@@ -81,7 +81,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
     this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
-    this.wristController = new PIDController(2, 0.000001, 0); // We don't actually use kI, but we do use it's error detection which is disabled when set to 0. So instead we set it to a very low number
+    this.wristController = new PIDController(5, 0.000001, 0); // We don't actually use kI, but we do use it's error detection which is disabled when set to 0. So instead we set it to a very low number
     this.wristController.setTolerance(0.04);
     this.wristController.setIntegratorRange(-0.3, 0.03);
   }
@@ -150,7 +150,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void moveWristMotorRaw(double speed) {
-    speed = Math.max(-0.5, Math.min(1, speed));
     if(speed > 0 && this.absoluteWristEncoder.getPosition() >= this.maxAbsoluteRotationCount)
       speed = 0;
     if(speed < 0 && this.absoluteWristEncoder.getPosition() <= this.minAbsoluteRotationCount)

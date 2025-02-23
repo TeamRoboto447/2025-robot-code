@@ -91,6 +91,7 @@ public final class Constants {
 
     public enum Level {
       FLOOR,
+      CORAL_LOADING,
       TROUGH,
       CORAL_L2,
       CORAL_L3,
@@ -108,15 +109,16 @@ public final class Constants {
     public static final Distance DISTANCE_PER_ROTATION = Inches.of(1 * Math.PI); // Circumferance of 1 inch pulley
 
     public static final Distance FLOOR_LEVEL = Inches.of(0);
+    public static final Distance CORAL_LOADING_LEVEL = Inches.of(6);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
-    public static final Distance CORAL_L3_LEVEL = Inches.of(17);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(15);
 
-    public static final Distance ALGAE_L1_LEVEL = Inches.of(22);
-    public static final Distance ALGAE_L2_LEVEL = Inches.of(34);
+    public static final Distance ALGAE_L1_LEVEL = Inches.of(20);
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(32);
 
-    public static final Distance CORAL_L4_LEVEL = Inches.of(50);
-    public static final Distance NET_LEVEL = Inches.of(68);
+    public static final Distance CORAL_L4_LEVEL = Inches.of(48);
+    public static final Distance NET_LEVEL = Inches.of(66);
   }
 
   public static class AlgaeManipulatorSubsystemConstants {

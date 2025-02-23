@@ -28,13 +28,14 @@ public class ManualCoralPickup extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(55));
+    this.elevatorSubsystem.setElevatorTargetHeight(Level.CORAL_LOADING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (this.elevatorSubsystem.atTarget())
+      this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(55));
     this.algaeManipulatorSubsystem.intakeCoral();
   }
 
