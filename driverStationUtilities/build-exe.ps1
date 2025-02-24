@@ -1,1 +1,0 @@
-pyinstaller.exe streamdeck-control.py -F --add-data Assets:Assets

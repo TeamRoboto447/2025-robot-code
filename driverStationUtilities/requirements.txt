@@ -1,6 +1,0 @@
-pillow==11.1.0
-pynetworktables==2021.0.0
-streamdeck==0.9.6
-ntcore==0.1.7
-pyinstaller==6.11.1
-pyinstaller-hooks-contrib==2025.1
