@@ -1,0 +1,4 @@
+[submodule "Streamdeck-Control"]
+	path = Streamdeck-Control
+	url = https://github.com/TeamRoboto447/Streamdeck-Control.git
+	branch = Reefscape
