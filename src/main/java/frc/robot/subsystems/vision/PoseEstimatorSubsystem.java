@@ -24,35 +24,35 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class PoseEstimatorSubsystem extends SubsystemBase {
 
   private final SwerveSubsystem swerveSubsystem;
-  private final PhotonRunnable leftCamera;
-  private final PhotonRunnable rightCamera;
+  private final PhotonRunnable frontCamera;
+  // private final PhotonRunnable rightCamera;
 
   /** Creates a new PoseEstimatorSubsystem. */
   public PoseEstimatorSubsystem(SwerveSubsystem swerveSubsystem) {
     this.swerveSubsystem = swerveSubsystem;
     if (USE_VISION) {
-      this.leftCamera = new PhotonRunnable(new PhotonCamera("leftCamera"), null);
-      this.rightCamera = new PhotonRunnable(new PhotonCamera("rightCamera"), null);
-      this.setDefaultCommand(this.createNotifierCommand());
+      this.frontCamera = new PhotonRunnable(new PhotonCamera("FrontCam"), VisionConstants.ROBOT_TO_FRONT_CAM);
+      // this.rightCamera = new PhotonRunnable(new PhotonCamera("rightCamera"), null);
+      this.setDefaultCommand(this.createNotifierCommand(this));
     } else {
-      this.leftCamera = null;
-      this.rightCamera = null;
+      this.frontCamera = null;
+      // this.rightCamera = null;
     }
   }
 
   @Override
   public void periodic() {
     if (VisionConstants.USE_VISION) {
-      estimatorChecker(leftCamera);
-      estimatorChecker(rightCamera);
+      estimatorChecker(frontCamera);
+      // estimatorChecker(rightCamera);
     }
   }
 
-  private NotifierCommand createNotifierCommand() {
+  private NotifierCommand createNotifierCommand(PoseEstimatorSubsystem peSubsystem) {
     return new NotifierCommand(() -> {
-      leftCamera.run();
-      rightCamera.run();
-    }, 0.02);
+      frontCamera.run();
+      // rightCamera.run();
+    }, 0.02, peSubsystem);
   }
 
   public Pose2d getCurrentPose() {
@@ -99,6 +99,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       return;
     Pose2d pose2d = cameraPose.estimatedPose.toPose2d();
     if (RobotState.isDisabled()) {
+      System.out.println("Setting position");
       swerveSubsystem.getSwerveDrive().resetOdometry(pose2d);
     } else {
       swerveSubsystem.getSwerveDrive().addVisionMeasurement(pose2d, cameraPose.timestampSeconds,

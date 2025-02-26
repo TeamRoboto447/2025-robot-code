@@ -9,6 +9,8 @@ import static edu.wpi.first.units.Units.Inches;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -105,14 +107,14 @@ public final class Constants {
     // public static final double MAX_INCH_HEIGHT = 92;
     public static final int MIN_RAW_HEIGHT = 0;
     public static final int MAX_RAW_HEIGHT = 90;
-    public static final double GEARING_MULTIPLIER = 4; // 4:1 gearbox
+    public static final double GEARING_MULTIPLIER = 4.5; // 4:1 gearbox
     public static final Distance DISTANCE_PER_ROTATION = Inches.of(1 * Math.PI); // Circumferance of 1 inch pulley
 
     public static final Distance FLOOR_LEVEL = Inches.of(0);
     public static final Distance CORAL_LOADING_LEVEL = Inches.of(6);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
-    public static final Distance CORAL_L3_LEVEL = Inches.of(15);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(18);
 
     public static final Distance ALGAE_L1_LEVEL = Inches.of(20);
     public static final Distance ALGAE_L2_LEVEL = Inches.of(32);
@@ -130,6 +132,11 @@ public final class Constants {
   }
 
   public static class VisionConstants {
+    public static final Transform3d ROBOT_TO_FRONT_CAM = new Transform3d(
+      new Translation3d(Units.inchesToMeters(3.75), Units.inchesToMeters(-8), Units.inchesToMeters(17.25)),
+      new Rotation3d(0, Units.degreesToRadians(2), 0)
+    );
+
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
     public static final boolean USE_VISION = true;
     public static final double POSE_AMBIGUITY_SHIFTER = 0;

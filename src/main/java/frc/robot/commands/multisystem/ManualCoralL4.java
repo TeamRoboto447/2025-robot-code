@@ -69,15 +69,6 @@ public class ManualCoralL4 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if (this.elevatorSubsystem.atTarget() && !this.tiltAngleSet) {
-    // this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
-    // this.tiltAngleSet = true;
-    // } else if (this.algaeManipulatorSubsystem.atTarget() &&
-    // this.elevatorSubsystem.atTarget()) {
-    // this.algaeManipulatorSubsystem.outtakeCoral();
-    // } else {
-    // this.algaeManipulatorSubsystem.holdCoral();
-    // }
     SmartDashboard.putNumber("ManualCoralL4/waitTimer", waitTimer.get());
     switch (this.step) {
       case 0:

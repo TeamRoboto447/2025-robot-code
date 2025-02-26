@@ -10,10 +10,17 @@ import static frc.robot.utils.ControllerRumbleHelper.rumbleBoth;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleRight;
 
 import java.io.File;
+import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -32,6 +39,7 @@ import frc.robot.commands.algae.AlgaeManipulatorCommand;
 import frc.robot.commands.algae.auto.CollectAlgaeFromReef;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.commands.climber.ClimberControlCommand;
+import frc.robot.commands.drivebase.DriveToPose;
 import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
 import frc.robot.commands.multisystem.ManualAlgaeL1;
 import frc.robot.commands.multisystem.AlgaeL2Command;
@@ -48,6 +56,7 @@ import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.vision.PoseEstimatorSubsystem;
 import swervelib.SwerveInputStream;
 
 import frc.robot.controllers.ReefscapeStreamdeckController;
@@ -114,6 +123,9 @@ public class RobotContainer {
     configureMultisystemBindings();
     initializeStreamdeckBasedControls();
     initializeControllerRumbles();
+
+    // Configure the PoseEstimatorSubsystem
+    new PoseEstimatorSubsystem(swerveSubsystem);
 
     // this.driverController.a()
     // .whileTrue(this.algaeManipulatorSubsystem.run(() ->
@@ -297,6 +309,20 @@ public class RobotContainer {
 
     this.manualAlgaeNetCommand = new ManualAlgaeNet(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualAlgaeProcessorCommand = new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem);
+
+    // red net
+    this.driverController.a().whileTrue(
+      new SequentialCommandGroup(
+        swerveSubsystem.driveToPose(new Pose2d(10.585, 3.198, Rotation2d.fromDegrees(-158.386)))
+        // new ManualAlgaeNet(algaeManipulatorSubsystem, elevatorSubsystem)
+      )
+    );
+    // id 10
+    this.driverController.b().whileTrue(swerveSubsystem.driveToPose(new Pose2d(11.700, 3.986, Rotation2d.fromDegrees(0))));
+    // id 9
+    this.driverController.x().whileTrue(swerveSubsystem.driveToPose(new Pose2d(12.314, 5.283, Rotation2d.fromDegrees(-60))));
+    // red proc
+    this.driverController.y().whileTrue(swerveSubsystem.driveToPose(new Pose2d(11.534, 7.438, Rotation2d.fromDegrees(90))));
   }
 
   private void initializeNamedCommands() {

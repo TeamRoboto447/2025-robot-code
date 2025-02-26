@@ -11,6 +11,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
@@ -60,7 +61,9 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.pdh = pdh;
 
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
+    this.upperWheelMotor.setNeutralMode(NeutralModeValue.Brake);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
+    this.lowerWheelMotor.setNeutralMode(NeutralModeValue.Brake);
     
     SparkMaxConfig coralCurrentConfig = new SparkMaxConfig();
     coralCurrentConfig.smartCurrentLimit(20);

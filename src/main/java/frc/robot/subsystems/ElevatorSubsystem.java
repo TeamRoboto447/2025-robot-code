@@ -102,9 +102,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     if (this.elevatorEncoder.getPosition() < ElevatorSubsystemConstants.MAX_RAW_HEIGHT / 3)
-      speed = Math.max(-0.2, speed);
-    else
       speed = Math.max(-0.5, speed);
+    else
+      speed = Math.max(-0.75, speed);
 
     elevatorMotor.set(speed);
   }
