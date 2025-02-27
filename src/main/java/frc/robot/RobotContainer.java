@@ -19,7 +19,6 @@ import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -69,8 +68,6 @@ import frc.robot.controllers.StreamdeckController.ControlScheme;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private PowerDistribution powerDistributionHub;
-
   private SwerveSubsystem swerveSubsystem;
 
   private ClimberSubsystem climberSubsystem;
@@ -105,8 +102,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    this.powerDistributionHub = new PowerDistribution();
-
     initializeSwerveSubsystem();
     initializeClimberSubsystem();
     initializeAlgaeManipulatorSubsystem();
@@ -342,7 +337,6 @@ public class RobotContainer {
   }
 
   private void initializeAlgaeManipulatorSubsystem() {
-    this.algaeManipulatorSubsystem = new AlgaeManipulatorSubsystem(powerDistributionHub);
     this.algaeManipulatorCommand = new AlgaeManipulatorCommand(algaeManipulatorSubsystem, operatorController);
     this.algaeManipulatorSubsystem.setDefaultCommand(algaeManipulatorCommand);
 

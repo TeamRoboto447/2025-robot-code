@@ -26,7 +26,6 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeManipulatorSubsystemConstants;
@@ -40,8 +39,6 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   private final RelativeEncoder wristEncoder;
   private final AbsoluteEncoder absoluteWristEncoder;
-
-  private final PowerDistribution pdh;
 
   private double currentTargetWristPosition = 0.5;
   private boolean isPIDControlling = true;
@@ -57,14 +54,12 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private PIDController wristController;
 
   /** Creates a new AlgaeManipulator. */
-  public AlgaeManipulatorSubsystem(PowerDistribution pdh) {
-    this.pdh = pdh;
-
+  public AlgaeManipulatorSubsystem() {
     this.upperWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.UPPER_WHEEL_MOTOR_ID);
     this.upperWheelMotor.setNeutralMode(NeutralModeValue.Brake);
     this.lowerWheelMotor = new TalonFX(AlgaeManipulatorSubsystemConstants.LOWER_WHEEL_MOTOR_ID);
     this.lowerWheelMotor.setNeutralMode(NeutralModeValue.Brake);
-    
+
     SparkMaxConfig coralCurrentConfig = new SparkMaxConfig();
     coralCurrentConfig.smartCurrentLimit(20);
     this.coralMotor = new SparkMax(AlgaeManipulatorSubsystemConstants.CORAL_MOTOR_ID, MotorType.kBrushless);
@@ -83,8 +78,11 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
-    this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount, maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
-    this.wristController = new PIDController(5, 0.000001, 0); // We don't actually use kI, but we do use it's error detection which is disabled when set to 0. So instead we set it to a very low number
+    this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount,
+        maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
+    this.wristController = new PIDController(5, 0.000001, 0); // We don't actually use kI, but we do use it's error
+                                                              // detection which is disabled when set to 0. So instead
+                                                              // we set it to a very low number
     this.wristController.setTolerance(0.04);
     this.wristController.setIntegratorRange(-0.3, 0.03);
   }
@@ -96,7 +94,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Wrist/At Target", this.atTarget());
     SmartDashboard.putNumber("Wrist/Accumulated Error", this.wristController.getAccumulatedError());
     SmartDashboard.putBoolean("Wrist/Stalled", isStalled());
-    double angleMotorOutput = this.wristController.calculate(getAbsoluteWristPosition(), this.currentTargetWristPosition);
+    double angleMotorOutput = this.wristController.calculate(getAbsoluteWristPosition(),
+        this.currentTargetWristPosition);
     checkForOperatorOverride(angleMotorOutput);
   }
 
@@ -134,7 +133,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
         // Command init
         () -> this.setManipulatorAngle(angle),
         // Command execute/periodic
-        () -> {},
+        () -> {
+        },
         // Command end
         interrupted -> {
         },
@@ -153,9 +153,9 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void moveWristMotorRaw(double speed) {
-    if(speed > 0 && this.absoluteWristEncoder.getPosition() >= this.maxAbsoluteRotationCount)
+    if (speed > 0 && this.absoluteWristEncoder.getPosition() >= this.maxAbsoluteRotationCount)
       speed = 0;
-    if(speed < 0 && this.absoluteWristEncoder.getPosition() <= this.minAbsoluteRotationCount)
+    if (speed < 0 && this.absoluteWristEncoder.getPosition() <= this.minAbsoluteRotationCount)
       speed = 0;
     wristMotor.set(speed);
   }
@@ -190,7 +190,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     if (!isPIDControlling) {
       motorOutput = operatorControlSpeed;
-      currentTargetWristPosition = Math.max(minAbsoluteRotationCount, Math.min(getAbsoluteWristPosition(), maxAbsoluteRotationCount));
+      currentTargetWristPosition = Math.max(minAbsoluteRotationCount,
+          Math.min(getAbsoluteWristPosition(), maxAbsoluteRotationCount));
     }
 
     moveWristMotorRaw(motorOutput);
@@ -198,7 +199,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   public double getAbsoluteWristPosition() {
     double pos = absoluteWristEncoder.getPosition();
-    if(pos > 0.9) pos = 0 - (1 - pos);
+    if (pos > 0.9)
+      pos = 0 - (1 - pos);
     return pos;
   }
 
@@ -209,7 +211,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public double getAbsoluteFromWristAngle(Angle angle) {
-    return MathUtils.map(angle.in(Units.Degrees), minWristAngle, maxWristAngle, minAbsoluteRotationCount, maxAbsoluteRotationCount);
+    return MathUtils.map(angle.in(Units.Degrees), minWristAngle, maxWristAngle, minAbsoluteRotationCount,
+        maxAbsoluteRotationCount);
   }
 
   public double getWristMotorRotations(Angle angle) {

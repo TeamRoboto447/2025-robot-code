@@ -6,8 +6,6 @@ package frc.robot.commands.algae.auto;
 
 import static edu.wpi.first.units.Units.Degrees;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
@@ -17,6 +15,7 @@ public class CollectAlgaeFromReef extends Command {
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private int step;
   private Timer waitTimer;
+
   /** Creates a new CollectAlgaeFromReef. */
   public CollectAlgaeFromReef(AlgaeManipulatorSubsystem aManipulatorSubsystem) {
     algaeManipulatorSubsystem = aManipulatorSubsystem;
@@ -36,27 +35,27 @@ public class CollectAlgaeFromReef extends Command {
   @Override
   public void execute() {
     this.algaeManipulatorSubsystem.intakeAlgae(0.5);
-    switch(this.step) {
+    switch (this.step) {
       case 0:
         this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
-        if(this.algaeManipulatorSubsystem.atTarget()) {
+        if (this.algaeManipulatorSubsystem.atTarget()) {
           this.step += 1;
           this.waitTimer.reset();
           this.waitTimer.start();
         }
         break;
       case 1:
-        if(this.waitTimer.get() > 1)
+        if (this.waitTimer.get() > 1)
           this.algaeManipulatorSubsystem.outtakeCoral();
 
-        if(this.waitTimer.get() > 1.5) {
+        if (this.waitTimer.get() > 1.5) {
           this.step += 1;
           this.waitTimer.stop();
         }
         break;
       case 2:
         this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
-        if(this.algaeManipulatorSubsystem.atTarget()) {
+        if (this.algaeManipulatorSubsystem.atTarget()) {
           this.step += 1;
         }
         break;

@@ -6,13 +6,13 @@ package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ElevatorDebuggingControlCommand extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
   private final CommandXboxController operatorController;
+
   /** Creates a new ElevatorControlCommand. */
   public ElevatorDebuggingControlCommand(ElevatorSubsystem eSubsystem, CommandXboxController oController) {
     this.elevatorSubsystem = eSubsystem;
@@ -23,22 +23,25 @@ public class ElevatorDebuggingControlCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {if (this.operatorController.pov(0).getAsBoolean()) {
+  public void execute() {
+    if (this.operatorController.pov(0).getAsBoolean()) {
       this.elevatorSubsystem.moveDebugMotorRaw(1);
     } else if (this.operatorController.pov(180).getAsBoolean()) {
       this.elevatorSubsystem.moveDebugMotorRaw(-1);
-    } else if(this.elevatorSubsystem.debugging) {
+    } else if (this.elevatorSubsystem.debugging) {
       this.elevatorSubsystem.moveDebugMotorRaw(0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
