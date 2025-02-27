@@ -31,9 +31,9 @@ public class ClimberControlCommand extends Command {
   public void execute() {
     double speed = 1;
 
-    if (this.driverController.rightBumper().getAsBoolean()) {
+    if (this.driverController.rightTrigger().getAsBoolean()) {
       this.climberSubsystem.setSpeed(-speed);
-    } else if (this.driverController.leftBumper().getAsBoolean()) {
+    } else if (this.driverController.leftTrigger().getAsBoolean()) {
       this.climberSubsystem.setSpeed(speed);
     } else {
       this.climberSubsystem.setSpeed(0.0);
