@@ -10,14 +10,17 @@ import static frc.robot.utils.ControllerRumbleHelper.rumbleBoth;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleRight;
 
 import java.io.File;
+import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,6 +34,7 @@ import frc.robot.Constants.DriverConstants;
 import frc.robot.commands.algae.AlgaeManipulatorCommand;
 import frc.robot.commands.algae.auto.CollectAlgaeFromReef;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.climber.ClimberControlCommand;
 import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
 import frc.robot.commands.multisystem.ManualAlgaeL1;
@@ -49,9 +53,11 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.vision.PoseEstimatorSubsystem;
+import frc.robot.utils.CommandOverrides;
 import swervelib.SwerveInputStream;
 
 import frc.robot.controllers.ReefscapeStreamdeckController;
+import frc.robot.controllers.StreamdeckController.ControlScheme;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -189,60 +195,123 @@ public class RobotContainer {
 
     initializeLegacyStreamdeckControls();
 
-    // Semi-Auto Control Scheme
     // Intake
     this.operatorStreamdeck.floorCollect.whileTrue(this.manualFloorPickupCommand);
     this.operatorStreamdeck.coralLoading.whileTrue(this.manualCoralPickupCommand);
 
-    // Scoring
-    this.operatorStreamdeck.coralTrough.whileTrue(this.manualCoralL1Command);
-    this.operatorStreamdeck.coralL2.onTrue(this.manualCoralL2Command);
-    this.operatorStreamdeck.coralL3.onTrue(this.manualCoralL3Command);
-    this.operatorStreamdeck.coralL4.onTrue(this.manualCoralL4Command);
+    // Semi-Auto Control Scheme
+    this.operatorStreamdeck.semiCoralTrough.whileTrue(this.manualCoralL1Command);
+    this.operatorStreamdeck.semiCoralL2.onTrue(this.manualCoralL2Command);
+    this.operatorStreamdeck.semiCoralL3.onTrue(this.manualCoralL3Command);
+    this.operatorStreamdeck.semiCoralL4.onTrue(this.manualCoralL4Command);
 
     this.operatorStreamdeck.algaeL1.onTrue(this.manualAlgaeL1Command);
-    this.operatorStreamdeck.algaeL1WithCoral.onTrue(this.manualCoralL3AlgaeL1Command);
+    this.operatorStreamdeck.semiAlgaeL1WithCoral.onTrue(this.manualCoralL3AlgaeL1Command);
     this.operatorStreamdeck.algaeL2.onTrue(this.manualAlgaeL2Command);
 
-    this.operatorStreamdeck.algaeNet.whileTrue(this.manualAlgaeNetCommand);
-    this.operatorStreamdeck.algaeProcessor.whileTrue(this.manualAlgaeProcessorCommand);
+    this.operatorStreamdeck.semiAlgaeNet.whileTrue(this.manualAlgaeNetCommand);
+    this.operatorStreamdeck.semiAlgaeProcessor.whileTrue(this.manualAlgaeProcessorCommand);
+
+    // Fully-Auto Control Scheme
+    Optional<Alliance> allianceOptional = DriverStation.getAlliance();
+    Alliance alliance = Alliance.Blue;
+    if (allianceOptional.isPresent())
+      alliance = allianceOptional.get();
+
+    Pose2d targetNet = alliance == Alliance.Red ? FieldConstants.RedSide.NET : FieldConstants.BlueSide.NET;
+    this.operatorStreamdeck.autoNet
+        .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetNet), driverController));
+
+    Pose2d targetProc = alliance == Alliance.Red ? FieldConstants.RedSide.PROC : FieldConstants.BlueSide.PROC;
+    this.operatorStreamdeck.autoProcessor
+        .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetProc), driverController));
+
+    this.operatorStreamdeck.autoLevelOne.onTrue(CommandOverrides.addDriverOverride(
+        swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    this.operatorStreamdeck.autoLevelTwo.onTrue(CommandOverrides.addDriverOverride(
+        swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    this.operatorStreamdeck.autoLevelThree.onTrue(CommandOverrides.addDriverOverride(
+        swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    this.operatorStreamdeck.autoLevelFour.onTrue(CommandOverrides.addDriverOverride(
+        swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
   }
 
   private void initializeLegacyStreamdeckControls() {
     this.operatorStreamdeck.reefOne
-        .onChange(this.algaeManipulatorSubsystem.runOnce(() -> System.out.println("Reef One Status Changed")));
+        .onChange(this.algaeManipulatorSubsystem.runOnce(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            System.out.println("Reef One Status Changed");
+        }));
 
     this.operatorStreamdeck.algaeIntake
-        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeAlgae(0.5)));
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.algaeManipulatorSubsystem.intakeAlgae(0.5);
+        }));
+
     this.operatorStreamdeck.algaeOuttake
-        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeAlgae(0.5)));
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.algaeManipulatorSubsystem.outtakeAlgae(0.5);
+        }));
+
     this.operatorStreamdeck.coralIntake
-        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.intakeCoral()));
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.algaeManipulatorSubsystem.intakeCoral();
+        }));
+
     this.operatorStreamdeck.coralOuttake
-        .whileTrue(this.algaeManipulatorSubsystem.run(() -> this.algaeManipulatorSubsystem.outtakeCoral()));
+        .whileTrue(this.algaeManipulatorSubsystem.run(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.algaeManipulatorSubsystem.outtakeCoral();
+        }));
 
     this.operatorStreamdeck.manualNet
-        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.NET)));
+        .onTrue(this.elevatorSubsystem.runOnce(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.elevatorSubsystem.setElevatorTargetHeight(Level.NET);
+        }));
     this.operatorStreamdeck.manualLevelTwo
-        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L1)));
+        .onTrue(this.elevatorSubsystem.runOnce(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L1);
+        }));
     this.operatorStreamdeck.manualLevelThree
-        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L2)));
+        .onTrue(this.elevatorSubsystem.runOnce(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L2);
+        }));
     this.operatorStreamdeck.manualFloor
-        .onTrue(this.elevatorSubsystem.runOnce(() -> this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR)));
+        .onTrue(this.elevatorSubsystem.runOnce(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
+        }));
 
     this.operatorStreamdeck.tiltBack.whileTrue(this.algaeManipulatorSubsystem.run(() -> {
-      this.algaeManipulatorSubsystem.setIsPIDControlled(false);
-      this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(0.5);
+      if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY) {
+        this.algaeManipulatorSubsystem.setIsPIDControlled(false);
+        this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(0.5);
+      }
     }));
     this.operatorStreamdeck.tiltBack
-        .onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
+        .onFalse(this.algaeManipulatorSubsystem.runOnce(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.algaeManipulatorSubsystem.setIsPIDControlled(true);
+        }));
 
     this.operatorStreamdeck.tiltForward.whileTrue(this.algaeManipulatorSubsystem.run(() -> {
-      this.algaeManipulatorSubsystem.setIsPIDControlled(false);
-      this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(-0.5);
+      if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY) {
+        this.algaeManipulatorSubsystem.setIsPIDControlled(false);
+        this.algaeManipulatorSubsystem.setOperatorRequestedSpeed(-0.5);
+      }
     }));
+
     this.operatorStreamdeck.tiltForward
-        .onFalse(this.algaeManipulatorSubsystem.runOnce(() -> this.algaeManipulatorSubsystem.setIsPIDControlled(true)));
+        .onFalse(this.algaeManipulatorSubsystem.runOnce(() -> {
+          if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
+            this.algaeManipulatorSubsystem.setIsPIDControlled(true);
+        }));
   }
 
   private void initializeClimberSubsystem() {
@@ -296,32 +365,48 @@ public class RobotContainer {
 
     this.manualAlgaeL1Command = new ManualAlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualAlgaeL2Command = new AlgaeL2Command(algaeManipulatorSubsystem, elevatorSubsystem);
-    
+
     this.manualCoralL3AlgaeL1Command = new CoralL3AlgaeL1Command(algaeManipulatorSubsystem, elevatorSubsystem);
 
     this.manualAlgaeNetCommand = new ManualAlgaeNet(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualAlgaeProcessorCommand = new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem);
 
-    // red net
-    this.driverController.a().whileTrue(
-      new SequentialCommandGroup(
-        swerveSubsystem.driveToPose(new Pose2d(10.585, 3.198, Rotation2d.fromDegrees(-158.386)))
-        // new ManualAlgaeNet(algaeManipulatorSubsystem, elevatorSubsystem)
-      )
-    );
-    // id 10
-    this.driverController.b().whileTrue(swerveSubsystem.driveToPose(new Pose2d(11.700, 3.986, Rotation2d.fromDegrees(0))));
-    // id 9
-    this.driverController.x().whileTrue(swerveSubsystem.driveToPose(new Pose2d(12.314, 5.283, Rotation2d.fromDegrees(-60))));
-    // red proc
-    this.driverController.y().whileTrue(swerveSubsystem.driveToPose(new Pose2d(11.534, 7.438, Rotation2d.fromDegrees(90))));
+    AllianceStationID allianceStationID = DriverStation.getRawAllianceStation();
+    Pose2d cagePosition = null;
+    switch (allianceStationID) {
+      case Blue1:
+        cagePosition = FieldConstants.BlueSide.CAGE_ONE;
+        break;
+      case Blue2:
+        cagePosition = FieldConstants.BlueSide.CAGE_TWO;
+        break;
+      case Blue3:
+        cagePosition = FieldConstants.BlueSide.CAGE_THREE;
+        break;
+      case Red1:
+        cagePosition = FieldConstants.RedSide.CAGE_ONE;
+        break;
+      case Red2:
+        cagePosition = FieldConstants.RedSide.CAGE_TWO;
+        break;
+      case Red3:
+        cagePosition = FieldConstants.RedSide.CAGE_THREE;
+        break;
+      default:
+        break;
+
+    }
+    this.driverController.a()
+        .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(cagePosition), driverController));
   }
 
   private void initializeNamedCommands() {
     // Collection Commands
-    NamedCommands.registerCommand("CollectAlgaeFromReefL2", new CoralL3AlgaeL1Command(algaeManipulatorSubsystem, elevatorSubsystem));
+    NamedCommands.registerCommand("CollectAlgaeFromReefL2",
+        new CoralL3AlgaeL1Command(algaeManipulatorSubsystem, elevatorSubsystem));
 
-    NamedCommands.registerCommand("CollectAlgaeFromReefL3", new AlgaeL2Command(algaeManipulatorSubsystem, elevatorSubsystem));
+    NamedCommands.registerCommand("CollectAlgaeFromReefL3",
+        new AlgaeL2Command(algaeManipulatorSubsystem, elevatorSubsystem));
 
     NamedCommands.registerCommand("CollectAlgaeFromCoralMark", new SequentialCommandGroup(
         this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR),
@@ -329,9 +414,8 @@ public class RobotContainer {
 
     // Scoring Commands
     NamedCommands.registerCommand("ScoreInProcessor", new ParallelRaceGroup(
-      new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem),
-      new WaitCommand(0.5)
-    ));
+        new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem),
+        new WaitCommand(0.5)));
 
     NamedCommands.registerCommand("ScoreOnL2",
         new SequentialCommandGroup(this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L2),

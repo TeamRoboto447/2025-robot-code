@@ -1,0 +1,47 @@
+@startuml Control
+!pragma teoz true
+skinparam backgroundColor #EEEBDC
+box "Vision Subsystem"
+participant "April Tag Camera" as cam0
+collections "Pose Estimation" as poseEstimation
+end box
+box "Swerve Subsystem"
+collections "Swerve Telemetry" as swerveTele
+control "Swerve Control" as swerveControl
+entity "Swerve Modules" as swerveModules
+box "Path Following"
+control "Path Follower" as pathfinding
+end box
+end box
+box "Drive Team"
+actor "Operator" as operator
+actor "Driver" as driver
+end box
+title "Control Loop"
+skinparam maxMessageSize 200
+swerveControl -> poseEstimation :   <back:#f0f0f0>Request up to date pose
+activate poseEstimation
+swerveModules -> swerveTele :   <back:#f0f0f0>Encoder readings from drive and angle motors
+poseEstimation -> swerveTele :   <back:#f0f0f0>Request estimated pose
+activate swerveTele
+swerveTele -> poseEstimation :   <back:#f0f0f0>Estimated field position based on module encoder readings
+deactivate swerveTele
+cam0 -> poseEstimation :   <back:#f0f0f0>Estimated distance to April Tag
+poseEstimation --> swerveTele :   <back:#f0f0f0>Update Swerve Telemetry with current position for encoders
+poseEstimation -> swerveControl :   <back:#f0f0f0>Field position estimate
+poseEstimation -> pathfinding :   <back:#f0f0f0>Field position estimate
+deactivate poseEstimation
+group #LightGreen If new target position requested
+operator -> pathfinding :   <back:#f0f0f0>Request move to target reef position
+activate pathfinding #004400
+pathfinding -> pathfinding : <back:#f0f0f0>Generate and save requested path
+deactivate pathfinding
+end
+group #LightBlue If following path
+swerveControl -> swerveControl :   <back:#f0f0f0>Calculate error of current state vs requested state from path
+swerveControl -> swerveModules :   <back:#f0f0f0>New speed and angle from calculated error
+else #Pink Under manual control
+driver -> swerveControl : <back:#f0f0f0>Drive x, y speed request
+swerveControl -> swerveModules : <back:#f0f0f0>New module speed and angles to accomplish requested movement
+end
+@enduml

@@ -1,7 +1,11 @@
 package frc.robot.controllers;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import frc.robot.Constants.FieldConstants;
 
 public class ReefscapeStreamdeckController extends StreamdeckController {
     public final Trigger reefOne, reefTwo, reefThree, reefFour, reefFive, reefSix;
@@ -9,11 +13,11 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
     public final Trigger shiftLeft, shiftForward, shiftRight, shiftBack, shifting;
     public final Trigger algaeIntake, algaeOuttake, coralIntake, coralOuttake;
     public final Trigger selectLeft, selectRight;
-    public final Trigger processor, floor, levelTwo, levelThree, levelFour, net;
+    public final Trigger autoProcessor, autoLevelOne, autoLevelTwo, autoLevelThree, autoLevelFour, autoNet;
     public final Trigger reset;
     public final Trigger floorCollect, coralLoading;
-    public final Trigger coralTrough, coralL2, coralL3, coralL4;
-    public final Trigger algaeL1, algaeL1WithCoral, algaeL2, algaeNet, algaeProcessor;
+    public final Trigger semiCoralTrough, semiCoralL2, semiCoralL3, semiCoralL4;
+    public final Trigger algaeL1, semiAlgaeL1WithCoral, algaeL2, semiAlgaeNet, semiAlgaeProcessor;
     private TargetReef targetReef;
 
     public enum TargetReef {
@@ -44,12 +48,12 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         selectLeft = new Trigger(this.getButton("Select Left"));
         selectRight = new Trigger(this.getButton("Select Right"));
 
-        processor = new Trigger(this.getButton("Processor"));
-        floor = new Trigger(this.getButton("Floor"));
-        levelTwo = new Trigger(this.getButton("Level 2"));
-        levelThree = new Trigger(this.getButton("Level 3"));
-        levelFour = new Trigger(this.getButton("Level 4"));
-        net = new Trigger(this.getButton("Net"));
+        autoProcessor = new Trigger(this.getButton("Processor"));
+        autoLevelOne = new Trigger(this.getButton("Level 1"));
+        autoLevelTwo = new Trigger(this.getButton("Level 2"));
+        autoLevelThree = new Trigger(this.getButton("Level 3"));
+        autoLevelFour = new Trigger(this.getButton("Level 4"));
+        autoNet = new Trigger(this.getButton("Net"));
 
         reefOne = new Trigger(this.getButton("Reef One"));
         reefTwo = new Trigger(this.getButton("Reef Two"));
@@ -67,31 +71,61 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         tiltBack = new Trigger(this.getButton("Tilt Back"));
         tiltForward = new Trigger(this.getButton("Tilt Forward"));
 
-        reset.onTrue(Commands.run(() -> this.targetReef = TargetReef.NONE));
+        Trigger hasReefSelected = new Trigger(() -> {
+            return reefOne.getAsBoolean() || reefTwo.getAsBoolean() || reefThree.getAsBoolean()
+                    || reefFour.getAsBoolean() || reefFive.getAsBoolean() || reefSix.getAsBoolean();
+        });
         reefOne.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefOne));
         reefTwo.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefTwo));
         reefThree.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefThree));
         reefFour.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefFour));
         reefFive.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefFive));
         reefSix.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefSix));
+        hasReefSelected.onFalse(Commands.run(() -> this.targetReef = TargetReef.NONE));
 
         floorCollect = new Trigger(this.getButton("Floor Collect"));
         coralLoading = new Trigger(this.getButton("Coral Loading"));
 
-        coralTrough = new Trigger(this.getButton("Coral Trough"));
-        coralL2 = new Trigger(this.getButton("Coral L2"));
-        coralL3 = new Trigger(this.getButton("Coral L3"));
-        coralL4 = new Trigger(this.getButton("Coral L4"));
+        semiCoralTrough = new Trigger(this.getButton("Coral Trough"));
+        semiCoralL2 = new Trigger(this.getButton("Coral L2"));
+        semiCoralL3 = new Trigger(this.getButton("Coral L3"));
+        semiCoralL4 = new Trigger(this.getButton("Coral L4"));
 
         algaeL1 = new Trigger(this.getButton("Algae L1"));
-        algaeL1WithCoral = new Trigger(this.getButton("L3 w/ Algae"));
+        semiAlgaeL1WithCoral = new Trigger(this.getButton("L3 w/ Algae"));
         algaeL2 = new Trigger(this.getButton("Algae L2"));
-        algaeNet = new Trigger(this.getButton("Algae Net"));
-        algaeProcessor = new Trigger(this.getButton("Algae Processor"));
+        semiAlgaeNet = new Trigger(this.getButton("Algae Net"));
+        semiAlgaeProcessor = new Trigger(this.getButton("Algae Processor"));
     }
 
     public TargetReef getTargetReef() {
         return this.targetReef;
+    }
+
+    public Pose2d getTargetReefPosition(Alliance currentAlliance) {
+        switch (this.targetReef) {
+            case ReefOne:
+                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_ONE
+                        : FieldConstants.BlueSide.REEF_ONE;
+            case ReefTwo:
+                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_TWO
+                        : FieldConstants.BlueSide.REEF_TWO;
+            case ReefThree:
+                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_THREE
+                        : FieldConstants.BlueSide.REEF_THREE;
+            case ReefFour:
+                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_FOUR
+                        : FieldConstants.BlueSide.REEF_FOUR;
+            case ReefFive:
+                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_FIVE
+                        : FieldConstants.BlueSide.REEF_FIVE;
+            case ReefSix:
+                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_SIX
+                        : FieldConstants.BlueSide.REEF_SIX;
+            default:
+                return null;
+
+        }
     }
 
     public double getXShiftSpeed() {
