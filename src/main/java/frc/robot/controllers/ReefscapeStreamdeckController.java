@@ -18,7 +18,6 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
     public final Trigger floorCollect, coralLoading;
     public final Trigger semiCoralTrough, semiCoralL2, semiCoralL3, semiCoralL4;
     public final Trigger algaeL1, semiAlgaeL1WithCoral, algaeL2, semiAlgaeNet, semiAlgaeProcessor;
-    private TargetReef targetReef;
 
     public enum TargetReef {
         ReefOne,
@@ -29,6 +28,9 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         ReefSix,
         NONE
     }
+
+    
+    private TargetReef targetReef = TargetReef.NONE;
 
     public ReefscapeStreamdeckController() {
         super();

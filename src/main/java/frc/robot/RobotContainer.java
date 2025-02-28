@@ -221,14 +221,14 @@ public class RobotContainer {
     this.operatorStreamdeck.autoProcessor
         .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetProc), driverController));
 
-    this.operatorStreamdeck.autoLevelOne.onTrue(CommandOverrides.addDriverOverride(
-        swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
-    this.operatorStreamdeck.autoLevelTwo.onTrue(CommandOverrides.addDriverOverride(
-        swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
-    this.operatorStreamdeck.autoLevelThree.onTrue(CommandOverrides.addDriverOverride(
-        swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
-    this.operatorStreamdeck.autoLevelFour.onTrue(CommandOverrides.addDriverOverride(
-        swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // this.operatorStreamdeck.autoLevelOne.onTrue(CommandOverrides.addDriverOverride(
+    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // this.operatorStreamdeck.autoLevelTwo.onTrue(CommandOverrides.addDriverOverride(
+    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // this.operatorStreamdeck.autoLevelThree.onTrue(CommandOverrides.addDriverOverride(
+    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // this.operatorStreamdeck.autoLevelFour.onTrue(CommandOverrides.addDriverOverride(
+    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
   }
 
   private void initializeLegacyStreamdeckControls() {
@@ -337,6 +337,7 @@ public class RobotContainer {
   }
 
   private void initializeAlgaeManipulatorSubsystem() {
+    this.algaeManipulatorSubsystem = new AlgaeManipulatorSubsystem();
     this.algaeManipulatorCommand = new AlgaeManipulatorCommand(algaeManipulatorSubsystem, operatorController);
     this.algaeManipulatorSubsystem.setDefaultCommand(algaeManipulatorCommand);
 
