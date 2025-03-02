@@ -45,7 +45,7 @@ public class ManualCoralL1 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }
 

@@ -28,7 +28,7 @@ public class ManualFloorPickup extends Command {
   @Override
   public void initialize() {
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(10));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,7 +40,7 @@ public class ManualFloorPickup extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
     this.algaeManipulatorSubsystem.holdAlgae();
   }
 

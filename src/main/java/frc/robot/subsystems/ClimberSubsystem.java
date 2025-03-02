@@ -13,6 +13,7 @@ import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberSubsystemConstants;
@@ -25,7 +26,8 @@ public class ClimberSubsystem extends SubsystemBase {
   private Double currentSpeed = 0.0;
 
   private double minRotationCount = 0;
-  private double maxRotationCount = 96;
+  private double maxRotationCount = 190;
+  private DigitalInput lowerLimitSwitch;
 
   /** Creates a new climberSubsystem. */
   public ClimberSubsystem() {
@@ -40,6 +42,12 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
+    SmartDashboard.putNumber("ClimberPosition", this.ClimberEncoder.getPosition());
+    if (lowerLimitSwitch.get()) {
+      this.ClimberEncoder.setPosition(0);
+      if (speed < 0)
+        speed = 0;
+    }
     climberMotor.set(speed);
   }
 
@@ -63,9 +71,11 @@ public class ClimberSubsystem extends SubsystemBase {
     motorLimits.forwardSoftLimit(maxRotationCount);
     motorLimits.forwardSoftLimitEnabled(true);
     motorLimits.reverseSoftLimit(minRotationCount);
-    motorLimits.reverseSoftLimitEnabled(true);
-    motorConfig.apply(motorLimits);
+    motorLimits.reverseSoftLimitEnabled(false);
+    // motorConfig.apply(motorLimits);
     climberMotor.configure(motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     ClimberEncoder = climberMotor.getEncoder();
+
+    lowerLimitSwitch = new DigitalInput(ClimberSubsystemConstants.CLIMBER_LOWER_LIMIT_ID);
   }
 }

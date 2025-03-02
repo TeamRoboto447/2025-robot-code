@@ -42,7 +42,7 @@ public class ManualCoralPickup extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
     this.algaeManipulatorSubsystem.holdCoral();
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }

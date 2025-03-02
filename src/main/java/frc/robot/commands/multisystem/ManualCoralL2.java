@@ -96,7 +96,7 @@ public class ManualCoralL2 extends Command {
     this.shiftBack = false;
     this.step = 0;
     this.waitTimer.stop();
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }
 

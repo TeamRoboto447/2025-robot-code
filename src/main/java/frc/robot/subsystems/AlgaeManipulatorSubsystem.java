@@ -47,7 +47,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   private final double minRotationCount = 20;
   private final double maxRotationCount = 65;
   private final double minAbsoluteRotationCount = 0;
-  private final double maxAbsoluteRotationCount = 0.506;
+  private final double maxAbsoluteRotationCount = 0.49;
   private final double minWristAngle = 0;
   private final double maxWristAngle = 90;
 

@@ -54,7 +54,7 @@ public class CollectAlgaeFromReef extends Command {
         }
         break;
       case 2:
-        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
         if (this.algaeManipulatorSubsystem.atTarget()) {
           this.step += 1;
         }

@@ -44,7 +44,7 @@ public class CoralL3AlgaeL1Command extends Command {
     if (!this.elevatorSubsystem.atTarget())
       return;
 
-    this.algaeManipulatorSubsystem.intakeAlgae(0.5);
+    this.algaeManipulatorSubsystem.intakeAlgae(1);
     switch (this.step) {
       case 0:
         this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(60));
@@ -52,7 +52,6 @@ public class CoralL3AlgaeL1Command extends Command {
         break;
       case 1:
         if (this.algaeManipulatorSubsystem.atTarget()) {
-          this.algaeManipulatorSubsystem.outtakeCoral();
           this.step += 1;
           this.waitTimer.reset();
           this.waitTimer.start();
@@ -62,19 +61,20 @@ public class CoralL3AlgaeL1Command extends Command {
         if (this.waitTimer.get() > 0.75) {
           this.step += 1;
           this.waitTimer.stop();
+          this.algaeManipulatorSubsystem.outtakeCoral();
         }
         break;
       case 3:
         this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L1);
         if (this.elevatorSubsystem.atTarget()) {
-          this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
+          this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(10));
           this.waitTimer.reset();
           this.waitTimer.start();
           this.step += 1;
         }
         break;
       case 4:
-        if (this.algaeManipulatorSubsystem.atTarget())
+        if (this.algaeManipulatorSubsystem.atTarget() && this.waitTimer.get() > 2)
           this.step += 1;
         break;
     }
@@ -83,7 +83,7 @@ public class CoralL3AlgaeL1Command extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
     this.algaeManipulatorSubsystem.holdAlgae();
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
   }

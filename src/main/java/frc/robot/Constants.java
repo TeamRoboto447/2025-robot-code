@@ -85,6 +85,7 @@ public final class Constants {
   public static class ClimberSubsystemConstants {
     public static final int CLIMBER_MAX_SPEED = 10;
     public static final int CLIMBER_MOTOR_ID = 20;
+    public static final int CLIMBER_LOWER_LIMIT_ID = 9;
   }
 
   public static class ElevatorSubsystemConstants {
@@ -113,16 +114,16 @@ public final class Constants {
     public static final Distance DISTANCE_PER_ROTATION = Inches.of(1 * Math.PI); // Circumferance of 1 inch pulley
 
     public static final Distance FLOOR_LEVEL = Inches.of(0);
-    public static final Distance CORAL_LOADING_LEVEL = Inches.of(18);
+    public static final Distance CORAL_LOADING_LEVEL = Inches.of(6);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
-    public static final Distance CORAL_L3_LEVEL = Inches.of(26);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(16);
 
-    public static final Distance ALGAE_L1_LEVEL = Inches.of(28);
-    public static final Distance ALGAE_L2_LEVEL = Inches.of(40);
+    public static final Distance ALGAE_L1_LEVEL = Inches.of(23);
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(33);
 
-    public static final Distance CORAL_L4_LEVEL = Inches.of(56);
-    public static final Distance NET_LEVEL = Inches.of(74);
+    public static final Distance CORAL_L4_LEVEL = Inches.of(46);
+    public static final Distance NET_LEVEL = Inches.of(62);
   }
 
   public static class AlgaeManipulatorSubsystemConstants {
@@ -139,7 +140,7 @@ public final class Constants {
         new Rotation3d(0, Units.degreesToRadians(2), 0));
 
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
-    public static final boolean USE_VISION = true;
+    public static final boolean USE_VISION = false;
     public static final double POSE_AMBIGUITY_SHIFTER = 0;
     public static final double POSE_AMBIGUITY_MULTIPLIER = 0;
     public static final double NOISY_DISTANCE_METERS = 0;

@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.8824547051946965,
-        "y": 1.192186586755982
+        "x": 5.721540405657643,
+        "y": 1.6150188330810802
       },
       "isLocked": false,
       "linkedName": "Processor"
     },
     {
       "anchor": {
-        "x": 5.13,
-        "y": 2.83
+        "x": 5.54775,
+        "y": 1.9482499999999994
       },
       "prevControl": {
-        "x": 5.413919479676758,
-        "y": 2.0553938232494664
+        "x": 5.895698001227686,
+        "y": 1.1285829795652784
+      },
+      "nextControl": {
+        "x": 5.21917383510108,
+        "y": 2.7222824563391548
+      },
+      "isLocked": false,
+      "linkedName": "Right Netside Reef"
+    },
+    {
+      "anchor": {
+        "x": 5.07,
+        "y": 2.7867499999999996
+      },
+      "prevControl": {
+        "x": 5.339784972925861,
+        "y": 2.396182765884433
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Netside Reef"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

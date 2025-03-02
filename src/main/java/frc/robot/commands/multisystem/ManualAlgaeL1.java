@@ -47,13 +47,13 @@ public class ManualAlgaeL1 extends Command {
     this.algaeManipulatorSubsystem.intakeAlgae(0.5);
     switch (this.step) {
       case 0:
-        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
+        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
         this.waitTimer.reset();
         this.waitTimer.start();
         this.step += 1;
         break;
       case 1:
-        if (this.algaeManipulatorSubsystem.atTarget() || this.waitTimer.get() > 0.5)
+        if (this.algaeManipulatorSubsystem.atTarget() || this.waitTimer.get() > 0.75)
           this.step += 1;
         break;
     }
@@ -62,7 +62,7 @@ public class ManualAlgaeL1 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
     this.algaeManipulatorSubsystem.holdAlgae();
     this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
     this.waitTimer.stop();

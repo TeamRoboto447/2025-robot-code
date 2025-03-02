@@ -35,7 +35,7 @@ public class ManualAlgaeProcessor extends Command {
   @Override
   public void execute() {
     if (this.algaeManipulatorSubsystem.atTarget() && this.elevatorSubsystem.atTarget()) {
-      this.algaeManipulatorSubsystem.outtakeAlgae(0.5);
+      this.algaeManipulatorSubsystem.outtakeAlgae(0.2);
     } else {
       this.algaeManipulatorSubsystem.holdAlgae();
     }
@@ -44,7 +44,7 @@ public class ManualAlgaeProcessor extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(90));
+    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
   }
 
   // Returns true when the command should end.
