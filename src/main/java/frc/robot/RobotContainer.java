@@ -161,6 +161,14 @@ public class RobotContainer {
   private void initializeSwerveSubsystem() {
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
+    Trigger driverShifting = new Trigger(() -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean());
+    SwerveInputStream arrowKeyInputStream = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
+        () -> driverController.pov(90).getAsBoolean() ? 1 : (driverController.pov(270).getAsBoolean() ? -1 : 0),
+        () -> 0)
+        .withControllerRotationAxis(() -> -driverController.getRightX() / 2)
+        .deadband(DriverConstants.DEADBAND)
+        .scaleTranslation(0.8);
+    
 
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.getLeftY() * -1,
@@ -173,6 +181,7 @@ public class RobotContainer {
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
 
     this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    driverShifting.whileTrue(swerveSubsystem.drive(arrowKeyInputStream));
   }
 
   private void initializeStreamdeckBasedControls() {
