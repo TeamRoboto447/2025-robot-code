@@ -44,6 +44,7 @@ import frc.robot.commands.multisystem.ManualCoralL1;
 import frc.robot.commands.multisystem.ManualCoralL2;
 import frc.robot.commands.multisystem.ManualCoralL3;
 import frc.robot.commands.multisystem.CoralL3AlgaeL1Command;
+import frc.robot.commands.multisystem.CoralL4AlgaeL1Command;
 import frc.robot.commands.multisystem.ManualCoralL4;
 import frc.robot.commands.multisystem.ManualCoralPickup;
 import frc.robot.commands.multisystem.ManualFloorPickup;
@@ -445,6 +446,8 @@ public class RobotContainer {
             new WaitCommand(0.25)),
         algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
         this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
+    NamedCommands.registerCommand("CoralL4AlgaeL1",
+        new CoralL4AlgaeL1Command(this.algaeManipulatorSubsystem, this.elevatorSubsystem, this.swerveSubsystem));
 
     NamedCommands.registerCommand("ScoreInNet", new SequentialCommandGroup(
         this.elevatorSubsystem.moveElevatorToLevel(Level.NET),
