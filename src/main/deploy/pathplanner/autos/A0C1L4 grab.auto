@@ -27,23 +27,11 @@
           "data": {
             "name": "AlgaeL1Only"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Move to NR from R1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreInNet"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Live",
+  "folder": "Tests",
   "choreoAuto": false
 }

@@ -53,7 +53,7 @@ public class ManualAlgaeL1 extends Command {
         this.step += 1;
         break;
       case 1:
-        if (this.algaeManipulatorSubsystem.atTarget() || this.waitTimer.get() > 0.75)
+        if (this.algaeManipulatorSubsystem.atTarget() && this.waitTimer.get() > 1)
           this.step += 1;
         break;
     }
