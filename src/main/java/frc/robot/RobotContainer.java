@@ -51,7 +51,6 @@ import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.vision.PoseEstimatorSubsystem;
 import frc.robot.utils.CommandOverrides;
 import swervelib.SwerveInputStream;
 
@@ -68,7 +67,7 @@ import frc.robot.controllers.StreamdeckController.ControlScheme;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private SwerveSubsystem swerveSubsystem;
+  public SwerveSubsystem swerveSubsystem;
 
   private ClimberSubsystem climberSubsystem;
   private ClimberControlCommand climberControlCommand;
@@ -118,7 +117,7 @@ public class RobotContainer {
     initializeControllerRumbles();
 
     // Configure the PoseEstimatorSubsystem
-    new PoseEstimatorSubsystem(swerveSubsystem);
+    // new PoseEstimatorSubsystem(swerveSubsystem);
 
     // this.driverController.a()
     // .whileTrue(this.algaeManipulatorSubsystem.run(() ->
@@ -161,14 +160,14 @@ public class RobotContainer {
   private void initializeSwerveSubsystem() {
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
-    Trigger driverShifting = new Trigger(() -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean());
+    Trigger driverShifting = new Trigger(
+        () -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean());
     SwerveInputStream arrowKeyInputStream = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.pov(90).getAsBoolean() ? 1 : (driverController.pov(270).getAsBoolean() ? -1 : 0),
         () -> 0)
         .withControllerRotationAxis(() -> -driverController.getRightX() / 2)
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8);
-    
 
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.getLeftY() * -1,
@@ -231,13 +230,17 @@ public class RobotContainer {
         .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetProc), driverController));
 
     // this.operatorStreamdeck.autoLevelOne.onTrue(CommandOverrides.addDriverOverride(
-    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
+    // driverController));
     // this.operatorStreamdeck.autoLevelTwo.onTrue(CommandOverrides.addDriverOverride(
-    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
+    // driverController));
     // this.operatorStreamdeck.autoLevelThree.onTrue(CommandOverrides.addDriverOverride(
-    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
+    // driverController));
     // this.operatorStreamdeck.autoLevelFour.onTrue(CommandOverrides.addDriverOverride(
-    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
+    // driverController));
   }
 
   private void initializeLegacyStreamdeckControls() {
