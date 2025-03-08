@@ -17,12 +17,15 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -115,7 +118,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureMultisystemBindings();
     initializeStreamdeckBasedControls();
-    initializeControllerRumbles();
+    // initializeControllerRumbles();
 
     // Configure the PoseEstimatorSubsystem
     // new PoseEstimatorSubsystem(swerveSubsystem);
@@ -404,8 +407,11 @@ public class RobotContainer {
         break;
 
     }
-    this.driverController.a()
-        .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(cagePosition), driverController));
+    // this.driverController.a()
+    // .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(cagePosition),
+    // driverController));
+    this.driverController.a().onTrue(Commands.runOnce(() -> swerveSubsystem.resetOdometry(new Pose2d(
+        new Translation2d(0.5, 0.5), Rotation2d.kCW_90deg))));
   }
 
   private void initializeNamedCommands() {

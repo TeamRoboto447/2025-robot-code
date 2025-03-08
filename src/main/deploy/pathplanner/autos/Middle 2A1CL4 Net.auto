@@ -43,7 +43,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to S2 from NR"
+            "pathName": "Move to R6 From NR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgaeFromReefL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to NR From R6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInNet"
           }
         }
       ]

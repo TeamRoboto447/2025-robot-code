@@ -19,6 +19,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -38,6 +39,7 @@ import frc.robot.QuestNav;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -55,7 +57,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 public class SwerveSubsystem extends SubsystemBase {
 
   private final SwerveDrive swerveDrive;
-  private final QuestNav questNav = new QuestNav();
+  private final QuestNav questNav = new QuestNav(Constants.VisionConstants.ROBOT_TO_QUEST);
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -100,8 +102,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (questNav.connected())
-      swerveDrive.addVisionMeasurement(questNav.getPose(), Timer.getFPGATimestamp());
+    Optional<Pose3d> questPose = questNav.getRobotPose();
+    if (questPose.isPresent())
+      swerveDrive.addVisionMeasurement(getPose(), Timer.getFPGATimestamp());
   }
 
   @Override
@@ -469,7 +472,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d initialHolonomicPose) {
     swerveDrive.resetOdometry(initialHolonomicPose);
-    questNav.resetPoseTo(initialHolonomicPose);
+    questNav.resetPose(new Pose3d(initialHolonomicPose));
   }
 
   /**
@@ -506,11 +509,6 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void zeroGyro() {
     swerveDrive.zeroGyro();
-    questNav.zeroHeading();
-  }
-
-  public void cleanupQuestNavMessages() {
-    questNav.cleanUpQuestNavMessages();
   }
 
   /**
