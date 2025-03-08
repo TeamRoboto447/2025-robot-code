@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.2,
-        "y": 5.16
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 6.900671609389521,
-        "y": 4.953857462962291
-      },
-      "isLocked": false,
-      "linkedName": "Left Netside Reef"
-    },
-    {
-      "anchor": {
         "x": 7.06,
         "y": 5.019979508196721
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.892073790541613,
+        "y": 4.466727658268059
+      },
+      "isLocked": false,
+      "linkedName": "Net Right"
+    },
+    {
+      "anchor": {
+        "x": 7.59,
+        "y": 4.054
+      },
       "prevControl": {
-        "x": 6.384257503362843,
-        "y": 5.162451930318392
+        "x": 7.507315844346197,
+        "y": 4.403940367291584
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Net Right"
+      "linkedName": "S2"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 17.102728969052443
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -122.12499844038744
+    "rotation": 17.102728969052443
   },
   "useDefaultConstraints": true
 }

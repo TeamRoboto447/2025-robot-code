@@ -17,12 +17,15 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -44,6 +47,7 @@ import frc.robot.commands.multisystem.ManualCoralL1;
 import frc.robot.commands.multisystem.ManualCoralL2;
 import frc.robot.commands.multisystem.ManualCoralL3;
 import frc.robot.commands.multisystem.CoralL3AlgaeL1Command;
+import frc.robot.commands.multisystem.CoralL4AutoCommand;
 import frc.robot.commands.multisystem.ManualCoralL4;
 import frc.robot.commands.multisystem.ManualCoralPickup;
 import frc.robot.commands.multisystem.ManualFloorPickup;
@@ -51,7 +55,6 @@ import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.vision.PoseEstimatorSubsystem;
 import frc.robot.utils.CommandOverrides;
 import swervelib.SwerveInputStream;
 
@@ -68,7 +71,7 @@ import frc.robot.controllers.StreamdeckController.ControlScheme;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private SwerveSubsystem swerveSubsystem;
+  public SwerveSubsystem swerveSubsystem;
 
   private ClimberSubsystem climberSubsystem;
   private ClimberControlCommand climberControlCommand;
@@ -115,10 +118,10 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureMultisystemBindings();
     initializeStreamdeckBasedControls();
-    initializeControllerRumbles();
+    // initializeControllerRumbles();
 
     // Configure the PoseEstimatorSubsystem
-    new PoseEstimatorSubsystem(swerveSubsystem);
+    // new PoseEstimatorSubsystem(swerveSubsystem);
 
     // this.driverController.a()
     // .whileTrue(this.algaeManipulatorSubsystem.run(() ->
@@ -161,14 +164,14 @@ public class RobotContainer {
   private void initializeSwerveSubsystem() {
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
-    Trigger driverShifting = new Trigger(() -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean());
+    Trigger driverShifting = new Trigger(
+        () -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean());
     SwerveInputStream arrowKeyInputStream = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.pov(90).getAsBoolean() ? 1 : (driverController.pov(270).getAsBoolean() ? -1 : 0),
         () -> 0)
         .withControllerRotationAxis(() -> -driverController.getRightX() / 2)
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8);
-    
 
     SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.getLeftY() * -1,
@@ -231,13 +234,17 @@ public class RobotContainer {
         .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetProc), driverController));
 
     // this.operatorStreamdeck.autoLevelOne.onTrue(CommandOverrides.addDriverOverride(
-    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
+    // driverController));
     // this.operatorStreamdeck.autoLevelTwo.onTrue(CommandOverrides.addDriverOverride(
-    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
+    // driverController));
     // this.operatorStreamdeck.autoLevelThree.onTrue(CommandOverrides.addDriverOverride(
-    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
+    // driverController));
     // this.operatorStreamdeck.autoLevelFour.onTrue(CommandOverrides.addDriverOverride(
-    //     swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)), driverController));
+    // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
+    // driverController));
   }
 
   private void initializeLegacyStreamdeckControls() {
@@ -400,12 +407,18 @@ public class RobotContainer {
         break;
 
     }
-    this.driverController.a()
-        .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(cagePosition), driverController));
+    // this.driverController.a()
+    // .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(cagePosition),
+    // driverController));
+    this.driverController.a().onTrue(Commands.runOnce(() -> swerveSubsystem.resetOdometry(new Pose2d(
+        new Translation2d(0.5, 0.5), Rotation2d.kCW_90deg))));
   }
 
   private void initializeNamedCommands() {
     // Collection Commands
+    NamedCommands.registerCommand("AlgaeL1Only",
+        new ManualAlgaeL1(this.algaeManipulatorSubsystem, this.elevatorSubsystem));
+
     NamedCommands.registerCommand("CollectAlgaeFromReefL2",
         new CoralL3AlgaeL1Command(algaeManipulatorSubsystem, elevatorSubsystem));
 
@@ -442,6 +455,8 @@ public class RobotContainer {
             new WaitCommand(0.25)),
         algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
         this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
+    NamedCommands.registerCommand("CoralL4Auto",
+        new CoralL4AutoCommand(this.algaeManipulatorSubsystem, this.elevatorSubsystem, this.swerveSubsystem));
 
     NamedCommands.registerCommand("ScoreInNet", new SequentialCommandGroup(
         this.elevatorSubsystem.moveElevatorToLevel(Level.NET),

@@ -138,6 +138,11 @@ public final class Constants {
     public static final Transform3d ROBOT_TO_FRONT_CAM = new Transform3d(
         new Translation3d(Units.inchesToMeters(3.75), Units.inchesToMeters(-8), Units.inchesToMeters(17.25)),
         new Rotation3d(0, Units.degreesToRadians(2), 0));
+    public static final Transform3d ROBOT_TO_QUEST = new Transform3d(
+        Units.inchesToMeters(-12),
+        Units.inchesToMeters(-6.5),
+        Units.inchesToMeters(9),
+        new Rotation3d(0, 0, -130.7));
 
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
     public static final boolean USE_VISION = false;

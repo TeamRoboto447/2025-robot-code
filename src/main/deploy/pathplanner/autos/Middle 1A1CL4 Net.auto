@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R1B from S2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL4Auto"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R1 from R1B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AlgaeL1Only"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to NR from R1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInNet"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to S2 from NR"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Live",
+  "choreoAuto": false
+}
