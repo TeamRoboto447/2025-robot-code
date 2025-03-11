@@ -19,6 +19,7 @@ import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -162,6 +163,10 @@ public class RobotContainer {
   }
 
   private void initializeSwerveSubsystem() {
+    NetworkTableEntry isClockDrive = SmartDashboard.getEntry("swerve/Is Clock Drive");
+    isClockDrive.setBoolean(true);
+    Trigger isClockDriveTrigger = new Trigger(() -> isClockDrive.getBoolean(true));
+
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
     Trigger driverShifting = new Trigger(
@@ -180,10 +185,22 @@ public class RobotContainer {
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8)
         .allianceRelativeControl(true);
-
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
     this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
+    SwerveInputStream driveClockHeading = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
+        () -> driverController.getLeftY() * -1,
+        () -> driverController.getLeftX() * -1)
+        .withControllerHeadingAxis(() -> -driverController.getRightX(), () -> -driverController.getRightY())
+        .deadband(DriverConstants.DEADBAND)
+        .scaleTranslation(0.8)
+        .allianceRelativeControl(true);
+
+    Command driveFieldOrientedClockHeading = swerveSubsystem.driveFieldOriented(driveClockHeading);
+    // this.swerveSubsystem.setDefaultCommand(driveFieldOrientedClockHeading);
+    // isClockDriveTrigger
+    // .whileTrue(driveFieldOrientedClockHeading)
+    // .whileFalse(driveFieldOrientedAngularVelocity);
     driverShifting.whileTrue(swerveSubsystem.drive(arrowKeyInputStream));
   }
 
