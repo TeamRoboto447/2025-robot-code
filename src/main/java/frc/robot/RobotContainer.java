@@ -162,6 +162,7 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 
+  @SuppressWarnings("unused")
   private void initializeSwerveSubsystem() {
     NetworkTableEntry isClockDrive = SmartDashboard.getEntry("swerve/Is Clock Drive");
     isClockDrive.setBoolean(true);
@@ -186,21 +187,15 @@ public class RobotContainer {
         .scaleTranslation(0.8)
         .allianceRelativeControl(true);
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
-    this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
+    // this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
-    SwerveInputStream driveClockHeading = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-        () -> driverController.getLeftY() * -1,
-        () -> driverController.getLeftX() * -1)
+    SwerveInputStream driveClockHeading = driveAngularVelocity.copy()
         .withControllerHeadingAxis(() -> -driverController.getRightX(), () -> -driverController.getRightY())
-        .deadband(DriverConstants.DEADBAND)
-        .scaleTranslation(0.8)
-        .allianceRelativeControl(true);
+        .headingWhile(true);
 
     Command driveFieldOrientedClockHeading = swerveSubsystem.driveFieldOriented(driveClockHeading);
-    // this.swerveSubsystem.setDefaultCommand(driveFieldOrientedClockHeading);
-    // isClockDriveTrigger
-    // .whileTrue(driveFieldOrientedClockHeading)
-    // .whileFalse(driveFieldOrientedAngularVelocity);
+    this.swerveSubsystem.setDefaultCommand(driveFieldOrientedClockHeading);
+
     driverShifting.whileTrue(swerveSubsystem.drive(arrowKeyInputStream));
   }
 
