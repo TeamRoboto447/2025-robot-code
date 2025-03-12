@@ -190,7 +190,7 @@ public class RobotContainer {
     // this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
     SwerveInputStream driveClockHeading = driveAngularVelocity.copy()
-        .withControllerHeadingAxis(() -> -driverController.getRightX(), () -> -driverController.getRightY())
+        .withControllerHeadingAxis(() -> driverController.getRightX(), () -> driverController.getRightY())
         .headingWhile(true);
 
     Command driveFieldOrientedClockHeading = swerveSubsystem.driveFieldOriented(driveClockHeading);
