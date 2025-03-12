@@ -19,6 +19,7 @@ import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -161,7 +162,12 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
 
+  @SuppressWarnings("unused")
   private void initializeSwerveSubsystem() {
+    NetworkTableEntry isClockDrive = SmartDashboard.getEntry("swerve/Is Clock Drive");
+    isClockDrive.setBoolean(true);
+    Trigger isClockDriveTrigger = new Trigger(() -> isClockDrive.getBoolean(true));
+
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
     Trigger driverShifting = new Trigger(
@@ -179,7 +185,11 @@ public class RobotContainer {
         .withControllerRotationAxis(() -> -driverController.getRightX() / 2)
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8)
-        .allianceRelativeControl(true);
+        .allianceRelativeControl(true)
+        .withControllerHeadingAxis(
+            () -> Math.cos(swerveSubsystem.getNearestReefAngle().in(Degrees)),
+            () -> Math.sin(swerveSubsystem.getNearestReefAngle().in(Degrees)))
+        .headingWhile(() -> this.driverController.start().getAsBoolean());
 
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
     this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
