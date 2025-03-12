@@ -96,6 +96,7 @@ public final class Constants {
 
     public enum Level {
       FLOOR,
+      FLOOR_COLLECT,
       CORAL_LOADING,
       TROUGH,
       CORAL_L2,
@@ -114,6 +115,7 @@ public final class Constants {
     public static final Distance DISTANCE_PER_ROTATION = Inches.of(1 * Math.PI); // Circumferance of 1 inch pulley
 
     public static final Distance FLOOR_LEVEL = Inches.of(0);
+    public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(9);
     public static final Distance CORAL_LOADING_LEVEL = Inches.of(6);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
