@@ -185,16 +185,14 @@ public class RobotContainer {
         .withControllerRotationAxis(() -> -driverController.getRightX() / 2)
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8)
-        .allianceRelativeControl(true);
+        .allianceRelativeControl(true)
+        .withControllerHeadingAxis(
+            () -> Math.cos(swerveSubsystem.getNearestReefAngle().in(Degrees)),
+            () -> Math.sin(swerveSubsystem.getNearestReefAngle().in(Degrees)))
+        .headingWhile(() -> this.driverController.start().getAsBoolean());
+
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
-    // this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
-
-    SwerveInputStream driveClockHeading = driveAngularVelocity.copy()
-        .withControllerHeadingAxis(() -> driverController.getRightX(), () -> driverController.getRightY())
-        .headingWhile(true);
-
-    Command driveFieldOrientedClockHeading = swerveSubsystem.driveFieldOriented(driveClockHeading);
-    this.swerveSubsystem.setDefaultCommand(driveFieldOrientedClockHeading);
+    this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
 
     driverShifting.whileTrue(swerveSubsystem.drive(arrowKeyInputStream));
   }
