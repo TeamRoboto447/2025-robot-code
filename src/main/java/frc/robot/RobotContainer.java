@@ -182,8 +182,8 @@ public class RobotContainer {
         .allianceRelativeControl(true);
 
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
-
     this.swerveSubsystem.setDefaultCommand(driveFieldOrientedAngularVelocity);
+
     driverShifting.whileTrue(swerveSubsystem.drive(arrowKeyInputStream));
   }
 

@@ -16,6 +16,7 @@ public class ManualFloorPickup extends Command {
 
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
+
   /** Creates a new ManualFloorPickup. */
   public ManualFloorPickup(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
@@ -27,19 +28,21 @@ public class ManualFloorPickup extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
-    this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
+    this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR_COLLECT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (this.elevatorSubsystem.atTarget())
+      this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
     this.algaeManipulatorSubsystem.intakeAlgae(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    this.elevatorSubsystem.setElevatorTargetHeight(Level.FLOOR);
     this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(85));
     this.algaeManipulatorSubsystem.holdAlgae();
   }

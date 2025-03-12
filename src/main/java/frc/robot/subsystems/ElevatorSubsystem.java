@@ -96,12 +96,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     if (!this.algaeManipulatorSubsystem.atTarget())
       speed = 0;
 
-    if (speed > 0){
+    if (speed > 0) {
       elevatorMotor.set(speed);
       return;
     }
 
-    elevatorMotor.set(Math.max(-0.4, speed));
+    elevatorMotor.set(Math.max(-0.35, speed));
   }
 
   private double getPositionFromLevel(Level level) {
@@ -109,6 +109,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     switch (level) {
       case FLOOR:
         outputHeight = ElevatorSubsystemConstants.FLOOR_LEVEL;
+        break;
+      case FLOOR_COLLECT:
+        outputHeight = ElevatorSubsystemConstants.FLOOR_COLLECT_LEVEL;
         break;
       case CORAL_LOADING:
         outputHeight = ElevatorSubsystemConstants.CORAL_LOADING_LEVEL;
