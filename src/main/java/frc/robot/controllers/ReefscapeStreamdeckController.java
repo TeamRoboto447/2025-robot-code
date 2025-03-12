@@ -1,6 +1,9 @@
 package frc.robot.controllers;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -29,7 +32,6 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         NONE
     }
 
-    
     private TargetReef targetReef = TargetReef.NONE;
 
     public ReefscapeStreamdeckController() {
@@ -104,7 +106,12 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         return this.targetReef;
     }
 
-    public Pose2d getTargetReefPosition(Alliance currentAlliance) {
+    public Pose2d getTargetReefPosition() {
+        Optional<Alliance> allianceOptional = DriverStation.getAlliance();
+        Alliance currentAlliance = Alliance.Blue;
+        if (allianceOptional.isPresent())
+            currentAlliance = allianceOptional.get();
+
         switch (this.targetReef) {
             case ReefOne:
                 return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_ONE

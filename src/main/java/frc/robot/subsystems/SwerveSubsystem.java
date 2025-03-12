@@ -211,6 +211,16 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Use PathPlanner Path finding to go to a point on the field.
+   *
+   * @param poseSupplier Supplies a target {@link Pose2d} to go to.
+   * @return PathFinding command
+   */
+  public Command driveToPose(Supplier<Pose2d> poseSupplier) {
+    return driveToPose(poseSupplier.get());
+  }
+
+  /**
    * Drive with {@link SwerveSetpointGenerator} from 254, implemented by
    * PathPlanner.
    *
