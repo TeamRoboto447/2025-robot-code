@@ -31,6 +31,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -107,6 +108,9 @@ public class SwerveSubsystem extends SubsystemBase {
     Optional<Pose3d> questPose = questNav.getRobotPose();
     if (questPose.isPresent())
       swerveDrive.addVisionMeasurement(getPose(), Timer.getFPGATimestamp());
+    SmartDashboard.putNumber("Current Angle", getHeading().getDegrees());
+    SmartDashboard.putNumber("Nearest Reef Angle", getNearestReefAngle().getDegrees());
+
   }
 
   @Override
@@ -561,10 +565,13 @@ public class SwerveSubsystem extends SubsystemBase {
     return getPose().getRotation();
   }
 
-  public Angle getNearestReefAngle() {
-    double currentAngle = getHeading().getDegrees();
-    double nearestReefAngle = Math.round(currentAngle / 60.0) * 60;
-    return Degrees.of(nearestReefAngle);
+  public Rotation2d getNearestReefAngle() {
+    double normalized = Math.floorMod((int) Math.round(getHeading().getDegrees()), 360);
+    double offset = normalized % 60;
+    if (offset > 30)
+      offset -= 60;
+    double nearestReef = normalized - offset;
+    return Rotation2d.fromDegrees(Math.floorMod((int) nearestReef, 360));
   }
 
   /**

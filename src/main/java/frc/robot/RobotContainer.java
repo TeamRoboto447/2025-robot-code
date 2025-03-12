@@ -5,6 +5,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleLeft;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleBoth;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleRight;
@@ -187,8 +188,8 @@ public class RobotContainer {
         .scaleTranslation(0.8)
         .allianceRelativeControl(true)
         .withControllerHeadingAxis(
-            () -> Math.cos(swerveSubsystem.getNearestReefAngle().in(Degrees)),
-            () -> Math.sin(swerveSubsystem.getNearestReefAngle().in(Degrees)))
+            () -> Math.sin(swerveSubsystem.getNearestReefAngle().getRadians()),
+            () -> Math.cos(swerveSubsystem.getNearestReefAngle().getRadians()))
         .headingWhile(() -> this.driverController.start().getAsBoolean());
 
     Command driveFieldOrientedAngularVelocity = swerveSubsystem.driveFieldOriented(driveAngularVelocity);
