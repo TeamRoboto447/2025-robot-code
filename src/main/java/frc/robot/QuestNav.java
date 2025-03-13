@@ -27,7 +27,7 @@ import java.util.Optional;
 /** Add your docs here. */
 public class QuestNav implements PoseProvider {
     private boolean initializedPosition = false;
-    private String networkTableRoot = "oculus";
+    private String networkTableRoot = "questnav";
     private NetworkTableInstance networkTableInstance = NetworkTableInstance.getDefault();
     private NetworkTable networkTable;
     private Transform3d robotToQuest;
@@ -74,10 +74,6 @@ public class QuestNav implements PoseProvider {
         setupNetworkTables(networkTableRoot);
     }
 
-    public boolean connected() {
-        return ((RobotController.getFPGATime() - battery.getLastChange()) / 1000) < 250;
-    }
-
     private void setupNetworkTables(String root) {
         networkTable = networkTableInstance.getTable(root);
         miso = networkTable.getIntegerTopic("miso").getEntry(0);
@@ -91,7 +87,7 @@ public class QuestNav implements PoseProvider {
     }
 
     public Translation3d getRawPosition() {
-        return new Translation3d(position.get()[2], -position.get()[0], position.get()[2]);
+        return new Translation3d(position.get()[1], -position.get()[0], position.get()[2]);
     }
 
     private Translation3d correctWorldAxis(Translation3d rawPosition) {
@@ -100,7 +96,7 @@ public class QuestNav implements PoseProvider {
 
     public Rotation3d getRawRotation() {
         float[] euler = eulerAngles.get();
-        return new Rotation3d(Degrees.of(euler[2]), Degrees.of(euler[0]), Degrees.of(-euler[1]));
+        return new Rotation3d(Degrees.of(euler[2]), Degrees.of(euler[0]), Degrees.of(euler[1]));
     }
 
     public Optional<Pose3d> getRobotPose() {

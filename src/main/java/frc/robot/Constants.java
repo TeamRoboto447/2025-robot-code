@@ -133,8 +133,8 @@ public final class Constants {
 
   public static class VisionConstants {
     public static final Transform3d ROBOT_TO_FRONT_CAM = new Transform3d(
-        new Translation3d(Units.inchesToMeters(5), Units.inchesToMeters(10.125), Units.inchesToMeters(7.25)),
-        new Rotation3d(0, Units.degreesToRadians(-24.5), 0));
+        new Translation3d(Units.inchesToMeters(6.5), Units.inchesToMeters(10), Units.inchesToMeters(8)),
+        new Rotation3d(0, Units.degreesToRadians(-23), 0));
 
     public static final Transform3d ROBOT_TO_QUEST = new Transform3d(
         Units.inchesToMeters(-12),
@@ -143,14 +143,14 @@ public final class Constants {
         new Rotation3d(0, 0, -130.7));
 
     public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
-    public static final boolean USE_PHOTON_VISION = false;
+    public static final boolean USE_PHOTON_VISION = true;
     public static final double POSE_AMBIGUITY_SHIFTER = 0;
     public static final double POSE_AMBIGUITY_MULTIPLIER = 0;
     public static final double NOISY_DISTANCE_METERS = 0;
     public static final double DISTANCE_WEIGHT = 0;
     public static final int TAG_PRESENCE_WEIGHT = 0;
 
-    public static final boolean USE_QUEST_NAV = true;
+    public static final boolean USE_QUEST_NAV = false;
   }
 
   public static class FieldConstants {

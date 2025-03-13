@@ -107,12 +107,9 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     Optional<Pose3d> questPose = questNav.getRobotPose();
-    if (questPose.isPresent() && questNav.connected())
+    if (questPose.isPresent() && questNav.isActive())
       swerveDrive.addVisionMeasurement(questPose.get().toPose2d(), Timer.getFPGATimestamp());
-
-    SmartDashboard.putNumber("Current Angle", getHeading().getDegrees());
-    SmartDashboard.putNumber("Nearest Reef Angle", getNearestReefAngle().getDegrees());
-
+    SmartDashboard.putBoolean("Quest Connected", questNav.isActive());
   }
 
   public void addVisionMeasurement(Pose2d pose, double timestamp) {
@@ -492,6 +489,10 @@ public class SwerveSubsystem extends SubsystemBase {
     questNav.resetPose(new Pose3d(initialHolonomicPose));
   }
 
+  public void resetOdometry(Pose3d initialHolonomicPose) {
+    swerveDrive.resetOdometry(initialHolonomicPose.toPose2d());
+    questNav.resetPose(initialHolonomicPose);
+  }
   /**
    * Gets the current pose (position and rotation) of the robot, as reported by
    * odometry.

@@ -5,6 +5,7 @@
 package frc.robot.subsystems.vision;
 
 import static frc.robot.Constants.VisionConstants.USE_PHOTON_VISION;
+import static frc.robot.Constants.VisionConstants.USE_QUEST_NAV;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -52,7 +54,10 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       if (estimatedPose.isEmpty())
         continue;
       Matrix<N3, N1> standardDeviations = calculateStandardDeviations(estimatedPose.get());
-      swerveSubsystem.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), Timer.getFPGATimestamp(),
+      if(USE_QUEST_NAV && RobotState.isDisabled())
+        swerveSubsystem.resetOdometry(estimatedPose.get().estimatedPose);
+      else if(!USE_QUEST_NAV)
+        swerveSubsystem.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), Timer.getFPGATimestamp(),
           standardDeviations);
     }
   }
