@@ -19,9 +19,11 @@ import edu.wpi.first.networktables.IntegerSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.Optional;
 
+@SuppressWarnings("unused")
 /** Add your docs here. */
 public class QuestNav implements PoseProvider {
     private boolean initializedPosition = false;
@@ -70,6 +72,10 @@ public class QuestNav implements PoseProvider {
         this.robotToQuest = robotToQuest;
         this.networkTableRoot = networkTableRoot;
         setupNetworkTables(networkTableRoot);
+    }
+
+    public boolean connected() {
+        return ((RobotController.getFPGATime() - battery.getLastChange()) / 1000) < 250;
     }
 
     private void setupNetworkTables(String root) {

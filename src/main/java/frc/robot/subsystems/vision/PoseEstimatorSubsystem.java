@@ -4,55 +4,57 @@
 
 package frc.robot.subsystems.vision;
 
-import static frc.robot.Constants.VisionConstants.USE_VISION;
+import static frc.robot.Constants.VisionConstants.USE_PHOTON_VISION;
+
+import java.util.List;
+import java.util.Optional;
+
+import static frc.robot.Constants.VisionConstants.ROBOT_TO_FRONT_CAM;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj2.command.NotifierCommand;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.RobotState;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
-
   private final SwerveSubsystem swerveSubsystem;
-  private final PhotonRunnable frontCamera;
-  // private final PhotonRunnable rightCamera;
+  private final PhotonCamera frontCamera;
+  private final PhotonPoseEstimator poseEstimator;
+  private final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
   /** Creates a new PoseEstimatorSubsystem. */
   public PoseEstimatorSubsystem(SwerveSubsystem swerveSubsystem) {
     this.swerveSubsystem = swerveSubsystem;
-    if (USE_VISION) {
-      this.frontCamera = new PhotonRunnable(new PhotonCamera("FrontCam"), VisionConstants.ROBOT_TO_FRONT_CAM);
-      // this.rightCamera = new PhotonRunnable(new PhotonCamera("rightCamera"), null);
-      this.setDefaultCommand(this.createNotifierCommand(this));
-    } else {
-      this.frontCamera = null;
-      // this.rightCamera = null;
-    }
+    frontCamera = new PhotonCamera("FrontCam");
+    poseEstimator = new PhotonPoseEstimator(tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, ROBOT_TO_FRONT_CAM);
   }
 
   @Override
   public void periodic() {
-    if (VisionConstants.USE_VISION) {
-      estimatorChecker(frontCamera);
-      // estimatorChecker(rightCamera);
+    if (!USE_PHOTON_VISION)
+      return;
+    List<PhotonPipelineResult> pipeline = frontCamera.getAllUnreadResults();
+    for (PhotonPipelineResult result : pipeline) {
+      Optional<EstimatedRobotPose> estimatedPose = poseEstimator.update(result);
+      if (estimatedPose.isEmpty())
+        continue;
+      Matrix<N3, N1> standardDeviations = calculateStandardDeviations(estimatedPose.get());
+      swerveSubsystem.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), Timer.getFPGATimestamp(),
+          standardDeviations);
     }
-  }
-
-  private NotifierCommand createNotifierCommand(PoseEstimatorSubsystem peSubsystem) {
-    return new NotifierCommand(() -> {
-      frontCamera.run();
-      // rightCamera.run();
-    }, 0.02, peSubsystem);
   }
 
   public Pose2d getCurrentPose() {
@@ -67,43 +69,22 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     setCurrentPose(new Pose2d());
   }
 
-  private Matrix<N3, N1> confidenceCalculator(EstimatedRobotPose estimation) {
-    double smallestDistance = Double.POSITIVE_INFINITY;
-    for (PhotonTrackedTarget target : estimation.targetsUsed) {
-      Transform3d t3d = target.getBestCameraToTarget();
-      double distance = Math.sqrt(Math.pow(t3d.getX(), 2) + Math.pow(t3d.getY(), 2) + Math.pow(t3d.getZ(), 2));
-      if (distance < smallestDistance)
-        smallestDistance = distance;
-    }
+  private Matrix<N3, N1> calculateStandardDeviations(EstimatedRobotPose pose) {
+    int numTargets = pose.targetsUsed.size();
 
-    double poseAmbiguityFactor = estimation.targetsUsed.size() != 1 ? 1
-        : Math.max(1, estimation.targetsUsed.get(0).getPoseAmbiguity() + VisionConstants.POSE_AMBIGUITY_SHIFTER
-            * VisionConstants.POSE_AMBIGUITY_MULTIPLIER);
+    double baseXYStdDev = 0.5; // meters
+    double baseThetaStdDev = 0.1; // radians
 
-    double confidenceMultiplier = Math.max(
-        1,
-        (Math.max(
-            1,
-            Math.max(0, smallestDistance - VisionConstants.NOISY_DISTANCE_METERS)
-                * VisionConstants.DISTANCE_WEIGHT)
-            * poseAmbiguityFactor)
-            / (1
-                + ((estimation.targetsUsed.size() - 1)
-                    * VisionConstants.TAG_PRESENCE_WEIGHT)));
-    return VisionConstants.VISION_MEASUREMENT_STANDARD_DEVIATIONS.times(confidenceMultiplier);
-  }
-
-  public void estimatorChecker(PhotonRunnable estimator) {
-    EstimatedRobotPose cameraPose = estimator.grabLatestEstimatedPose();
-    if (cameraPose == null)
-      return;
-    Pose2d pose2d = cameraPose.estimatedPose.toPose2d();
-    if (RobotState.isDisabled()) {
-      System.out.println("Setting position");
-      swerveSubsystem.getSwerveDrive().resetOdometry(pose2d);
+    if (numTargets > 1) {
+      return VecBuilder.fill(baseXYStdDev / 2, baseXYStdDev / 2, baseThetaStdDev / 2);
+    } else if (numTargets == 1) {
+      PhotonTrackedTarget target = pose.targetsUsed.get(0);
+      double distance = target.getBestCameraToTarget().getTranslation().getNorm();
+      double factor = 1.0 + (distance / 4.0);
+      return VecBuilder.fill(baseXYStdDev * factor, baseXYStdDev * factor, baseThetaStdDev * factor);
     } else {
-      swerveSubsystem.getSwerveDrive().addVisionMeasurement(pose2d, cameraPose.timestampSeconds,
-          confidenceCalculator(cameraPose));
+      return VecBuilder.fill(5.0, 5.0, 10.0); // High uncertainty when no targets are reliably detected
     }
   }
+
 }

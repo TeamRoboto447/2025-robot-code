@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -18,6 +17,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -25,10 +26,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -106,11 +107,21 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     Optional<Pose3d> questPose = questNav.getRobotPose();
-    if (questPose.isPresent())
-      swerveDrive.addVisionMeasurement(getPose(), Timer.getFPGATimestamp());
+    if (questPose.isPresent() && questNav.connected())
+      swerveDrive.addVisionMeasurement(questPose.get().toPose2d(), Timer.getFPGATimestamp());
+
     SmartDashboard.putNumber("Current Angle", getHeading().getDegrees());
     SmartDashboard.putNumber("Nearest Reef Angle", getNearestReefAngle().getDegrees());
 
+  }
+
+  public void addVisionMeasurement(Pose2d pose, double timestamp) {
+    swerveDrive.addVisionMeasurement(pose, timestamp);
+  }
+
+  public void addVisionMeasurement(
+      Pose2d robotPose, double timestamp, Matrix<N3, N1> visionMeasurementStdDevs) {
+    swerveDrive.addVisionMeasurement(robotPose, timestamp, visionMeasurementStdDevs);
   }
 
   @Override

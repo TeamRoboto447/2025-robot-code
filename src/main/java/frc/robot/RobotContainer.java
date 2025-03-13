@@ -5,7 +5,6 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Radians;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleLeft;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleBoth;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleRight;
@@ -57,6 +56,7 @@ import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.vision.PoseEstimatorSubsystem;
 import frc.robot.utils.CommandOverrides;
 import swervelib.SwerveInputStream;
 
@@ -82,6 +82,8 @@ public class RobotContainer {
 
   public AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private AlgaeManipulatorCommand algaeManipulatorCommand;
+
+  private PoseEstimatorSubsystem poseEstimatorSubsystem;
 
   private ManualFloorPickup manualFloorPickupCommand;
   private ManualCoralPickup manualCoralPickupCommand;
@@ -111,6 +113,7 @@ public class RobotContainer {
     initializeClimberSubsystem();
     initializeAlgaeManipulatorSubsystem();
     initializeElevatorSubsystem();
+    poseEstimatorSubsystem = new PoseEstimatorSubsystem(swerveSubsystem);
 
     // initializeExampleSubsystem();
     initializeMultisystemCommands();
