@@ -79,7 +79,7 @@
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": "Live",
   "choreoAuto": false
 }

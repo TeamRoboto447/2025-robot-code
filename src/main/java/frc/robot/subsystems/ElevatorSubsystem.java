@@ -101,7 +101,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       return;
     }
 
-    elevatorMotor.set(Math.max(-0.35, speed));
+    elevatorMotor.set(Math.max(-0.3, speed));
   }
 
   private double getPositionFromLevel(Level level) {

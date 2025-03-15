@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Meter;
+import static frc.robot.Constants.VisionConstants.USE_QUEST_NAV;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -31,6 +32,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -107,8 +109,9 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     Optional<Pose3d> questPose = questNav.getRobotPose();
-    if (questPose.isPresent() && questNav.isActive())
-      swerveDrive.addVisionMeasurement(questPose.get().toPose2d(), Timer.getFPGATimestamp());
+    if (USE_QUEST_NAV && questPose.isPresent() && questNav.isActive() && RobotState.isEnabled()) {
+      swerveDrive.resetOdometry(questPose.get().toPose2d());
+    }
     SmartDashboard.putBoolean("Quest Connected", questNav.isActive());
   }
 

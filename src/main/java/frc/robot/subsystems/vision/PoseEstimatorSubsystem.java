@@ -54,11 +54,16 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
       if (estimatedPose.isEmpty())
         continue;
       Matrix<N3, N1> standardDeviations = calculateStandardDeviations(estimatedPose.get());
-      if(USE_QUEST_NAV && RobotState.isDisabled())
+      if(RobotState.isDisabled())
         swerveSubsystem.resetOdometry(estimatedPose.get().estimatedPose);
-      else if(!USE_QUEST_NAV)
-        swerveSubsystem.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), Timer.getFPGATimestamp(),
-          standardDeviations);
+      
+      if(!USE_QUEST_NAV) {
+        Pose2d poseEstimate = estimatedPose.get().estimatedPose.toPose2d();
+        double error = poseEstimate.getTranslation().getDistance(swerveSubsystem.getPose().getTranslation());
+        if(RobotState.isDisabled())
+          swerveSubsystem.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), Timer.getFPGATimestamp(),
+            standardDeviations);
+      }
     }
   }
 

@@ -110,17 +110,17 @@ public final class Constants {
     public static final Distance DISTANCE_PER_ROTATION = Inches.of(1 * Math.PI); // Circumferance of 1 inch pulley
 
     public static final Distance FLOOR_LEVEL = Inches.of(0);
-    public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(9);
-    public static final Distance CORAL_LOADING_LEVEL = Inches.of(6);
+    public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(3);
+    public static final Distance CORAL_LOADING_LEVEL = Inches.of(0);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
-    public static final Distance CORAL_L3_LEVEL = Inches.of(16);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(10);
 
-    public static final Distance ALGAE_L1_LEVEL = Inches.of(23);
-    public static final Distance ALGAE_L2_LEVEL = Inches.of(33);
+    public static final Distance ALGAE_L1_LEVEL = Inches.of(17);
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(27);
 
-    public static final Distance CORAL_L4_LEVEL = Inches.of(46);
-    public static final Distance NET_LEVEL = Inches.of(62);
+    public static final Distance CORAL_L4_LEVEL = Inches.of(38);
+    public static final Distance NET_LEVEL = Inches.of(54);
   }
 
   public static class AlgaeManipulatorSubsystemConstants {
@@ -133,7 +133,7 @@ public final class Constants {
 
   public static class VisionConstants {
     public static final Transform3d ROBOT_TO_FRONT_CAM = new Transform3d(
-        new Translation3d(Units.inchesToMeters(6.5), Units.inchesToMeters(10), Units.inchesToMeters(8)),
+        new Translation3d(Units.inchesToMeters(6.5), Units.inchesToMeters(-10), Units.inchesToMeters(8)),
         new Rotation3d(0, Units.degreesToRadians(-23), 0));
 
     public static final Transform3d ROBOT_TO_QUEST = new Transform3d(

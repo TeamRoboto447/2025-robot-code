@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.2,
-        "y": 5.16
+        "x": 5.25,
+        "y": 5.14
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.900671609389521,
-        "y": 4.953857462962291
+        "x": 6.950671609389521,
+        "y": 4.93385746296229
       },
       "isLocked": false,
       "linkedName": "Left Netside Reef"

@@ -72,7 +72,7 @@ public class ManualCoralL4 extends Command {
     SmartDashboard.putNumber("ManualCoralL4/waitTimer", waitTimer.get());
     switch (this.step) {
       case 0:
-        if (waitTimer.get() > 0.5) {
+        if (waitTimer.get() > 0.55) {
           this.step += 1;
         }
         break;
