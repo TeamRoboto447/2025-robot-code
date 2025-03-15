@@ -153,9 +153,9 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void moveWristMotorRaw(double speed) {
-    if (speed > 0 && this.absoluteWristEncoder.getPosition() >= this.maxAbsoluteRotationCount)
+    if (speed > 0 && this.getAbsoluteWristPosition() >= this.maxAbsoluteRotationCount)
       speed = 0;
-    if (speed < 0 && this.absoluteWristEncoder.getPosition() <= this.minAbsoluteRotationCount)
+    if (speed < 0 && this.getAbsoluteWristPosition() <= this.minAbsoluteRotationCount)
       speed = 0;
     wristMotor.set(speed);
   }
@@ -199,7 +199,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   public double getAbsoluteWristPosition() {
     double pos = absoluteWristEncoder.getPosition();
-    if (pos > 0.9)
+    if (pos > 0.8)
       pos = 0 - (1 - pos);
     return pos;
   }
