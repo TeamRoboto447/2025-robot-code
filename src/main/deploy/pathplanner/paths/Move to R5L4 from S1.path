@@ -3,32 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.84,
-        "y": 4.0
+        "x": 7.648155737704917,
+        "y": 6.146823770491803
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.488969267453197,
-        "y": 4.875117779425799
+        "x": 6.107626815907218,
+        "y": 6.169070372687939
       },
       "isLocked": false,
-      "linkedName": "Middle Netside Reef"
+      "linkedName": "ST Point #1"
     },
     {
       "anchor": {
-        "x": 7.06,
-        "y": 5.019979508196721
+        "x": 3.73,
+        "y": 5.61
       },
       "prevControl": {
-        "x": 6.066268348137378,
-        "y": 4.361877763032667
+        "x": 3.8862737992064433,
+        "y": 6.503807276528382
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Net Right"
+      "linkedName": "R5L4"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -105.26266330312386
+    },
+    {
+      "waypointRelativePos": 0.9680000000000013,
+      "rotationDegrees": -62.127375847162064
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 17.102728969052443
+    "rotation": -59.03624346792651
   },
   "reversed": false,
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -150.0
   },
   "useDefaultConstraints": true
 }

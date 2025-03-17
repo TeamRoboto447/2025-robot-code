@@ -484,6 +484,7 @@ public class RobotContainer {
 
     // Elevator Commands
     NamedCommands.registerCommand("MoveToFloor", this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR));
+    NamedCommands.registerCommand("MoveToLoading", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_LOADING));
     NamedCommands.registerCommand("MoveToL2", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L2));
     NamedCommands.registerCommand("MoveToL3", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L3));
     NamedCommands.registerCommand("MoveToL4", this.elevatorSubsystem.moveElevatorToLevel(Level.CORAL_L4));
@@ -495,9 +496,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunAlgaeOuttake", this.algaeManipulatorSubsystem.run(() -> {
       algaeManipulatorSubsystem.outtakeAlgae(0.5);
     }));
-    NamedCommands.registerCommand("RunCoralIntake", this.algaeManipulatorSubsystem.run(() -> {
-      algaeManipulatorSubsystem.intakeCoral();
-    }));
+    NamedCommands.registerCommand("RunCoralIntake", new ManualCoralPickup(algaeManipulatorSubsystem, elevatorSubsystem));
     NamedCommands.registerCommand("RunCoralOuttake", this.algaeManipulatorSubsystem.run(() -> {
       algaeManipulatorSubsystem.outtakeCoral();
     }));

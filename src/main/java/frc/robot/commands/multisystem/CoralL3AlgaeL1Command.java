@@ -74,7 +74,7 @@ public class CoralL3AlgaeL1Command extends Command {
         }
         break;
       case 4:
-        if (this.algaeManipulatorSubsystem.atTarget() && this.waitTimer.get() > 2)
+        if (this.algaeManipulatorSubsystem.atTarget() && this.waitTimer.get() > 0.75)
           this.step += 1;
         break;
     }

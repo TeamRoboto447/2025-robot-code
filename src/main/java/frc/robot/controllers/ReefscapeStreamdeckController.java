@@ -132,9 +132,9 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
 
     public double getXShiftSpeed() {
         if (this.shiftLeft.getAsBoolean())
-            return 0.25;
+            return 0.2;
         if (this.shiftRight.getAsBoolean())
-            return -0.25;
+            return -0.2;
         return 0;
     }
 

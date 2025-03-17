@@ -40,7 +40,7 @@ public class ManualCoralL2 extends Command {
 
     // Shifting setup
     this.shiftBackCommand = this.swerveSubsystem
-        .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.25, () -> 0) // -0.3
+        .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.3, () -> 0) // -0.3
             .withControllerRotationAxis(() -> 0)
             .deadband(0)
             .scaleTranslation(0.8));

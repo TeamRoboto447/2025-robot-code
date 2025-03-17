@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.13,
-        "y": 4.01
+        "x": 6.2700000000000005,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.878904402125501,
-        "y": 4.057362863821328
+        "x": 6.018904402125502,
+        "y": 4.047362863821328
       },
       "isLocked": false,
       "linkedName": "Middle Netside Reef Backed Up"
     },
     {
       "anchor": {
-        "x": 5.81,
-        "y": 4.06
+        "x": 5.84,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 6.050649235698162,
-        "y": 3.9922656264671303
+        "x": 6.0806492356981625,
+        "y": 3.9322656264671307
       },
       "nextControl": null,
       "isLocked": false,

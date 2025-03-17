@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.812090163934426,
-        "y": 5.1698258196721305
+        "x": 3.84,
+        "y": 5.18
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.007090163934425,
-        "y": 6.174075819672131
+        "x": 4.034999999999998,
+        "y": 6.1842500000000005
       },
       "isLocked": false,
       "linkedName": "Left Driverside Reef"
