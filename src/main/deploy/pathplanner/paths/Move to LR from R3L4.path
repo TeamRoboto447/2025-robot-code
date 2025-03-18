@@ -1,0 +1,59 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5483606557377048,
+        "y": 2.616444672131148
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.798530130528698,
+        "y": 2.2679493664859196
+      },
+      "isLocked": false,
+      "linkedName": "R3L4"
+    },
+    {
+      "anchor": {
+        "x": 1.51125,
+        "y": 0.8172499999999991
+      },
+      "prevControl": {
+        "x": 1.7356259551724216,
+        "y": 1.2911526409504588
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Right Loading Station"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5534545454545395,
+      "rotationDegrees": -141.19
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -126.98290692634467
+  },
+  "reversed": false,
+  "folder": "Live",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 59.03624346792647
+  },
+  "useDefaultConstraints": true
+}

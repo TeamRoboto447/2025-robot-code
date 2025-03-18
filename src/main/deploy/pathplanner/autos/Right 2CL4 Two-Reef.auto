@@ -1,0 +1,81 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R2L4 from S3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL4Auto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToLoading"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Move to LR from R2L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunCoralIntake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunCoralIntake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to R3L4Left from LR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralL4Auto"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Live",
+  "choreoAuto": false
+}
