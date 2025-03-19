@@ -3,32 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7861680327839005,
-        "y": 7.411526639351738
+        "x": 1.51125,
+        "y": 0.8172499999999991
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.807060138890091,
-        "y": 6.02457681845021
+        "x": 2.171764707365995,
+        "y": 1.604276881031224
       },
       "isLocked": false,
-      "linkedName": "Left Loading Station"
+      "linkedName": "Right Loading Station"
     },
     {
       "anchor": {
-        "x": 4.0638319672131145,
-        "y": 5.33765368852459
+        "x": 3.3205942622950824,
+        "y": 2.71234631147541
       },
       "prevControl": {
-        "x": 3.799537777097694,
-        "y": 6.08220018043949
+        "x": 2.338355191433758,
+        "y": 1.5439722934078897
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Driverside Reef 2nd Coral"
+      "linkedName": "R3L4Left"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4690909090909067,
+      "rotationDegrees": 105.60611807576451
+    },
+    {
+      "waypointRelativePos": 0.9403636363636387,
+      "rotationDegrees": 65.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +51,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.01836063115063
+    "rotation": 56.583843519898046
   },
   "reversed": false,
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 126.25383773744483
+    "rotation": -126.98290692634467
   },
   "useDefaultConstraints": true
 }

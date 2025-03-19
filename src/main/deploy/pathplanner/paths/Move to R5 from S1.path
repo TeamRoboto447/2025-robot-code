@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.231,
-        "y": 6.0
+        "x": 7.648155737704917,
+        "y": 6.146823770491803
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4174999999999995,
-        "y": 6.0
+        "x": 5.834655737704916,
+        "y": 6.146823770491803
       },
       "isLocked": false,
       "linkedName": "ST Point #1"
     },
     {
       "anchor": {
-        "x": 3.812090163934426,
-        "y": 5.1698258196721305
+        "x": 3.84,
+        "y": 5.18
       },
       "prevControl": {
-        "x": 3.8218401639344264,
-        "y": 6.4860758196721315
+        "x": 3.8497500000000002,
+        "y": 6.496250000000001
       },
       "nextControl": null,
       "isLocked": false,
@@ -53,7 +53,7 @@
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -150.0
   },
   "useDefaultConstraints": true
 }

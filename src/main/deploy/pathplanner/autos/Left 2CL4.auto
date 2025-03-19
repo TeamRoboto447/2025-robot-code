@@ -7,19 +7,38 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to R6 from S1"
+            "pathName": "Move to R5L4 from S1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreOnL3"
+            "name": "CoralL4Auto"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Move to LL from R6"
+            "name": "MoveToLoading"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Move to LL from R5L4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunCoralIntake"
+                }
+              }
+            ]
           }
         },
         {
@@ -35,7 +54,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 0.5
                 }
               }
             ]
@@ -44,44 +63,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to R5 from LL"
+            "pathName": "Move to R5L4Left from LL"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreOnL3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Move to LL from R5"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunCoralIntake"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              }
-            ]
+            "name": "CoralL4Auto"
           }
         }
       ]
     }
   },
-  "resetOdom": false,
+  "resetOdom": true,
   "folder": "Live",
   "choreoAuto": false
 }

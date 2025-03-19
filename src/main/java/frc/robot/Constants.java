@@ -111,7 +111,7 @@ public final class Constants {
 
     public static final Distance FLOOR_LEVEL = Inches.of(0);
     public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(3);
-    public static final Distance CORAL_LOADING_LEVEL = Inches.of(0);
+    public static final Distance CORAL_LOADING_LEVEL = Inches.of(3);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L3_LEVEL = Inches.of(10);
@@ -119,7 +119,7 @@ public final class Constants {
     public static final Distance ALGAE_L1_LEVEL = Inches.of(17);
     public static final Distance ALGAE_L2_LEVEL = Inches.of(27);
 
-    public static final Distance CORAL_L4_LEVEL = Inches.of(38);
+    public static final Distance CORAL_L4_LEVEL = Inches.of(37);
     public static final Distance NET_LEVEL = Inches.of(54);
   }
 
