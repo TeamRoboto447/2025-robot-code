@@ -46,19 +46,24 @@ public class ManualCoralL3 extends Command {
 
     switch (this.step) {
       case 0:
-        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(60));
+        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(55));
         this.step += 1;
         break;
       case 1:
         if (this.algaeManipulatorSubsystem.atTarget()) {
-          this.algaeManipulatorSubsystem.outtakeCoral();
           this.step += 1;
           this.waitTimer.reset();
           this.waitTimer.start();
         }
         break;
       case 2:
-        if (this.waitTimer.get() > 0.25)
+        if(this.waitTimer.get() > 0.25) {
+          this.algaeManipulatorSubsystem.outtakeCoral();
+          this.step += 1;
+        }
+        break;
+      case 3:
+      if (this.waitTimer.get() > 0.5)
           this.step += 1;
     }
   }
@@ -74,6 +79,6 @@ public class ManualCoralL3 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return step > 2;
+    return step > 3;
   }
 }

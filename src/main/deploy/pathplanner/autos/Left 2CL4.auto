@@ -61,15 +61,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Move to R5L4Left from LL"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Move to R5L4Left from LL"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunCoralIntake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "CoralL4Auto"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveToFloor"
           }
         }
       ]

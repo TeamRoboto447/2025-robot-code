@@ -165,7 +165,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
   }
 
   public void outtakeCoral() {
-    this.moveCoralMotorRaw(1);
+    this.moveCoralMotorRaw(0.4);
   }
 
   public void holdCoral() {

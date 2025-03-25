@@ -50,12 +50,13 @@ public class AlgaeL2Command extends Command {
       case 0:
         this.elevatorSubsystem.setElevatorTargetHeight(Level.ALGAE_L2);
         if(this.elevatorSubsystem.atTarget()) {
-          this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(15));
+          this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(45));
           this.step += 1;
+          this.waitTimer.restart();
         }
         break;
       case 1:
-        if(this.algaeManipulatorSubsystem.atTarget()) {
+        if(this.algaeManipulatorSubsystem.atTarget() && this.waitTimer.get() > 0.25) {
           this.step += 1;
           this.waitTimer.reset();
           this.waitTimer.start();

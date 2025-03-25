@@ -27,30 +27,6 @@
           "data": {
             "name": "AlgaeL1Only"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Move to NR from R1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreInNet"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Move to R6 From NR"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CollectAlgaeFromReefL3"
-          }
         }
       ]
     }

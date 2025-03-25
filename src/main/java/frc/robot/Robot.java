@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
     m_visionThread = new Thread(
         () -> {
           int WIDTH = 320;
-          int HEIGHT = 200;
+          int HEIGHT = 240;
           // Get the UsbCamera from CameraServer
           UsbCamera camera = CameraServer.startAutomaticCapture();
           // Set the resolution
@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
               continue;
             }
             // Put a line on the image in the center
-            int middleLineX = 155;
+            int middleLineX = 165;
             Imgproc.line(mat, new Point(middleLineX, HEIGHT), new Point(middleLineX, 0), new Scalar(255, 255, 255), 1);
             Imgproc.line(mat, new Point(WIDTH, HEIGHT / 2), new Point(0, HEIGHT / 2), new Scalar(255, 255, 255), 1);
 
@@ -88,8 +88,8 @@ public class Robot extends TimedRobot {
             outputStream.putFrame(mat);
           }
         });
-    m_visionThread.setDaemon(true);
-    m_visionThread.start();
+    // m_visionThread.setDaemon(true);
+    // m_visionThread.start();
   }
 
   /**

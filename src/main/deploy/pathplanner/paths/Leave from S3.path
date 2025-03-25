@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.71,
-        "y": 5.49
+        "x": 7.22475,
+        "y": 1.47
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.000741511856667,
-        "y": 5.084470425709817
+        "x": 5.89875,
+        "y": 0.8659999999999992
       },
       "isLocked": false,
-      "linkedName": "R5L4"
+      "linkedName": "S3"
     },
     {
       "anchor": {
-        "x": 3.84,
-        "y": 5.18
+        "x": 4.1925,
+        "y": 0.5052499999999998
       },
       "prevControl": {
-        "x": 3.565972814087225,
-        "y": 5.567080985067811
+        "x": 5.5185,
+        "y": 0.8659999999999991
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Driverside Reef"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.03624346792651
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.03624346792651
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

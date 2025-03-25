@@ -16,32 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.54775,
-        "y": 1.9482499999999994
+        "x": 5.15,
+        "y": 2.88
       },
       "prevControl": {
-        "x": 5.895698001227686,
-        "y": 1.1285829795652784
-      },
-      "nextControl": {
-        "x": 5.21917383510108,
-        "y": 2.7222824563391548
-      },
-      "isLocked": false,
-      "linkedName": "Right Netside Reef"
-    },
-    {
-      "anchor": {
-        "x": 5.07,
-        "y": 2.7867499999999996
-      },
-      "prevControl": {
-        "x": 5.339784972925861,
-        "y": 2.396182765884433
+        "x": 5.419784972925861,
+        "y": 2.489432765884433
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Netside Reef"
     }
   ],
   "rotationTargets": [],

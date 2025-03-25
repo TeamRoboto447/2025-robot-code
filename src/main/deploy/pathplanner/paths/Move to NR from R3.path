@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.9,
-        "y": 2.795
+        "x": 3.82,
+        "y": 2.89
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.860320675614995,
-        "y": 2.296618103210968
+        "x": 4.7803206756149965,
+        "y": 2.391618103210968
       },
       "isLocked": false,
       "linkedName": "Right Driverside Reef"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 7.06,
-        "y": 5.019979508196721
+        "x": 7.15,
+        "y": 5.0
       },
       "prevControl": {
-        "x": 7.299311500066499,
-        "y": 4.8555295178350635
+        "x": 7.3893115000664995,
+        "y": 4.835550009638342
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 17.102728969052443
+    "rotation": 2.4287078692823023
   },
   "reversed": false,
   "folder": "Live",

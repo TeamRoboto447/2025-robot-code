@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.49,
-        "y": 7.48
+        "y": 7.28
       },
       "prevControl": null,
       "nextControl": {
-        "x": -0.0505289217976983,
-        "y": 7.502246602196136
+        "x": 3.0991652746061966,
+        "y": 6.03141932920057
       },
       "isLocked": false,
       "linkedName": "Left Loading Station"
@@ -20,8 +20,8 @@
         "y": 5.84
       },
       "prevControl": {
-        "x": 4.036273799206443,
-        "y": 6.733807276528381
+        "x": 3.2826032724343452,
+        "y": 6.526371552647382
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,12 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -105.26266330312386
-    },
-    {
-      "waypointRelativePos": 0.9680000000000013,
-      "rotationDegrees": -62.127375847162064
+      "waypointRelativePos": 0.2355057976809265,
+      "rotationDegrees": -50.0
     }
   ],
   "constraintZones": [],

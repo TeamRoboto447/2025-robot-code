@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.73,
-        "y": 5.61
+        "x": 3.71,
+        "y": 5.49
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6933174275008676,
-        "y": 6.445735344016986
+        "x": 2.6733174275008675,
+        "y": 6.3257353440169855
       },
       "isLocked": false,
       "linkedName": "R5L4"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.49,
-        "y": 7.48
+        "y": 7.28
       },
       "prevControl": {
         "x": 2.439821743399743,
-        "y": 6.281811165014938
+        "y": 6.081811165014938
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +30,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.3196850393700811,
-      "rotationDegrees": 141.18514834651936
+      "waypointRelativePos": 0.6497401039584134,
+      "rotationDegrees": -40.0
     }
   ],
   "constraintZones": [],

@@ -13,6 +13,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkMax elevatorMotor;
   private SparkMax auxillaryElevatorMotor;
   private RelativeEncoder elevatorEncoder;
+  private PIDController elevatorPID;
 
   private Level currentTargetLevel = Level.FLOOR;
 
@@ -37,6 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem(AlgaeManipulatorSubsystem amSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
+    this.elevatorPID = new PIDController(0.15, 0, 0.01);
     initializeMotors();
   }
 
@@ -44,20 +47,20 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if (!debugging) {
-      double currentTargetPosition = this.getPositionFromLevel(currentTargetLevel);
-      double currentPosition = elevatorEncoder.getPosition();
-      double error = currentTargetPosition - currentPosition;
-      double kP = 0.1; // Proportional gain, this value would need to be tuned
-      double motorOutput = kP * error;
+      this.elevatorPID.setSetpoint(this.getPositionFromLevel(currentTargetLevel));
+      double motorOutput = this.elevatorPID.calculate(elevatorEncoder.getPosition());
 
-      double maxSpeed = 1;
-      motorOutput = Math.max(-maxSpeed, Math.min(maxSpeed, motorOutput)); // Clamp the output between -1 and 1
-      SmartDashboard.putNumber("Elevator/Elevator Controller Output", motorOutput);
-      SmartDashboard.putString("Elevator/Current Target Level", this.currentTargetLevel.toString());
-      SmartDashboard.putNumber("Elevator/Target Position", this.getPositionFromLevel(currentTargetLevel));
-      SmartDashboard.putNumber("Elevator/Current Position", elevatorEncoder.getPosition());
-      SmartDashboard.putBoolean("Elevator/At Target", this.atTarget());
+      double maxPositiveSpeed = 0.75;
+      double maxNegativeSpeed = 0.3;
+      motorOutput = Math.max(-maxNegativeSpeed, Math.min(maxPositiveSpeed, motorOutput));
       moveMotorRaw(motorOutput);
+
+      
+      // SmartDashboard.putNumber("Elevator/Elevator Controller Output", motorOutput);
+      // SmartDashboard.putString("Elevator/Current Target Level", this.currentTargetLevel.toString());
+      // SmartDashboard.putNumber("Elevator/Target Position", this.getPositionFromLevel(currentTargetLevel));
+      // SmartDashboard.putNumber("Elevator/Current Position", elevatorEncoder.getPosition());
+      // SmartDashboard.putBoolean("Elevator/At Target", this.atTarget());
     }
   }
 
@@ -93,15 +96,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
-    if (!this.algaeManipulatorSubsystem.atTarget())
+    if (!this.algaeManipulatorSubsystem.atTarget() || (speed < 0 && this.elevatorEncoder.getPosition() <= 5))
       speed = 0;
-
-    if (speed > 0) {
-      elevatorMotor.set(speed);
-      return;
-    }
-
-    elevatorMotor.set(Math.max(-0.3, speed));
+    elevatorMotor.set(speed);
   }
 
   private double getPositionFromLevel(Level level) {
@@ -205,7 +202,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorMotor = new SparkMax(ElevatorSubsystemConstants.ELEVATOR_MOTOR_ID, MotorType.kBrushless);
     SparkMaxConfig elevatorMotorConfig = new SparkMaxConfig();
     elevatorMotorConfig
-        .inverted(true)
+        .inverted(false)
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(50);
     elevatorMotor.configure(elevatorMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -218,7 +215,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .inverted(true)
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(50)
-        .follow(elevatorMotor, true);
+        .follow(elevatorMotor, false);
     auxillaryElevatorMotor.configure(auxElevatorMotorConfig, ResetMode.kResetSafeParameters,
         PersistMode.kPersistParameters);
   }

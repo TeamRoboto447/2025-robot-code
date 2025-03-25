@@ -47,13 +47,13 @@ public class ManualAlgaeL1 extends Command {
     this.algaeManipulatorSubsystem.intakeAlgae(0.5);
     switch (this.step) {
       case 0:
-        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
+        this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(30));
         this.waitTimer.reset();
         this.waitTimer.start();
         this.step += 1;
         break;
       case 1:
-        if (this.algaeManipulatorSubsystem.atTarget() && this.waitTimer.get() > 0.75)
+        if (this.algaeManipulatorSubsystem.atTarget() && this.waitTimer.get() > 0.5)
           this.step += 1;
         break;
     }

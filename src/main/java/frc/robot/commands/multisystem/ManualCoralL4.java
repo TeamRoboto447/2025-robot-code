@@ -89,14 +89,18 @@ public class ManualCoralL4 extends Command {
         break;
       case 3:
         if (this.algaeManipulatorSubsystem.atTarget()) {
-          this.algaeManipulatorSubsystem.outtakeCoral();
-          this.waitTimer.reset();
-          this.waitTimer.start();
+          this.waitTimer.restart();
           this.step += 1;
         }
         break;
       case 4:
-        if (this.waitTimer.get() > 0.5)
+        if (this.waitTimer.get() > 0.25) {
+          this.algaeManipulatorSubsystem.outtakeCoral();
+          this.step += 1;
+        }
+        break;
+      case 5:
+        if (this.waitTimer.get() > 0.75)
           this.step += 1;
     }
   }
@@ -114,6 +118,6 @@ public class ManualCoralL4 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return this.step > 4;
+    return this.step > 5;
   }
 }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.54775,
-        "y": 1.9482499999999994
+        "x": 5.1499999999999995,
+        "y": 2.87
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.96364753325269,
-        "y": 1.1354877097062301
+        "x": 5.56589753325269,
+        "y": 2.057237709706231
       },
       "isLocked": false,
       "linkedName": "Right Netside Reef"
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 7.06,
-        "y": 5.019979508196721
+        "x": 7.15,
+        "y": 5.0
       },
       "prevControl": {
-        "x": 6.235394200828256,
-        "y": 4.888617125900829
+        "x": 6.325394200828256,
+        "y": 4.868637617704108
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,7 +58,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 17.102728969052443
+    "rotation": 2.4287078692823023
   },
   "reversed": false,
   "folder": "Live",
