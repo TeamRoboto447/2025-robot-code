@@ -96,7 +96,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
-    if (!this.algaeManipulatorSubsystem.atTarget() || (speed < 0 && this.elevatorEncoder.getPosition() <= 5))
+    if (!this.algaeManipulatorSubsystem.atTarget() || (speed < 0 && this.elevatorEncoder.getPosition() <= 10))
       speed = 0;
     elevatorMotor.set(speed);
   }
