@@ -1,5 +1,6 @@
 package frc.robot.controllers;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -136,56 +137,60 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         return this.targetReef;
     }
 
-    public Supplier<Pose2d> getTargetReefPosition(Alliance currentAlliance, boolean isLeft) {
-        AtomicReference<Pose2d> target = new AtomicReference<>();
+    public Optional<Pose2d> getTargetReefPosition(Alliance currentAlliance, boolean isLeft) {
+        Pose2d target = null;
         if (isLeft) { // left side
             switch (getTargetReef()) {
                 case ReefOne:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_ONE
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_ONE
                             : FieldConstants.BlueSide.LeftReef.REEF_ONE);
                 case ReefTwo:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_TWO
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_TWO
                             : FieldConstants.BlueSide.LeftReef.REEF_TWO);
                 case ReefThree:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_THREE
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_THREE
                             : FieldConstants.BlueSide.LeftReef.REEF_THREE);
                 case ReefFour:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_FOUR
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_FOUR
                             : FieldConstants.BlueSide.LeftReef.REEF_FOUR);
                 case ReefFive:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_FIVE
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_FIVE
                             : FieldConstants.BlueSide.LeftReef.REEF_FIVE);
                 case ReefSix:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_SIX
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_SIX
                             : FieldConstants.BlueSide.LeftReef.REEF_SIX);
-                default:
-                    target.set(null);
+                case NONE:
+                    target = null;
             }
         } else {
             switch (getTargetReef()) {
                 case ReefOne:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_ONE
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_ONE
                             : FieldConstants.BlueSide.RightReef.REEF_ONE);
                 case ReefTwo:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_TWO
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_TWO
                             : FieldConstants.BlueSide.RightReef.REEF_TWO);
                 case ReefThree:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_THREE
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_THREE
                             : FieldConstants.BlueSide.RightReef.REEF_THREE);
                 case ReefFour:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_FOUR
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_FOUR
                             : FieldConstants.BlueSide.RightReef.REEF_FOUR);
                 case ReefFive:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_FIVE
+                    target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_FIVE
                             : FieldConstants.BlueSide.RightReef.REEF_FIVE);
                 case ReefSix:
-                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_SIX
-                            : FieldConstants.BlueSide.RightReef.REEF_SIX);
-                default:
-                    target.set(null);
+                    target = currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_SIX
+                            : FieldConstants.BlueSide.RightReef.REEF_SIX;
+                case NONE:
+                    target = null;
             }
         }
-        return () -> target.get();
+
+        if (target != null)
+            return Optional.of(target);
+        else
+            return Optional.empty();
     }
 
     public double getXShiftSpeed() {

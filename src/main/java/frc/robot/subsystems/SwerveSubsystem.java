@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.QuestNav;
 import frc.robot.controllers.ReefscapeStreamdeckController;
+import frc.robot.commands.drivebase.DynamicDriveToPose;
 
 import java.io.File;
 import java.io.IOException;
@@ -234,27 +235,13 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Use PathPlanner Pathfinding to go to a point on the field.
+   * Use PathPlanner Path finding to go to a point on the field.
    *
-   * @return Pathfinding command
+   * @return PathFinding command
    */
   public Command driveToScoringPose(Alliance alliance) {
-    // Create the constraints to use while pathfinding
-    PathConstraints constraints = new PathConstraints(
-        swerveDrive.getMaximumChassisVelocity(), 4.0,
-        swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
-    return Commands.runOnce(() -> {
-      Pose2d pose = this.reefscapeStreamdeckController.getTargetReefPosition(alliance,
-          this.reefscapeStreamdeckController.leftSide.getAsBoolean()).get();
-      System.out.println(pose.toString());
-    });
-    // return AutoBuilder.pathfindToPose(
-    // pose,
-    // constraints,
-    // edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in
-    // meters/sec
-    // );
+    return new DynamicDriveToPose(this, this.reefscapeStreamdeckController, alliance);
   }
 
   /**
@@ -728,4 +715,4 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
   }
-}
+}   
