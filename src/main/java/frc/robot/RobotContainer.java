@@ -5,9 +5,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static frc.robot.utils.ControllerRumbleHelper.rumbleLeft;
 import static frc.robot.utils.ControllerRumbleHelper.rumbleBoth;
-import static frc.robot.utils.ControllerRumbleHelper.rumbleRight;
 
 import java.io.File;
 import java.util.Optional;
@@ -17,8 +15,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -26,7 +22,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -83,6 +78,7 @@ public class RobotContainer {
   public AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private AlgaeManipulatorCommand algaeManipulatorCommand;
 
+  @SuppressWarnings("unused")
   private PoseEstimatorSubsystem poseEstimatorSubsystem;
 
   private ManualFloorPickup manualFloorPickupCommand;
@@ -428,11 +424,9 @@ public class RobotContainer {
         break;
 
     }
-    // this.driverController.a()
-    // .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(cagePosition),
-    // driverController));
-    this.driverController.a().onTrue(Commands.runOnce(() -> swerveSubsystem.resetOdometry(new Pose2d(
-        new Translation2d(0.5, 0.5), Rotation2d.kCW_90deg))));
+    this.driverController.a()
+    .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(cagePosition),
+    driverController));
   }
 
   private void initializeNamedCommands() {
@@ -513,12 +507,5 @@ public class RobotContainer {
     NamedCommands.registerCommand("TiltBack",
         algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)));
 
-  }
-
-  private void initializeControllerRumbles() {
-    this.driverController.x().whileTrue(rumbleLeft(driverController, 1));
-    this.driverController.b().whileTrue(rumbleRight(driverController, 1));
-    this.driverController.y().whileTrue(rumbleBoth(driverController, 1));
-    this.driverController.a().onTrue(rumbleBoth(driverController, 1, 2));
   }
 }

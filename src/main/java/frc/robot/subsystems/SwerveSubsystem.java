@@ -113,6 +113,7 @@ public class SwerveSubsystem extends SubsystemBase {
             Rotation2d.fromDegrees(0)));
   }
 
+  @SuppressWarnings("unused")
   @Override
   public void periodic() {
     Optional<Pose3d> questPose = questNav.getRobotPose();

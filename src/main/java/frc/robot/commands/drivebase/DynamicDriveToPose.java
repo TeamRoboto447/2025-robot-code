@@ -9,9 +9,9 @@ import java.util.Optional;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.controllers.ReefscapeStreamdeckController;
+import frc.robot.controllers.StreamdeckController.ControlScheme;
 
 public class DynamicDriveToPose extends Command {
   private final SwerveSubsystem swerve;
@@ -29,12 +29,11 @@ public class DynamicDriveToPose extends Command {
   @Override
   public void initialize() {
     // Get fresh pose data every initialization
-
     Optional<Pose2d> poseOptional = controller.getTargetReefPosition(
         alliance,
         controller.leftSide.getAsBoolean());
 
-    if (poseOptional.isPresent()) {
+    if (poseOptional.isPresent() && this.controller.getCurrentScheme() == ControlScheme.FULLYAUTO) {
       // Create new command instance with latest pose
       driveCommand = swerve.driveToPose(poseOptional.get())
         .finallyDo(interrupted -> {

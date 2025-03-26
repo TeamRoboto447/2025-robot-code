@@ -34,11 +34,14 @@ public class QuestNav implements PoseProvider {
   private IntegerEntry miso;
   private IntegerPublisher mosi;
 
+  @SuppressWarnings("unused")
   private IntegerSubscriber frameCount;
   private DoubleSubscriber timestamp;
   private FloatArraySubscriber position;
+  @SuppressWarnings("unused")
   private FloatArraySubscriber quaternion;
   private FloatArraySubscriber eulerAngles;
+  @SuppressWarnings("unused")
   private DoubleSubscriber battery;
 
   private ChassisSpeeds velocity;
