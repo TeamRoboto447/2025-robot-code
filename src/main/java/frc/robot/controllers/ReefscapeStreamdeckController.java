@@ -13,11 +13,15 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
     public final Trigger shiftLeft, shiftForward, shiftRight, shiftBack, shifting;
     public final Trigger algaeIntake, algaeOuttake, coralIntake, coralOuttake;
     public final Trigger selectLeft, selectRight;
+    public final Trigger rightSide, leftSide;
     public final Trigger autoProcessor, autoLevelOne, autoLevelTwo, autoLevelThree, autoLevelFour, autoNet;
     public final Trigger reset;
     public final Trigger floorCollect, coralLoading;
     public final Trigger semiCoralTrough, semiCoralL2, semiCoralL3, semiCoralL4;
     public final Trigger algaeL1, semiAlgaeL1WithCoral, algaeL2, semiAlgaeNet, semiAlgaeProcessor;
+
+    // New testing code
+    public final Trigger coralScoringButtons;
 
     public enum TargetReef {
         ReefOne,
@@ -29,7 +33,6 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         NONE
     }
 
-    
     private TargetReef targetReef = TargetReef.NONE;
 
     public ReefscapeStreamdeckController() {
@@ -49,6 +52,9 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
 
         selectLeft = new Trigger(this.getButton("Select Left"));
         selectRight = new Trigger(this.getButton("Select Right"));
+
+        rightSide = new Trigger(this.getButton("Right Side"));
+        leftSide = new Trigger(this.getButton("Left Side"));
 
         autoProcessor = new Trigger(this.getButton("Processor"));
         autoLevelOne = new Trigger(this.getButton("Level 1"));
@@ -77,13 +83,13 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
             return reefOne.getAsBoolean() || reefTwo.getAsBoolean() || reefThree.getAsBoolean()
                     || reefFour.getAsBoolean() || reefFive.getAsBoolean() || reefSix.getAsBoolean();
         });
-        reefOne.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefOne));
-        reefTwo.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefTwo));
-        reefThree.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefThree));
-        reefFour.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefFour));
-        reefFive.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefFive));
-        reefSix.onTrue(Commands.run(() -> this.targetReef = TargetReef.ReefSix));
-        hasReefSelected.onFalse(Commands.run(() -> this.targetReef = TargetReef.NONE));
+        reefOne.onTrue(Commands.runOnce(() -> this.targetReef = TargetReef.ReefOne));
+        reefTwo.onTrue(Commands.runOnce(() -> this.targetReef = TargetReef.ReefTwo));
+        reefThree.onTrue(Commands.runOnce(() -> this.targetReef = TargetReef.ReefThree));
+        reefFour.onTrue(Commands.runOnce(() -> this.targetReef = TargetReef.ReefFour));
+        reefFive.onTrue(Commands.runOnce(() -> this.targetReef = TargetReef.ReefFive));
+        reefSix.onTrue(Commands.runOnce(() -> this.targetReef = TargetReef.ReefSix));
+        hasReefSelected.onFalse(Commands.runOnce(() -> this.targetReef = TargetReef.NONE));
 
         floorCollect = new Trigger(this.getButton("Floor Collect"));
         coralLoading = new Trigger(this.getButton("Coral Loading"));
@@ -98,6 +104,29 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         algaeL2 = new Trigger(this.getButton("Algae L2"));
         semiAlgaeNet = new Trigger(this.getButton("Algae Net"));
         semiAlgaeProcessor = new Trigger(this.getButton("Algae Processor"));
+
+        // New testing code
+        coralScoringButtons = new Trigger(() -> {
+            return autoLevelOne.getAsBoolean() || autoLevelTwo.getAsBoolean() || autoLevelThree.getAsBoolean()
+                    || autoLevelFour.getAsBoolean();
+        });
+        coralScoringButtons.onTrue(Commands.runOnce(() -> {
+            if (hasReefSelected.getAsBoolean()) {
+                String side = "";
+                if (this.getButton("Left Side").getAsBoolean())
+                    side = "Left side";
+                else
+                    side = "Right side";
+
+                String level = "";
+                for (int i = 1; i <= 4; i++) {
+                    if (this.getButton(String.format("Level %d", i)).getAsBoolean())
+                        level = String.format("Level %d", i);
+                }
+
+                System.out.println(this.targetReef.name() + " / " + side + " / " + level);
+            }
+        }));
     }
 
     public TargetReef getTargetReef() {
