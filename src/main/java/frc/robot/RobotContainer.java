@@ -173,7 +173,7 @@ public class RobotContainer {
     Trigger isClockDriveTrigger = new Trigger(() -> isClockDrive.getBoolean(true));
 
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-        "swerve"));
+        "swerve"), this.operatorStreamdeck);
     Trigger driverShifting = new Trigger(
         () -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean());
     SwerveInputStream arrowKeyInputStream = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
@@ -246,6 +246,23 @@ public class RobotContainer {
     Pose2d targetProc = alliance == Alliance.Red ? FieldConstants.RedSide.PROC : FieldConstants.BlueSide.PROC;
     this.operatorStreamdeck.autoProcessor
         .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetProc), driverController));
+
+    this.operatorStreamdeck.autoLevelOne
+        .onTrue(CommandOverrides.addDriverOverride(
+            swerveSubsystem.driveToScoringPose(alliance),
+            driverController));
+    this.operatorStreamdeck.autoLevelTwo
+        .onTrue(CommandOverrides.addDriverOverride(
+            swerveSubsystem.driveToScoringPose(alliance),
+            driverController));
+    this.operatorStreamdeck.autoLevelThree
+        .onTrue(CommandOverrides.addDriverOverride(
+            swerveSubsystem.driveToScoringPose(alliance),
+            driverController));
+    this.operatorStreamdeck.autoLevelFour
+        .onTrue(CommandOverrides.addDriverOverride(
+            swerveSubsystem.driveToScoringPose(alliance),
+            driverController));
 
     // this.operatorStreamdeck.autoLevelOne.onTrue(CommandOverrides.addDriverOverride(
     // swerveSubsystem.driveToPose(this.operatorStreamdeck.getTargetReefPosition(alliance)),
@@ -496,7 +513,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunAlgaeOuttake", this.algaeManipulatorSubsystem.run(() -> {
       algaeManipulatorSubsystem.outtakeAlgae(0.5);
     }));
-    NamedCommands.registerCommand("RunCoralIntake", new ManualCoralPickup(algaeManipulatorSubsystem, elevatorSubsystem));
+    NamedCommands.registerCommand("RunCoralIntake",
+        new ManualCoralPickup(algaeManipulatorSubsystem, elevatorSubsystem));
     NamedCommands.registerCommand("RunCoralOuttake", this.algaeManipulatorSubsystem.run(() -> {
       algaeManipulatorSubsystem.outtakeCoral();
     }));

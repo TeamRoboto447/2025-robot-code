@@ -1,5 +1,8 @@
 package frc.robot.controllers;
 
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -110,53 +113,79 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
             return autoLevelOne.getAsBoolean() || autoLevelTwo.getAsBoolean() || autoLevelThree.getAsBoolean()
                     || autoLevelFour.getAsBoolean();
         });
-        coralScoringButtons.onTrue(Commands.runOnce(() -> {
-            if (hasReefSelected.getAsBoolean()) {
-                String side = "";
-                if (this.getButton("Left Side").getAsBoolean())
-                    side = "Left side";
-                else
-                    side = "Right side";
+        // coralScoringButtons.onTrue(Commands.runOnce(() -> {
+        // if (hasReefSelected.getAsBoolean()) {
+        // String side = "";
+        // if (this.getButton("Left Side").getAsBoolean())
+        // side = "Left side";
+        // else
+        // side = "Right side";
 
-                String level = "";
-                for (int i = 1; i <= 4; i++) {
-                    if (this.getButton(String.format("Level %d", i)).getAsBoolean())
-                        level = String.format("Level %d", i);
-                }
+        // String level = "";
+        // for (int i = 1; i <= 4; i++) {
+        // if (this.getButton(String.format("Level %d", i)).getAsBoolean())
+        // level = String.format("Level %d", i);
+        // }
 
-                System.out.println(this.targetReef.name() + " / " + side + " / " + level);
-            }
-        }));
+        // System.out.println(this.targetReef.name() + " / " + side + " / " + level);
+        // }
+        // }));
     }
 
     public TargetReef getTargetReef() {
         return this.targetReef;
     }
 
-    public Pose2d getTargetReefPosition(Alliance currentAlliance) {
-        switch (this.targetReef) {
-            case ReefOne:
-                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_ONE
-                        : FieldConstants.BlueSide.REEF_ONE;
-            case ReefTwo:
-                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_TWO
-                        : FieldConstants.BlueSide.REEF_TWO;
-            case ReefThree:
-                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_THREE
-                        : FieldConstants.BlueSide.REEF_THREE;
-            case ReefFour:
-                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_FOUR
-                        : FieldConstants.BlueSide.REEF_FOUR;
-            case ReefFive:
-                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_FIVE
-                        : FieldConstants.BlueSide.REEF_FIVE;
-            case ReefSix:
-                return currentAlliance == Alliance.Red ? FieldConstants.RedSide.REEF_SIX
-                        : FieldConstants.BlueSide.REEF_SIX;
-            default:
-                return null;
-
+    public Supplier<Pose2d> getTargetReefPosition(Alliance currentAlliance, boolean isLeft) {
+        AtomicReference<Pose2d> target = new AtomicReference<>();
+        if (isLeft) { // left side
+            switch (getTargetReef()) {
+                case ReefOne:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_ONE
+                            : FieldConstants.BlueSide.LeftReef.REEF_ONE);
+                case ReefTwo:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_TWO
+                            : FieldConstants.BlueSide.LeftReef.REEF_TWO);
+                case ReefThree:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_THREE
+                            : FieldConstants.BlueSide.LeftReef.REEF_THREE);
+                case ReefFour:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_FOUR
+                            : FieldConstants.BlueSide.LeftReef.REEF_FOUR);
+                case ReefFive:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_FIVE
+                            : FieldConstants.BlueSide.LeftReef.REEF_FIVE);
+                case ReefSix:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_SIX
+                            : FieldConstants.BlueSide.LeftReef.REEF_SIX);
+                default:
+                    target.set(null);
+            }
+        } else {
+            switch (getTargetReef()) {
+                case ReefOne:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_ONE
+                            : FieldConstants.BlueSide.RightReef.REEF_ONE);
+                case ReefTwo:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_TWO
+                            : FieldConstants.BlueSide.RightReef.REEF_TWO);
+                case ReefThree:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_THREE
+                            : FieldConstants.BlueSide.RightReef.REEF_THREE);
+                case ReefFour:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_FOUR
+                            : FieldConstants.BlueSide.RightReef.REEF_FOUR);
+                case ReefFive:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_FIVE
+                            : FieldConstants.BlueSide.RightReef.REEF_FIVE);
+                case ReefSix:
+                    target.set(currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_SIX
+                            : FieldConstants.BlueSide.RightReef.REEF_SIX);
+                default:
+                    target.set(null);
+            }
         }
+        return () -> target.get();
     }
 
     public double getXShiftSpeed() {
