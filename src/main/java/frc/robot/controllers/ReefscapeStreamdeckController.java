@@ -144,21 +144,27 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
                 case ReefOne:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_ONE
                             : FieldConstants.BlueSide.LeftReef.REEF_ONE);
+                            break;
                 case ReefTwo:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_TWO
                             : FieldConstants.BlueSide.LeftReef.REEF_TWO);
+                            break;
                 case ReefThree:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_THREE
                             : FieldConstants.BlueSide.LeftReef.REEF_THREE);
+                            break;
                 case ReefFour:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_FOUR
                             : FieldConstants.BlueSide.LeftReef.REEF_FOUR);
+                            break;
                 case ReefFive:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_FIVE
                             : FieldConstants.BlueSide.LeftReef.REEF_FIVE);
+                            break;
                 case ReefSix:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.LeftReef.REEF_SIX
                             : FieldConstants.BlueSide.LeftReef.REEF_SIX);
+                            break;
                 case NONE:
                     target = null;
             }
@@ -167,21 +173,27 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
                 case ReefOne:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_ONE
                             : FieldConstants.BlueSide.RightReef.REEF_ONE);
+                            break;
                 case ReefTwo:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_TWO
                             : FieldConstants.BlueSide.RightReef.REEF_TWO);
+                            break;
                 case ReefThree:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_THREE
                             : FieldConstants.BlueSide.RightReef.REEF_THREE);
+                            break;
                 case ReefFour:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_FOUR
                             : FieldConstants.BlueSide.RightReef.REEF_FOUR);
+                            break;
                 case ReefFive:
                     target = (currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_FIVE
                             : FieldConstants.BlueSide.RightReef.REEF_FIVE);
+                            break;
                 case ReefSix:
                     target = currentAlliance == Alliance.Red ? FieldConstants.RedSide.RightReef.REEF_SIX
                             : FieldConstants.BlueSide.RightReef.REEF_SIX;
+                            break;
                 case NONE:
                     target = null;
             }

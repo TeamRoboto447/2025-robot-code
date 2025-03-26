@@ -36,13 +36,12 @@ public class DynamicDriveToPose extends Command {
 
     if (poseOptional.isPresent()) {
       // Create new command instance with latest pose
-      // driveCommand = swerve.driveToPose(poseOptional.get())
-      // .finallyDo(interrupted -> {
-      // if (!interrupted) {
-      // System.out.println("Reached target: " + poseOptional.get());
-      // }
-      // });
-      driveCommand = Commands.runOnce(() -> System.out.println(poseOptional.get().toString()));
+      driveCommand = swerve.driveToPose(poseOptional.get())
+        .finallyDo(interrupted -> {
+          if (!interrupted) {
+            // System.out.println("Reached target: " + poseOptional.get());
+          }
+        });
 
       driveCommand.schedule();
     } else {
