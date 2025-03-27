@@ -53,29 +53,7 @@ public class StreamdeckController {
         fullyauto.onTrue(Commands.run(() -> this.currentScheme = ControlScheme.FULLYAUTO));
         legacy.onTrue(Commands.run(() -> this.currentScheme = ControlScheme.LEGACY));
 
-        switch(defaultControlScheme) {
-            case FULLYAUTO:
-                controlSchemeSubtable.getEntry("fully-auto").setBoolean(true);
-                break;
-            case LEGACY:
-            controlSchemeSubtable.getEntry("semi-auto").setBoolean(true);
-                break;
-            case MANUAL:
-            controlSchemeSubtable.getEntry("manual").setBoolean(true);
-                break;
-            case SEMIAUTO:
-                break;
-            default:
-                break;
-            
-        }
-        
-        if(controlSchemeSubtable.getEntry("manual").getBoolean(false))
-            this.currentScheme = ControlScheme.MANUAL;
-        if(controlSchemeSubtable.getEntry("semi-auto").getBoolean(false))
-            this.currentScheme = ControlScheme.SEMIAUTO;
-        if(controlSchemeSubtable.getEntry("fully-auto").getBoolean(false))
-            this.currentScheme = ControlScheme.FULLYAUTO;
+        this.setControlScheme(defaultControlScheme);
     }
 
     private void connectionListener(NetworkTableEvent event) {
@@ -107,5 +85,22 @@ public class StreamdeckController {
 
     public ControlScheme getCurrentScheme() {
         return this.currentScheme;
+    }
+
+    public void setControlScheme(ControlScheme targetControlScheme) {
+        switch (targetControlScheme) {
+            case FULLYAUTO:
+                controlSchemeSubtable.getEntry("fully-auto").setBoolean(true);
+                break;
+            case MANUAL:
+                controlSchemeSubtable.getEntry("manual").setBoolean(true);
+                break;
+            case SEMIAUTO:
+                controlSchemeSubtable.getEntry("semi-auto").setBoolean(true);
+                break;
+            default:
+                break;
+        }
+        this.currentScheme = targetControlScheme;
     }
 }
