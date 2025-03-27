@@ -33,12 +33,14 @@ public class DynamicDriveToPose extends Command {
         alliance,
         controller.leftSide.getAsBoolean());
 
+    System.out.println(this.controller.getCurrentScheme());
     if (poseOptional.isPresent() && this.controller.getCurrentScheme() == ControlScheme.FULLYAUTO) {
       // Create new command instance with latest pose
+      System.out.println(poseOptional);
       driveCommand = swerve.driveToPose(poseOptional.get())
         .finallyDo(interrupted -> {
           if (!interrupted) {
-            // System.out.println("Reached target: " + poseOptional.get());
+            System.out.println("Reached target: " + poseOptional.get());
           }
         });
 

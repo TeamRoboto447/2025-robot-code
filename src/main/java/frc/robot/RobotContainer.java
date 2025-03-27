@@ -97,7 +97,7 @@ public class RobotContainer {
       ControllerConstants.DRIVER_CONTROLLER_PORT);
   private CommandXboxController operatorController = new CommandXboxController(
       ControllerConstants.OPERATOR_CONTROLLER_PORT);
-  private ReefscapeStreamdeckController operatorStreamdeck = new ReefscapeStreamdeckController();
+  private ReefscapeStreamdeckController operatorStreamdeck = new ReefscapeStreamdeckController(ControlScheme.FULLYAUTO);
 
   private final SendableChooser<Command> autoChooser;
 

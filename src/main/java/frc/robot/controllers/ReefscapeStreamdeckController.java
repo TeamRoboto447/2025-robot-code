@@ -22,9 +22,6 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
     public final Trigger semiCoralTrough, semiCoralL2, semiCoralL3, semiCoralL4;
     public final Trigger algaeL1, semiAlgaeL1WithCoral, algaeL2, semiAlgaeNet, semiAlgaeProcessor;
 
-    // New testing code
-    public final Trigger coralScoringButtons;
-
     public enum TargetReef {
         ReefOne,
         ReefTwo,
@@ -37,8 +34,8 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
 
     private TargetReef targetReef = TargetReef.NONE;
 
-    public ReefscapeStreamdeckController() {
-        super();
+    public ReefscapeStreamdeckController(ControlScheme defaultControlScheme) {
+        super(defaultControlScheme);
 
         shiftLeft = new Trigger(this.getButton("Shift Left"));
         shiftForward = new Trigger(this.getButton("Shift Forward"));
@@ -65,12 +62,12 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         autoLevelFour = new Trigger(this.getButton("Level 4"));
         autoNet = new Trigger(this.getButton("Net"));
 
-        reefOne = new Trigger(this.getButton("Reef One"));
-        reefTwo = new Trigger(this.getButton("Reef Two"));
-        reefThree = new Trigger(this.getButton("Reef Three"));
-        reefFour = new Trigger(this.getButton("Reef Four"));
-        reefFive = new Trigger(this.getButton("Reef Five"));
-        reefSix = new Trigger(this.getButton("Reef Six"));
+        reefOne = new Trigger(this.getButton("Back Middle"));
+        reefTwo = new Trigger(this.getButton("Back Right"));
+        reefThree = new Trigger(this.getButton("Front Right"));
+        reefFour = new Trigger(this.getButton("Front Middle"));
+        reefFive = new Trigger(this.getButton("Front Left"));
+        reefSix = new Trigger(this.getButton("Back Left"));
         reset = new Trigger(this.getButton("Reset"));
 
         manualFloor = new Trigger(this.getButton("Man Floor"));
@@ -106,29 +103,6 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
         algaeL2 = new Trigger(this.getButton("Algae L2"));
         semiAlgaeNet = new Trigger(this.getButton("Algae Net"));
         semiAlgaeProcessor = new Trigger(this.getButton("Algae Processor"));
-
-        // New testing code
-        coralScoringButtons = new Trigger(() -> {
-            return autoLevelOne.getAsBoolean() || autoLevelTwo.getAsBoolean() || autoLevelThree.getAsBoolean()
-                    || autoLevelFour.getAsBoolean();
-        });
-        // coralScoringButtons.onTrue(Commands.runOnce(() -> {
-        // if (hasReefSelected.getAsBoolean()) {
-        // String side = "";
-        // if (this.getButton("Left Side").getAsBoolean())
-        // side = "Left side";
-        // else
-        // side = "Right side";
-
-        // String level = "";
-        // for (int i = 1; i <= 4; i++) {
-        // if (this.getButton(String.format("Level %d", i)).getAsBoolean())
-        // level = String.format("Level %d", i);
-        // }
-
-        // System.out.println(this.targetReef.name() + " / " + side + " / " + level);
-        // }
-        // }));
     }
 
     public TargetReef getTargetReef() {

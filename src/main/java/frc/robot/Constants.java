@@ -163,7 +163,8 @@ public final class Constants {
       public static final Pose2d CORAL_STATION_RIGHT = new Pose2d(16.37, 7, Rotation2d.fromDegrees(54));
       public static final Pose2d CORAL_STATION_LEFT = new Pose2d(16.37, 1.05, Rotation2d.fromDegrees(-54));
       public static final Pose2d CAGE_ONE = new Pose2d(9.48, 0.811, Rotation2d.fromDegrees(0));
-      public static final Pose2d CAGE_TWO = new Pose2d(9.48, 1.902, Rotation2d.fromDegrees(0));
+      public static final Pose2d CAGE_TWO = new Pose2d(9.77, 6.374, Rotation2d.fromDegrees(0)); //TODO: RED CAGE IS NOT ON THE BLUE BARGE
+      // public static final Pose2d CAGE_TWO = new Pose2d(9.48, 1.902, Rotation2d.fromDegrees(0));
       public static final Pose2d CAGE_THREE = new Pose2d(9.48, 2.952, Rotation2d.fromDegrees(0));
 
       public static class LeftReef {
