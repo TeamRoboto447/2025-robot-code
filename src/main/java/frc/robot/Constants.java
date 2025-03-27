@@ -160,33 +160,58 @@ public final class Constants {
     public static class RedSide {
       public static final Pose2d NET = new Pose2d(10.585, 3.198, Rotation2d.fromDegrees(-158.386));
       public static final Pose2d PROC = new Pose2d(11.534, 7.438, Rotation2d.fromDegrees(90));
-      public static final Pose2d REEF_ONE = new Pose2d(11.700, 3.986, Rotation2d.fromDegrees(0));
-      public static final Pose2d REEF_TWO = new Pose2d(12.314, 5.283, Rotation2d.fromDegrees(-60));
-      public static final Pose2d REEF_THREE = new Pose2d(13.744, 5.283, Rotation2d.fromDegrees(-120));
-      public static final Pose2d REEF_FOUR = new Pose2d(14.401, 4.031, Rotation2d.fromDegrees(180));
-      public static final Pose2d REEF_FIVE = new Pose2d(13.744, 2.881, Rotation2d.fromDegrees(120));
-      public static final Pose2d REEF_SIX = new Pose2d(12.398, 2.881, Rotation2d.fromDegrees(60));
       public static final Pose2d CORAL_STATION_RIGHT = new Pose2d(16.37, 7, Rotation2d.fromDegrees(54));
       public static final Pose2d CORAL_STATION_LEFT = new Pose2d(16.37, 1.05, Rotation2d.fromDegrees(-54));
       public static final Pose2d CAGE_ONE = new Pose2d(9.48, 0.811, Rotation2d.fromDegrees(0));
-      public static final Pose2d CAGE_TWO = new Pose2d(9.48, 1.902, Rotation2d.fromDegrees(0));
+      public static final Pose2d CAGE_TWO = new Pose2d(9.77, 6.374, Rotation2d.fromDegrees(0)); //TODO: RED CAGE IS NOT ON THE BLUE BARGE
+      // public static final Pose2d CAGE_TWO = new Pose2d(9.48, 1.902, Rotation2d.fromDegrees(0));
       public static final Pose2d CAGE_THREE = new Pose2d(9.48, 2.952, Rotation2d.fromDegrees(0));
+
+      public static class LeftReef {
+        public static final Pose2d REEF_ONE = new Pose2d(11.700, 3.986, Rotation2d.fromDegrees(0));
+        public static final Pose2d REEF_TWO = new Pose2d(12.314, 5.283, Rotation2d.fromDegrees(-60));
+        public static final Pose2d REEF_THREE = new Pose2d(13.744, 5.283, Rotation2d.fromDegrees(-120));
+        public static final Pose2d REEF_FOUR = new Pose2d(14.401, 4.031, Rotation2d.fromDegrees(180));
+        public static final Pose2d REEF_FIVE = new Pose2d(13.744, 2.881, Rotation2d.fromDegrees(120));
+        public static final Pose2d REEF_SIX = new Pose2d(12.398, 2.881, Rotation2d.fromDegrees(60));
+      }
+
+      public static class RightReef {
+        public static final Pose2d REEF_ONE = new Pose2d(11.700, 3.986, Rotation2d.fromDegrees(0));
+        public static final Pose2d REEF_TWO = new Pose2d(12.314, 5.283, Rotation2d.fromDegrees(-60));
+        public static final Pose2d REEF_THREE = new Pose2d(13.744, 5.283, Rotation2d.fromDegrees(-120));
+        public static final Pose2d REEF_FOUR = new Pose2d(14.401, 4.031, Rotation2d.fromDegrees(180));
+        public static final Pose2d REEF_FIVE = new Pose2d(13.744, 2.881, Rotation2d.fromDegrees(120));
+        public static final Pose2d REEF_SIX = new Pose2d(12.398, 2.881, Rotation2d.fromDegrees(60));
+      }
     }
 
     public static class BlueSide {
       public static final Pose2d NET = new Pose2d(6.8, 5.2, Rotation2d.fromDegrees(22));
       public static final Pose2d PROC = new Pose2d(6, 0.59, Rotation2d.fromDegrees(-90));
-      public static final Pose2d REEF_ONE = new Pose2d(5.85, 3.9, Rotation2d.fromDegrees(180));
-      public static final Pose2d REEF_TWO = new Pose2d(5.17, 2.87, Rotation2d.fromDegrees(120));
-      public static final Pose2d REEF_THREE = new Pose2d(3.84, 2.873, Rotation2d.fromDegrees(60));
-      public static final Pose2d REEF_FOUR = new Pose2d(3.14, 3.99, Rotation2d.fromDegrees(0));
-      public static final Pose2d REEF_FIVE = new Pose2d(3.81, 5.18, Rotation2d.fromDegrees(-60));
-      public static final Pose2d REEF_SIX = new Pose2d(5.15, 5.2, Rotation2d.fromDegrees(-120));
       public static final Pose2d CORAL_STATION_RIGHT = new Pose2d(1.19, 1.02, Rotation2d.fromDegrees(-125));
       public static final Pose2d CORAL_STATION_LEFT = new Pose2d(1.19, 7, Rotation2d.fromDegrees(125));
       public static final Pose2d CAGE_ONE = new Pose2d(7.98, 7.24, Rotation2d.fromDegrees(180));
       public static final Pose2d CAGE_TWO = new Pose2d(7.98, 6.22, Rotation2d.fromDegrees(180));
       public static final Pose2d CAGE_THREE = new Pose2d(7.98, 5.07, Rotation2d.fromDegrees(180));
+
+      public static class LeftReef {
+        public static final Pose2d REEF_ONE = new Pose2d(5.85, 3.9, Rotation2d.fromDegrees(180));
+        public static final Pose2d REEF_TWO = new Pose2d(5.17, 2.87, Rotation2d.fromDegrees(120));
+        public static final Pose2d REEF_THREE = new Pose2d(3.84, 2.873, Rotation2d.fromDegrees(60));
+        public static final Pose2d REEF_FOUR = new Pose2d(3.14, 3.99, Rotation2d.fromDegrees(0));
+        public static final Pose2d REEF_FIVE = new Pose2d(3.81, 5.18, Rotation2d.fromDegrees(-60));
+        public static final Pose2d REEF_SIX = new Pose2d(5.15, 5.2, Rotation2d.fromDegrees(-120));
+      }
+
+      public static class RightReef {
+        public static final Pose2d REEF_ONE = new Pose2d(5.85, 3.9, Rotation2d.fromDegrees(180));
+        public static final Pose2d REEF_TWO = new Pose2d(5.17, 2.87, Rotation2d.fromDegrees(120));
+        public static final Pose2d REEF_THREE = new Pose2d(3.84, 2.873, Rotation2d.fromDegrees(60));
+        public static final Pose2d REEF_FOUR = new Pose2d(3.14, 3.99, Rotation2d.fromDegrees(0));
+        public static final Pose2d REEF_FIVE = new Pose2d(3.81, 5.18, Rotation2d.fromDegrees(-60));
+        public static final Pose2d REEF_SIX = new Pose2d(5.15, 5.2, Rotation2d.fromDegrees(-120));
+      }
     }
   }
 }

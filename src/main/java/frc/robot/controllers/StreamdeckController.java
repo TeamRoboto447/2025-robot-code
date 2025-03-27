@@ -33,7 +33,7 @@ public class StreamdeckController {
         FULLYAUTO
     }
 
-    public StreamdeckController() {
+    public StreamdeckController(ControlScheme defaultControlScheme) {
         buttonLabels = new AtomicReference<String[]>();
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         panel = inst.getTable("Streamdeck-Control").getSubTable("panel");
@@ -52,6 +52,8 @@ public class StreamdeckController {
         semiauto.onTrue(Commands.run(() -> this.currentScheme = ControlScheme.SEMIAUTO));
         fullyauto.onTrue(Commands.run(() -> this.currentScheme = ControlScheme.FULLYAUTO));
         legacy.onTrue(Commands.run(() -> this.currentScheme = ControlScheme.LEGACY));
+
+        this.setControlScheme(defaultControlScheme);
     }
 
     private void connectionListener(NetworkTableEvent event) {
@@ -83,5 +85,22 @@ public class StreamdeckController {
 
     public ControlScheme getCurrentScheme() {
         return this.currentScheme;
+    }
+
+    public void setControlScheme(ControlScheme targetControlScheme) {
+        switch (targetControlScheme) {
+            case FULLYAUTO:
+                controlSchemeSubtable.getEntry("fully-auto").setBoolean(true);
+                break;
+            case MANUAL:
+                controlSchemeSubtable.getEntry("manual").setBoolean(true);
+                break;
+            case SEMIAUTO:
+                controlSchemeSubtable.getEntry("semi-auto").setBoolean(true);
+                break;
+            default:
+                break;
+        }
+        this.currentScheme = targetControlScheme;
     }
 }
