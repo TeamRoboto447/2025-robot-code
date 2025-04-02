@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.49,
-        "y": 7.28
+        "x": 1.605,
+        "y": 7.39
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2069440930979747,
-        "y": 5.673398454153134
+        "x": 2.3219440930979722,
+        "y": 5.783398454153134
       },
       "isLocked": false,
       "linkedName": "Left Loading Station"

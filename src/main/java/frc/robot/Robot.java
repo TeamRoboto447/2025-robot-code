@@ -74,9 +74,10 @@ public class Robot extends TimedRobot {
               continue;
             }
             // Put a line on the image in the center
-            int middleLineX = 165;
+            int middleLineX = 110;
+            int middleLineY = 180;
             Imgproc.line(mat, new Point(middleLineX, HEIGHT), new Point(middleLineX, 0), new Scalar(255, 255, 255), 1);
-            Imgproc.line(mat, new Point(WIDTH, HEIGHT / 2), new Point(0, HEIGHT / 2), new Scalar(255, 255, 255), 1);
+            Imgproc.line(mat, new Point(WIDTH, middleLineY), new Point(0, middleLineY), new Scalar(255, 255, 255), 1);
 
             if (DriverStation.getMatchTime() < 20) {
               Imgproc.rectangle(mat, new Rect(new Point(3, 3), new Point(WIDTH - 3, HEIGHT - 3)), new Scalar(255, 0, 0),
@@ -89,8 +90,8 @@ public class Robot extends TimedRobot {
             outputStream.putFrame(mat);
           }
         });
-    // m_visionThread.setDaemon(true);
-    // m_visionThread.start();
+    m_visionThread.setDaemon(true);
+    m_visionThread.start();
   }
 
   /**

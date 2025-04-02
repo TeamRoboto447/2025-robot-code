@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.71,
-        "y": 5.49
+        "x": 3.66,
+        "y": 5.51
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.000741511856667,
-        "y": 5.084470425709817
+        "x": 3.950741511856667,
+        "y": 5.104470425709817
       },
       "isLocked": false,
       "linkedName": "R5L4"

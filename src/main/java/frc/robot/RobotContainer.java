@@ -35,6 +35,7 @@ import frc.robot.commands.algae.auto.CollectAlgaeFromReef;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.climber.ClimberControlCommand;
+import frc.robot.commands.drivebase.DriveToSelectedReef;
 import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
 import frc.robot.commands.multisystem.ManualAlgaeL1;
 import frc.robot.commands.multisystem.AlgaeL2Command;
@@ -170,7 +171,7 @@ public class RobotContainer {
     Trigger isClockDriveTrigger = new Trigger(() -> isClockDrive.getBoolean(true));
 
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-        "swerve"), this.operatorStreamdeck);
+        "swerve"));
     Trigger driverShifting = new Trigger(
         () -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean());
     SwerveInputStream arrowKeyInputStream = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
@@ -244,31 +245,40 @@ public class RobotContainer {
     this.operatorStreamdeck.autoProcessor
         .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetProc), driverController));
 
-    this.operatorStreamdeck.autoLevelOne
-        .onTrue(CommandOverrides.addDriverOverride(
-            swerveSubsystem.driveToScoringPose(alliance),
-            driverController));
+    // this.operatorStreamdeck.autoLevelOne
+    //     .onTrue(CommandOverrides.addDriverOverride(
+    //         swerveSubsystem.driveToScoringPose(alliance),
+    //         driverController));
 
     this.operatorStreamdeck.autoLevelTwo
-        .onTrue(CommandOverrides.addDriverOverride(
-            swerveSubsystem.driveToScoringPose(alliance),
-            driverController));
+    .onTrue(CommandOverrides.addDriverOverride(
+        new SequentialCommandGroup(
+          new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck, alliance),
+          new ManualCoralL2(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem)
+        ),
+        driverController));
 
     this.operatorStreamdeck.autoLevelThree
         .onTrue(CommandOverrides.addDriverOverride(
-            swerveSubsystem.driveToScoringPose(alliance),
+            new SequentialCommandGroup(
+              new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck, alliance),
+              new ManualCoralL3(algaeManipulatorSubsystem, elevatorSubsystem)
+            ),
             driverController));
 
     this.operatorStreamdeck.autoLevelFour
-        .onTrue(CommandOverrides.addDriverOverride(
-            swerveSubsystem.driveToScoringPose(alliance),
-            driverController));
+    .onTrue(CommandOverrides.addDriverOverride(
+      new SequentialCommandGroup(
+        new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck, alliance),
+        new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem)
+      ),
+      driverController));
 
-    this.driverController.y().onTrue(Commands.runOnce(() -> {
+    this.driverController.rightBumper().onTrue(Commands.runOnce(() -> {
       this.operatorStreamdeck.setControlScheme(ControlScheme.SEMIAUTO);
     }));
 
-    this.driverController.back().onTrue(Commands.runOnce(() -> {
+    this.driverController.leftBumper().onTrue(Commands.runOnce(() -> {
       this.operatorStreamdeck.setControlScheme(ControlScheme.FULLYAUTO);
     }));
   }

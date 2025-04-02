@@ -22,9 +22,9 @@ public class CoralL4AutoCommand extends Command {
   private final ElevatorSubsystem elevatorSubsystem;
   private final SwerveSubsystem swerveSubsystem;
 
-  private final Trigger shiftForwardTrigger;
-  private Command shiftForwardCommand;
-  private boolean shiftForward;
+  // private final Trigger shiftForwardTrigger;
+  // private Command shiftForwardCommand;
+  // private boolean shiftForward;
 
   private int step;
   private Timer waitTimer;
@@ -41,14 +41,14 @@ public class CoralL4AutoCommand extends Command {
     this.waitTimer = new Timer();
     this.waitTimer.stop();
 
-    // Shifting setup
-    this.shiftForwardCommand = this.swerveSubsystem
-        .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> 0.15, () -> 0)
-            .withControllerRotationAxis(() -> 0)
-            .deadband(0)
-            .scaleTranslation(0.8));
-    this.shiftForwardTrigger = new Trigger(() -> this.shiftForward);
-    this.shiftForwardTrigger.whileTrue(shiftForwardCommand);
+    // // Shifting setup
+    // this.shiftForwardCommand = this.swerveSubsystem
+    //     .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> 0.15, () -> 0)
+    //         .withControllerRotationAxis(() -> 0)
+    //         .deadband(0)
+    //         .scaleTranslation(0.8));
+    // this.shiftForwardTrigger = new Trigger(() -> this.shiftForward);
+    // this.shiftForwardTrigger.whileTrue(shiftForwardCommand);
   }
 
   // Called when the command is initially scheduled.
@@ -67,10 +67,11 @@ public class CoralL4AutoCommand extends Command {
         if (this.elevatorSubsystem.atTarget()) {
           this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(20));
           this.step += 1;
+          this.waitTimer.restart();
         }
         break;
       case 1:
-        if (this.algaeManipulatorSubsystem.atTarget()) {
+        if (this.algaeManipulatorSubsystem.atTarget() && this.waitTimer.get() > 0.5) {
           this.algaeManipulatorSubsystem.outtakeCoral();
           this.waitTimer.reset();
           this.waitTimer.start();

@@ -45,7 +45,7 @@ public class ManualCoralL4 extends Command {
 
     // Shifting setup
     this.shiftBackCommand = this.swerveSubsystem
-        .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.3, () -> 0)
+        .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.3, () -> 0.00) // -0.2 = -0.3
             .withControllerRotationAxis(() -> 0)
             .deadband(0)
             .scaleTranslation(0.8));
@@ -72,7 +72,7 @@ public class ManualCoralL4 extends Command {
     SmartDashboard.putNumber("ManualCoralL4/waitTimer", waitTimer.get());
     switch (this.step) {
       case 0:
-        if (waitTimer.get() > 0.55) {
+        if (waitTimer.get() > 0.55) { // 0.55
           this.step += 1;
         }
         break;
@@ -94,7 +94,7 @@ public class ManualCoralL4 extends Command {
         }
         break;
       case 4:
-        if (this.waitTimer.get() > 0.25) {
+        if (this.waitTimer.get() > 0.50) {
           this.algaeManipulatorSubsystem.outtakeCoral();
           this.step += 1;
         }

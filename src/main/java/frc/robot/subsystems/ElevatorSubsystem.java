@@ -16,6 +16,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,6 +32,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkMax auxillaryElevatorMotor;
   private RelativeEncoder elevatorEncoder;
   private PIDController elevatorPID;
+  private DigitalInput elevatorLowerLimit;
 
   private Level currentTargetLevel = Level.FLOOR;
 
@@ -39,11 +42,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   public ElevatorSubsystem(AlgaeManipulatorSubsystem amSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
     this.elevatorPID = new PIDController(0.15, 0, 0.01);
+    this.elevatorLowerLimit = new DigitalInput(ElevatorSubsystemConstants.ELEVATOR_LOWER_LIMIT_SWITCH_CHANNEL);
     initializeMotors();
   }
 
   @Override
   public void periodic() {
+    if(this.elevatorLowerLimit.get()) {
+      this.elevatorEncoder.setPosition(0);
+    }
     // This method will be called once per scheduler run
     if (!debugging) {
       this.elevatorPID.setSetpoint(this.getPositionFromLevel(currentTargetLevel));
@@ -54,19 +61,19 @@ public class ElevatorSubsystem extends SubsystemBase {
       motorOutput = Math.max(-maxNegativeSpeed, Math.min(maxPositiveSpeed, motorOutput));
       moveMotorRaw(motorOutput);
 
-      
-      // SmartDashboard.putNumber("Elevator/Elevator Controller Output", motorOutput);
-      // SmartDashboard.putString("Elevator/Current Target Level", this.currentTargetLevel.toString());
-      // SmartDashboard.putNumber("Elevator/Target Position", this.getPositionFromLevel(currentTargetLevel));
-      // SmartDashboard.putNumber("Elevator/Current Position", elevatorEncoder.getPosition());
-      // SmartDashboard.putBoolean("Elevator/At Target", this.atTarget());
+      SmartDashboard.putBoolean("Elevator/At Lower Limit", this.elevatorLowerLimit.get());
     }
   }
 
   public boolean atTarget() {
-    return Math.abs(this.getPositionFromLevel(currentTargetLevel) - elevatorEncoder.getPosition()) < 2;
+    double error = this.getPositionFromLevel(currentTargetLevel) - elevatorEncoder.getPosition();
+    if (error > 0 && error < 3)
+      return true;
+    else if (error < 0 && error > -2)
+      return true;
+    return false;
   }
-
+  
   public Command moveElevatorToLevel(Level level) {
     return new FunctionalCommand(
         // Command init
@@ -95,7 +102,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
-    if (!this.algaeManipulatorSubsystem.atTarget() || (speed < 0 && this.elevatorEncoder.getPosition() <= 10))
+    if (!this.algaeManipulatorSubsystem.atTarget() || (speed < 0 && (this.elevatorEncoder.getPosition() <= 2 || this.elevatorLowerLimit.get())))
       speed = 0;
     elevatorMotor.set(speed);
   }
