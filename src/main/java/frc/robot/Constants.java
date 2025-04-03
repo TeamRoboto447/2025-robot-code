@@ -109,7 +109,7 @@ public final class Constants {
     public static final Distance DISTANCE_PER_ROTATION = Inches.of(2 * Math.PI); // Circumference of 2 inch pulley
 
     public static final Distance FLOOR_LEVEL = Inches.of(0);
-    public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(4.5);
+    public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(3);
     public static final Distance CORAL_LOADING_LEVEL = Inches.of(4.5);
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;

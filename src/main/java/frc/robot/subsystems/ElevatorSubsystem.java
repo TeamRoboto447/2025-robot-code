@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -48,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(this.elevatorLowerLimit.get()) {
+    if(this.elevatorLowerLimit.get() && RobotState.isDisabled()) {
       this.elevatorEncoder.setPosition(0);
     }
     // This method will be called once per scheduler run
@@ -56,8 +57,8 @@ public class ElevatorSubsystem extends SubsystemBase {
       this.elevatorPID.setSetpoint(this.getPositionFromLevel(currentTargetLevel));
       double motorOutput = this.elevatorPID.calculate(elevatorEncoder.getPosition());
 
-      double maxPositiveSpeed = 0.75;
-      double maxNegativeSpeed = 0.3;
+      double maxPositiveSpeed = RobotState.isAutonomous() ? 1 : 0.75;
+      double maxNegativeSpeed = RobotState.isAutonomous() ? 0.75 : 0.3;
       motorOutput = Math.max(-maxNegativeSpeed, Math.min(maxPositiveSpeed, motorOutput));
       moveMotorRaw(motorOutput);
 
@@ -66,10 +67,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public boolean atTarget() {
-    double error = this.getPositionFromLevel(currentTargetLevel) - elevatorEncoder.getPosition();
-    if (error > 0 && error < 3)
+    double currPos = elevatorEncoder.getPosition();
+    double error = this.getPositionFromLevel(currentTargetLevel) - currPos;
+    if (error > 0 && ((currPos > 12 && error < 3) || (currPos <= 12 || error < 2)))
       return true;
-    else if (error < 0 && error > -2)
+    else if (error < 0 && error > -1)
       return true;
     return false;
   }
@@ -102,7 +104,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
-    if (!this.algaeManipulatorSubsystem.atTarget() || (speed < 0 && (this.elevatorEncoder.getPosition() <= 2 || this.elevatorLowerLimit.get())))
+    if (!this.algaeManipulatorSubsystem.atTarget() || (speed < 0 && (this.elevatorEncoder.getPosition() <= 1 || this.elevatorLowerLimit.get())))
       speed = 0;
     elevatorMotor.set(speed);
   }

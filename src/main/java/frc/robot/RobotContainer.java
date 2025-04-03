@@ -173,10 +173,10 @@ public class RobotContainer {
     this.swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
         "swerve"));
     Trigger driverShifting = new Trigger(
-        () -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean());
+        () -> driverController.pov(90).getAsBoolean() || driverController.pov(270).getAsBoolean() || driverController.leftBumper().getAsBoolean() || driverController.rightBumper().getAsBoolean());
     SwerveInputStream arrowKeyInputStream = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
         () -> driverController.pov(90).getAsBoolean() ? 1 : (driverController.pov(270).getAsBoolean() ? -1 : 0),
-        () -> 0)
+        () -> driverController.leftBumper().getAsBoolean() ? 0.2 : (driverController.rightBumper().getAsBoolean() ? -0.2 : 0))
         .withControllerRotationAxis(() -> -driverController.getRightX() / 2)
         .deadband(DriverConstants.DEADBAND)
         .scaleTranslation(0.8);
@@ -274,11 +274,11 @@ public class RobotContainer {
       ),
       driverController));
 
-    this.driverController.rightBumper().onTrue(Commands.runOnce(() -> {
+    this.driverController.y().onTrue(Commands.runOnce(() -> {
       this.operatorStreamdeck.setControlScheme(ControlScheme.SEMIAUTO);
     }));
 
-    this.driverController.leftBumper().onTrue(Commands.runOnce(() -> {
+    this.driverController.back().onTrue(Commands.runOnce(() -> {
       this.operatorStreamdeck.setControlScheme(ControlScheme.FULLYAUTO);
     }));
   }
@@ -422,22 +422,27 @@ public class RobotContainer {
     Pose2d cagePosition = null;
     switch (allianceStationID) {
       case Blue1:
-        cagePosition = FieldConstants.BlueSide.CAGE_ONE;
+        // cagePosition = FieldConstants.BlueSide.CAGE_ONE;
+        cagePosition = FieldConstants.BlueSide.CAGE_THREE;
         break;
       case Blue2:
-        cagePosition = FieldConstants.BlueSide.CAGE_TWO;
+      cagePosition = FieldConstants.BlueSide.CAGE_THREE;
+        // cagePosition = FieldConstants.BlueSide.CAGE_TWO;
         break;
       case Blue3:
+        // cagePosition = FieldConstants.BlueSide.CAGE_ONE;
         cagePosition = FieldConstants.BlueSide.CAGE_THREE;
         break;
       case Red1:
         cagePosition = FieldConstants.RedSide.CAGE_ONE;
         break;
       case Red2:
-        cagePosition = FieldConstants.RedSide.CAGE_TWO;
+      cagePosition = FieldConstants.RedSide.CAGE_ONE;
+        // cagePosition = FieldConstants.RedSide.CAGE_TWO;
         break;
       case Red3:
-        cagePosition = FieldConstants.RedSide.CAGE_THREE;
+      cagePosition = FieldConstants.RedSide.CAGE_ONE;
+        // cagePosition = FieldConstants.RedSide.CAGE_THREE;
         break;
       default:
         break;
