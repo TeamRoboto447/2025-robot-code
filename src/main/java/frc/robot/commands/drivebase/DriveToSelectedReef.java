@@ -11,6 +11,7 @@ import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -20,24 +21,29 @@ import frc.robot.controllers.StreamdeckController.ControlScheme;
 public class DriveToSelectedReef extends Command {
   private final SwerveSubsystem swerve;
   private final ReefscapeStreamdeckController controller;
-  private final Alliance alliance;
   private Command driveCommand;
   private boolean done;
 
-  public DriveToSelectedReef(SwerveSubsystem swerve, ReefscapeStreamdeckController controller, Alliance alliance) {
+  public DriveToSelectedReef(SwerveSubsystem swerve, ReefscapeStreamdeckController controller) {
     this.swerve = swerve;
     this.controller = controller;
-    this.alliance = alliance;
   }
 
   @Override
   public void initialize() {
     this.done = false;
     // Get fresh pose data every initialization
+
+    
+    Optional<Alliance> allianceOptional = DriverStation.getAlliance();
+    Alliance alliance = Alliance.Blue;
+    if (allianceOptional.isPresent())
+      alliance = allianceOptional.get();
     Optional<Pose2d> poseOptional = controller.getTargetReefPosition(
         alliance,
         controller.leftSide.getAsBoolean());
 
+      System.out.println(poseOptional);
     if (poseOptional.isPresent() && this.controller.getCurrentScheme() == ControlScheme.FULLYAUTO) {
       PathConstraints constraints = new PathConstraints(
           // swerve.getSwerveDrive().getMaximumChassisVelocity(),

@@ -63,6 +63,12 @@
           "data": {
             "name": "ScoreInNet"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move off line from Net"
+          }
         }
       ]
     }

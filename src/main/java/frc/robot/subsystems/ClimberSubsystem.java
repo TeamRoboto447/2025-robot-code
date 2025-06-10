@@ -43,8 +43,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
   private void moveMotorRaw(double speed) {
     SmartDashboard.putNumber("ClimberPosition", this.ClimberEncoder.getPosition());
-    if (lowerLimitSwitch.get()) {
-      this.ClimberEncoder.setPosition(0);
+    if (this.ClimberEncoder.getPosition() <= 0 && lowerLimitSwitch.get()) {
+      // this.ClimberEncoder.setPosition(0);
       if (speed < 0)
         speed = 0;
     }

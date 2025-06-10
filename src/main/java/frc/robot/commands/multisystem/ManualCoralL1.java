@@ -35,7 +35,7 @@ public class ManualCoralL1 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (this.algaeManipulatorSubsystem.atTarget() && this.elevatorSubsystem.atTarget()) {
+    if (this.algaeManipulatorSubsystem.atTarget()) {
       this.algaeManipulatorSubsystem.outtakeCoral();
     } else {
       this.algaeManipulatorSubsystem.holdCoral();

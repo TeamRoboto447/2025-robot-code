@@ -42,7 +42,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem(AlgaeManipulatorSubsystem amSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
-    this.elevatorPID = new PIDController(0.15, 0, 0.01);
+    this.elevatorPID = new PIDController(0.15, 0, 0);
     this.elevatorLowerLimit = new DigitalInput(ElevatorSubsystemConstants.ELEVATOR_LOWER_LIMIT_SWITCH_CHANNEL);
     initializeMotors();
   }
@@ -57,8 +57,8 @@ public class ElevatorSubsystem extends SubsystemBase {
       this.elevatorPID.setSetpoint(this.getPositionFromLevel(currentTargetLevel));
       double motorOutput = this.elevatorPID.calculate(elevatorEncoder.getPosition());
 
-      double maxPositiveSpeed = RobotState.isAutonomous() ? 1 : 0.75;
-      double maxNegativeSpeed = RobotState.isAutonomous() ? 0.75 : 0.3;
+      double maxPositiveSpeed = RobotState.isAutonomous() ? 0.5 : 0.65;
+      double maxNegativeSpeed = RobotState.isAutonomous() ? 0.2 : 0.2;
       motorOutput = Math.max(-maxNegativeSpeed, Math.min(maxPositiveSpeed, motorOutput));
       moveMotorRaw(motorOutput);
 
@@ -69,9 +69,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   public boolean atTarget() {
     double currPos = elevatorEncoder.getPosition();
     double error = this.getPositionFromLevel(currentTargetLevel) - currPos;
-    if (error > 0 && ((currPos > 12 && error < 3) || (currPos <= 12 || error < 2)))
+    if (error > 0 && error < 3)
       return true;
-    else if (error < 0 && error > -1)
+    else if (error < 0 && error > -2)
+      return true;
+    else if(this.currentTargetLevel == Level.FLOOR && this.elevatorLowerLimit.get())
       return true;
     return false;
   }

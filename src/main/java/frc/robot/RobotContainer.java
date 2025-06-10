@@ -35,6 +35,7 @@ import frc.robot.commands.algae.auto.CollectAlgaeFromReef;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.commands.climber.ClimberControlCommand;
+import frc.robot.commands.drivebase.DriveToSelectedCage;
 import frc.robot.commands.drivebase.DriveToSelectedReef;
 import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
 import frc.robot.commands.multisystem.ManualAlgaeL1;
@@ -243,17 +244,20 @@ public class RobotContainer {
 
     Pose2d targetProc = alliance == Alliance.Red ? FieldConstants.RedSide.PROC : FieldConstants.BlueSide.PROC;
     this.operatorStreamdeck.autoProcessor
-        .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetProc), driverController));
+    .onTrue(CommandOverrides.addDriverOverride(
+        new SequentialCommandGroup(
+        swerveSubsystem.driveToPose(targetProc), 
+        new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem)
+      ), 
+      driverController));
 
-    // this.operatorStreamdeck.autoLevelOne
-    //     .onTrue(CommandOverrides.addDriverOverride(
-    //         swerveSubsystem.driveToScoringPose(alliance),
-    //         driverController));
+    this.operatorStreamdeck.autoLevelOne
+        .onTrue(new ManualAlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem));
 
     this.operatorStreamdeck.autoLevelTwo
     .onTrue(CommandOverrides.addDriverOverride(
         new SequentialCommandGroup(
-          new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck, alliance),
+          new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
           new ManualCoralL2(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem)
         ),
         driverController));
@@ -261,7 +265,7 @@ public class RobotContainer {
     this.operatorStreamdeck.autoLevelThree
         .onTrue(CommandOverrides.addDriverOverride(
             new SequentialCommandGroup(
-              new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck, alliance),
+              new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
               new ManualCoralL3(algaeManipulatorSubsystem, elevatorSubsystem)
             ),
             driverController));
@@ -269,7 +273,7 @@ public class RobotContainer {
     this.operatorStreamdeck.autoLevelFour
     .onTrue(CommandOverrides.addDriverOverride(
       new SequentialCommandGroup(
-        new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck, alliance),
+        new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
         new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem)
       ),
       driverController));
@@ -418,38 +422,12 @@ public class RobotContainer {
     this.manualAlgaeNetCommand = new ManualAlgaeNet(algaeManipulatorSubsystem, elevatorSubsystem);
     this.manualAlgaeProcessorCommand = new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem);
 
-    AllianceStationID allianceStationID = DriverStation.getRawAllianceStation();
-    Pose2d cagePosition = null;
-    switch (allianceStationID) {
-      case Blue1:
-        // cagePosition = FieldConstants.BlueSide.CAGE_ONE;
-        cagePosition = FieldConstants.BlueSide.CAGE_THREE;
-        break;
-      case Blue2:
-      cagePosition = FieldConstants.BlueSide.CAGE_THREE;
-        // cagePosition = FieldConstants.BlueSide.CAGE_TWO;
-        break;
-      case Blue3:
-        // cagePosition = FieldConstants.BlueSide.CAGE_ONE;
-        cagePosition = FieldConstants.BlueSide.CAGE_THREE;
-        break;
-      case Red1:
-        cagePosition = FieldConstants.RedSide.CAGE_ONE;
-        break;
-      case Red2:
-      cagePosition = FieldConstants.RedSide.CAGE_ONE;
-        // cagePosition = FieldConstants.RedSide.CAGE_TWO;
-        break;
-      case Red3:
-      cagePosition = FieldConstants.RedSide.CAGE_ONE;
-        // cagePosition = FieldConstants.RedSide.CAGE_THREE;
-        break;
-      default:
-        break;
-
-    }
     this.driverController.a()
-        .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(cagePosition),
+        .onTrue(CommandOverrides.addDriverOverride(new DriveToSelectedCage(swerveSubsystem, false),
+            driverController));
+
+    this.driverController.b()
+        .onTrue(CommandOverrides.addDriverOverride(new DriveToSelectedCage(swerveSubsystem, true),
             driverController));
   }
 

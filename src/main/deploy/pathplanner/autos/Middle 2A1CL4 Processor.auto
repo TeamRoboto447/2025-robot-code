@@ -25,25 +25,43 @@
         {
           "type": "named",
           "data": {
-            "name": "AlgaeL1Only"
+            "name": "CollectAlgaeFromReefL2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move to NR from R1"
+            "pathName": "Move to Proc from R1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreInNet"
+            "name": "ScoreInProcessor"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move off line from Net"
+            "pathName": "Move to R2 From Proc"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgaeFromReefL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to Proc From R2 "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInProcessor"
           }
         }
       ]

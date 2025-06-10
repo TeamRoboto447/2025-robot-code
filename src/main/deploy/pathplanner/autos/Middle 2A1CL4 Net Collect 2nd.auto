@@ -43,7 +43,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move off line from Net"
+            "pathName": "Move to R6 From NR"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CollectAlgaeFromReefL3"
           }
         }
       ]

@@ -13,8 +13,8 @@ public class CommandOverrides {
                 }, () -> {
                 }, inturrupted -> {
                 }, () -> {
-                    return (Math.abs(driverControl.getLeftX()) > 0.2 || Math.abs(driverControl.getLeftY()) > 0.2
-                            || Math.abs(driverControl.getRightX()) > 0.2);
+                    return (Math.abs(driverControl.getLeftX()) > 0.4 || Math.abs(driverControl.getLeftY()) > 0.4
+                            || Math.abs(driverControl.getRightX()) > 0.4);
                 }));
     }
 }

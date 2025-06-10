@@ -3,39 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.51125,
-        "y": 0.8172499999999991
+        "x": 6.185,
+        "y": 3.99
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.171764707365995,
-        "y": 1.604276881031224
+        "x": 6.434785490854383,
+        "y": 4.000354156587335
       },
       "isLocked": false,
-      "linkedName": "Right Loading Station"
+      "linkedName": "Middle Netside Reef Backed Up"
     },
     {
       "anchor": {
-        "x": 3.3205942622950824,
-        "y": 2.71234631147541
+        "x": 5.9670000000000005,
+        "y": 0.9
       },
       "prevControl": {
-        "x": 2.338355191433758,
-        "y": 1.5439722934078897
+        "x": 5.969299725250255,
+        "y": 1.7814450719835513
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R3L4Left"
+      "linkedName": "Processor"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.4690909090909067,
-      "rotationDegrees": 105.60611807576451
-    },
-    {
-      "waypointRelativePos": 0.9403636363636387,
-      "rotationDegrees": 65.0
+      "waypointRelativePos": 0.5063520871143511,
+      "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [],
@@ -51,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 56.583843519898046
+    "rotation": -90.97102193107912
   },
   "reversed": false,
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -126.98290692634467
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

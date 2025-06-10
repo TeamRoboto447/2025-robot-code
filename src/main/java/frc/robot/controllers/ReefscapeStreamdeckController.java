@@ -187,9 +187,9 @@ public class ReefscapeStreamdeckController extends StreamdeckController {
 
     public double getYShiftSpeed() {
         if (this.shiftBack.getAsBoolean())
-            return -0.75;
+            return -0.4;
         if (this.shiftForward.getAsBoolean())
-            return 0.75;
+            return 0.4;
         return 0;
     }
 

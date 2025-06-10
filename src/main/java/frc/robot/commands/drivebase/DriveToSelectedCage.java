@@ -31,12 +31,14 @@ public class DriveToSelectedCage extends Command {
   private final SwerveSubsystem swerve;
   private Command driveCommand;
   private boolean done;
+  private boolean oppositeSide;
   private SendableChooser<CageNum> targetCage;
 
-  public DriveToSelectedCage(SwerveSubsystem swerve) {
+  public DriveToSelectedCage(SwerveSubsystem swerve, boolean opposite) {
     this.swerve = swerve;
+    this.oppositeSide = opposite;
     this.targetCage = new SendableChooser<CageNum>();
-    this.targetCage.setDefaultOption("Driver Station Controlled", null);
+    this.targetCage.setDefaultOption("Driver Station Controlled", CageNum.DYNAMIC);
     this.targetCage.addOption("Left", CageNum.ONE);
     this.targetCage.addOption("Middle", CageNum.TWO);
     this.targetCage.addOption("Right", CageNum.THREE);
@@ -53,27 +55,32 @@ public class DriveToSelectedCage extends Command {
       alliance = allianceOptional.get();
 
     final Pose2d cagePosition;
+    CageNum targetCageNum = this.targetCage.getSelected();
 
-    switch (this.targetCage.getSelected()) {
+    switch (targetCageNum) {
       case DYNAMIC:
         switch (allianceStationID) {
           case Blue1:
-            cagePosition = FieldConstants.BlueSide.CAGE_ONE;
+              cagePosition = this.oppositeSide ? FieldConstants.BlueSide.OPPOSITE_SIDE_CAGE_TWO : FieldConstants.BlueSide.CAGE_TWO;
+          //   cagePosition = this.oppositeSide ? FieldConstants.BlueSide.OPPOSITE_SIDE_CAGE_ONE : FieldConstants.BlueSide.CAGE_ONE;
             break;
           case Blue2:
-            cagePosition = FieldConstants.BlueSide.CAGE_TWO;
+            cagePosition = this.oppositeSide ? FieldConstants.BlueSide.OPPOSITE_SIDE_CAGE_TWO : FieldConstants.BlueSide.CAGE_TWO;
             break;
           case Blue3:
-            cagePosition = FieldConstants.BlueSide.CAGE_THREE;
+            cagePosition = this.oppositeSide ? FieldConstants.BlueSide.OPPOSITE_SIDE_CAGE_TWO : FieldConstants.BlueSide.CAGE_TWO;
+            // cagePosition = this.oppositeSide ? FieldConstants.BlueSide.OPPOSITE_SIDE_CAGE_THREE : FieldConstants.BlueSide.CAGE_THREE;
             break;
           case Red1:
-            cagePosition = FieldConstants.RedSide.CAGE_ONE;
+            cagePosition = this.oppositeSide ? FieldConstants.RedSide.OPPOSITE_SIDE_CAGE_TWO : FieldConstants.RedSide.CAGE_TWO;
+            // cagePosition = this.oppositeSide ? FieldConstants.RedSide.OPPOSITE_SIDE_CAGE_ONE : FieldConstants.RedSide.CAGE_ONE;
             break;
           case Red2:
-            cagePosition = FieldConstants.RedSide.CAGE_TWO;
+            cagePosition = this.oppositeSide ? FieldConstants.RedSide.OPPOSITE_SIDE_CAGE_TWO : FieldConstants.RedSide.CAGE_TWO;
             break;
           case Red3:
-            cagePosition = FieldConstants.RedSide.CAGE_THREE;
+            cagePosition = this.oppositeSide ? FieldConstants.RedSide.OPPOSITE_SIDE_CAGE_TWO : FieldConstants.RedSide.CAGE_TWO;
+            // cagePosition = this.oppositeSide ? FieldConstants.RedSide.OPPOSITE_SIDE_CAGE_THREE : FieldConstants.RedSide.CAGE_THREE;
             break;
           default:
             cagePosition = null;
@@ -82,21 +89,21 @@ public class DriveToSelectedCage extends Command {
         break;
       case ONE:
         if (alliance == Alliance.Blue)
-          cagePosition = FieldConstants.BlueSide.CAGE_ONE;
+          cagePosition = this.oppositeSide ? FieldConstants.BlueSide.OPPOSITE_SIDE_CAGE_ONE : FieldConstants.BlueSide.CAGE_ONE;
         else
-          cagePosition = FieldConstants.RedSide.CAGE_ONE;
+          cagePosition = this.oppositeSide ? FieldConstants.RedSide.OPPOSITE_SIDE_CAGE_ONE : FieldConstants.RedSide.CAGE_ONE;
         break;
       case TWO:
         if (alliance == Alliance.Blue)
-          cagePosition = FieldConstants.BlueSide.CAGE_TWO;
+          cagePosition = this.oppositeSide ? FieldConstants.BlueSide.OPPOSITE_SIDE_CAGE_TWO : FieldConstants.BlueSide.CAGE_TWO;
         else
-          cagePosition = FieldConstants.RedSide.CAGE_TWO;
+          cagePosition = this.oppositeSide ? FieldConstants.RedSide.OPPOSITE_SIDE_CAGE_TWO : FieldConstants.RedSide.CAGE_TWO;
         break;
       case THREE:
         if (alliance == Alliance.Blue)
-          cagePosition = FieldConstants.BlueSide.CAGE_THREE;
+        cagePosition = this.oppositeSide ? FieldConstants.BlueSide.OPPOSITE_SIDE_CAGE_THREE : FieldConstants.BlueSide.CAGE_THREE;
         else
-          cagePosition = FieldConstants.RedSide.CAGE_THREE;
+        cagePosition = this.oppositeSide ? FieldConstants.RedSide.OPPOSITE_SIDE_CAGE_THREE : FieldConstants.RedSide.CAGE_THREE;
         break;
       default:
         cagePosition = null;

@@ -35,7 +35,7 @@ public class ManualFloorPickup extends Command {
   @Override
   public void execute() {
     if (this.elevatorSubsystem.atTarget())
-      this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(0));
+      this.algaeManipulatorSubsystem.setManipulatorAngle(Degrees.of(-5));
     this.algaeManipulatorSubsystem.intakeAlgae(0.5);
   }
 

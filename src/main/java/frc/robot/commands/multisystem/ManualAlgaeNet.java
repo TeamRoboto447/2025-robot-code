@@ -36,7 +36,7 @@ public class ManualAlgaeNet extends Command {
   @Override
   public void execute() {
     if (this.algaeManipulatorSubsystem.atTarget() && this.elevatorSubsystem.atTarget()) {
-      this.algaeManipulatorSubsystem.outtakeAlgae(1);
+      this.algaeManipulatorSubsystem.outtakeAlgae(0.5);
     } else {
       this.algaeManipulatorSubsystem.holdAlgae();
     }
