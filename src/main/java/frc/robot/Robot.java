@@ -94,6 +94,11 @@ public class Robot extends TimedRobot {
     m_visionThread.start();
   }
 
+  @Override
+  public void robotInit() {
+    System.out.println("Hello, world!");
+  }
+
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items
    * like diagnostics

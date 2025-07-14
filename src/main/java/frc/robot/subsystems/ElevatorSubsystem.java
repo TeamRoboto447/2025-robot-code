@@ -63,6 +63,9 @@ public class ElevatorSubsystem extends SubsystemBase {
       moveMotorRaw(motorOutput);
 
       SmartDashboard.putBoolean("Elevator/At Lower Limit", this.elevatorLowerLimit.get());
+      
+      SmartDashboard.putNumber("Elevator/Motor Position", elevatorEncoder.getPosition());
+      SmartDashboard.putNumber("Elevator/Target Motor Position", this.getPositionFromLevel(currentTargetLevel));
     }
   }
 
@@ -106,9 +109,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   private void moveMotorRaw(double speed) {
-    if (!this.algaeManipulatorSubsystem.atTarget() || (speed < 0 && (this.elevatorEncoder.getPosition() <= 1 || this.elevatorLowerLimit.get())))
+    if ((!this.algaeManipulatorSubsystem.atTarget() && this.elevatorEncoder.getPosition() > 10) || (speed < 0 && (this.elevatorEncoder.getPosition() <= 1 || this.elevatorLowerLimit.get())))
       speed = 0;
     elevatorMotor.set(speed);
+    SmartDashboard.putNumber("Elevator/Target Motor Output", speed);
   }
 
   private double getPositionFromLevel(Level level) {

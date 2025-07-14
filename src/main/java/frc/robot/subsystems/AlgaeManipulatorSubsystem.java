@@ -66,7 +66,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     this.coralMotor.configure(coralCurrentConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
     SparkMaxConfig wristCurrentLimit = new SparkMaxConfig();
-    wristCurrentLimit.smartCurrentLimit(50);
+    wristCurrentLimit.smartCurrentLimit(40);
+    wristCurrentLimit.inverted(false);
     SoftLimitConfig wristLimits = new SoftLimitConfig();
     wristLimits.forwardSoftLimit(this.maxRotationCount);
     wristLimits.forwardSoftLimitEnabled(false);
@@ -78,12 +79,13 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
     this.wristEncoder = this.wristMotor.getEncoder();
     this.absoluteWristEncoder = this.wristMotor.getAbsoluteEncoder();
-    this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount,
-        maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
+    // this.wristEncoder.setPosition(MathUtils.map(this.absoluteWristEncoder.getPosition(), minAbsoluteRotationCount,
+    //     maxAbsoluteRotationCount, minRotationCount, maxRotationCount));
     this.wristController = new PIDController(5, 0.000001, 0); // We don't actually use kI, but we do use it's error
                                                               // detection which is disabled when set to 0. So instead
                                                               // we set it to a very low number
     this.wristController.setTolerance(0.04);
+    this.wristController.enableContinuousInput(0, 1);
     this.wristController.setIntegratorRange(-0.3, 0.03);
   }
 
@@ -94,7 +96,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Wrist/At Target", this.atTarget());
     SmartDashboard.putNumber("Wrist/Accumulated Error", this.wristController.getAccumulatedError());
     SmartDashboard.putBoolean("Wrist/Stalled", isStalled());
-    double angleMotorOutput = this.wristController.calculate(getAbsoluteWristPosition(),
+    double angleMotorOutput = this.wristController.calculate(absoluteWristEncoder.getPosition(),
         this.currentTargetWristPosition);
     checkForOperatorOverride(angleMotorOutput);
   }
@@ -154,9 +156,7 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   public void moveWristMotorRaw(double speed) {
     if (speed > 0 && this.getAbsoluteWristPosition() >= this.maxAbsoluteRotationCount)
-      speed = 0;
-    if (speed < 0 && this.getAbsoluteWristPosition() <= this.minAbsoluteRotationCount)
-      speed = 0;
+      speed /= 8;
     wristMotor.set(speed);
   }
 
@@ -199,8 +199,8 @@ public class AlgaeManipulatorSubsystem extends SubsystemBase {
 
   public double getAbsoluteWristPosition() {
     double pos = absoluteWristEncoder.getPosition();
-    if (pos > 0.8)
-      pos = 0 - (1 - pos);
+    // if (pos > 0.7)
+    //   pos = 0 - (1 - pos);
     return pos;
   }
 

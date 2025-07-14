@@ -34,7 +34,7 @@ public final class Constants {
   }
 
   public static class SwerveSubsystemConstants {
-    public static final double MAX_SPEED = Units.feetToMeters(9.2); // 12.78 is max speed the robot is capable of
+    public static final double MAX_SPEED = Units.feetToMeters(11.2); // 12.78 is max speed the robot is capable of
     public static final double ROBOT_MASS = Units.lbsToKilograms(107);
     public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); // TODO:
                                                                                                                        // update
@@ -84,8 +84,8 @@ public final class Constants {
   }
 
   public static class ElevatorSubsystemConstants {
-    public static final int ELEVATOR_MOTOR_ID = 22;
-    public static final int AUXILLARY_ELEVATOR_MOTOR_ID = 23;
+    public static final int ELEVATOR_MOTOR_ID = 23; // 22
+    public static final int AUXILLARY_ELEVATOR_MOTOR_ID = 22; // 23
     public static final int ELEVATOR_LOWER_LIMIT_SWITCH_CHANNEL = 8;
 
     public enum Level {
@@ -108,18 +108,19 @@ public final class Constants {
     public static final double GEARING_MULTIPLIER = 5;
     public static final Distance DISTANCE_PER_ROTATION = Inches.of(2 * Math.PI); // Circumference of 2 inch pulley
 
+
     public static final Distance FLOOR_LEVEL = Inches.of(0);
-    public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(4.5);
-    public static final Distance CORAL_LOADING_LEVEL = Inches.of(4.5);
+    public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(4.5); // 4.5
+    public static final Distance CORAL_LOADING_LEVEL = Inches.of(4.5); // 4.5
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
-    public static final Distance CORAL_L3_LEVEL = Inches.of(14);
+    public static final Distance CORAL_L3_LEVEL = Inches.of(14); // 14
 
-    public static final Distance ALGAE_L1_LEVEL = Inches.of(20);
-    public static final Distance ALGAE_L2_LEVEL = Inches.of(30);
+    public static final Distance ALGAE_L1_LEVEL = Inches.of(20); // 20
+    public static final Distance ALGAE_L2_LEVEL = Inches.of(30); // 30
 
-    public static final Distance CORAL_L4_LEVEL = Inches.of(43);
-    public static final Distance NET_LEVEL = Inches.of(60);
+    public static final Distance CORAL_L4_LEVEL = Inches.of(43); // 43
+    public static final Distance NET_LEVEL = Inches.of(60); //60
   }
 
   public static class AlgaeManipulatorSubsystemConstants {
