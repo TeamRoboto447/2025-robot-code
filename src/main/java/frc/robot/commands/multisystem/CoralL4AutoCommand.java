@@ -8,13 +8,10 @@ import static edu.wpi.first.units.Units.Degrees;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import swervelib.SwerveInputStream;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CoralL4AutoCommand extends Command {

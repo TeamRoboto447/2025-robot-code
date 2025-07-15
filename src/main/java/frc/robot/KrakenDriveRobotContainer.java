@@ -51,10 +51,8 @@ import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.vision.PoseEstimatorSubsystem;
 import frc.robot.utils.CommandOverrides;
-import swervelib.SwerveInputStream;
 
 import frc.robot.controllers.ReefscapeStreamdeckController;
 import frc.robot.controllers.StreamdeckController.ControlScheme;
@@ -111,7 +109,7 @@ public class KrakenDriveRobotContainer {
     initializeClimberSubsystem();
     initializeAlgaeManipulatorSubsystem();
     initializeElevatorSubsystem();
-    // poseEstimatorSubsystem = new PoseEstimatorSubsystem(swerveSubsystem);
+    poseEstimatorSubsystem = new PoseEstimatorSubsystem(swerveSubsystem);
 
     initializeMultisystemCommands();
 
@@ -135,46 +133,27 @@ public class KrakenDriveRobotContainer {
 
   @SuppressWarnings("unused")
   private void initializeSwerveSubsystem() {
-
-    double MaxCapableSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    double MaxPercentageAllowed = 0.25;
-    double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
-    // private double MaxAngularRate = RotationsPerSecond.of(0.25).in(RadiansPerSecond); // 1/4 of a rotation per second max angular velocity
-
-    /* Setting up bindings for necessary control of the swerve drive platform */
-    final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxCapableSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-    final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric()
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-
-    final Telemetry logger = new Telemetry(MaxCapableSpeed);
+    final Telemetry logger = new Telemetry(Constants.SwerveSubsystemConstants.MaxCapableSpeed);
 
     swerveSubsystem = TunerConstants.createDrivetrain();
     swerveSubsystem.setDefaultCommand(
             // Drivetrain will execute this command periodically
             swerveSubsystem.applyRequest(() ->
-                drive.withVelocityX(-driverController.getLeftY() * MaxCapableSpeed * MaxPercentageAllowed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-driverController.getLeftX() * MaxCapableSpeed * MaxPercentageAllowed) // Drive left with negative X (left)
-                    .withRotationalRate(-driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                Constants.SwerveSubsystemConstants.drive.withVelocityX(-driverController.getLeftY() * Constants.SwerveSubsystemConstants.MaxCapableSpeed * Constants.SwerveSubsystemConstants.MaxPercentageAllowed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-driverController.getLeftX() * Constants.SwerveSubsystemConstants.MaxCapableSpeed * Constants.SwerveSubsystemConstants.MaxPercentageAllowed) // Drive left with negative X (left)
+                    .withRotationalRate(-driverController.getRightX() * Constants.SwerveSubsystemConstants.MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
   }
 
   private void initializeStreamdeckBasedControls() {
-    // Operator controlled shifting
-    // SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveSubsystem.getSwerveDrive(),
-    //     () -> operatorStreamdeck.getYShiftSpeed(),
-    //     () -> operatorStreamdeck.getXShiftSpeed())
-    //     .withControllerRotationAxis(() -> -driverController.getRightX() / 2)
-    //     .deadband(0)
-    //     .scaleTranslation(0.8);
+    Command operatorControlledShifting = swerveSubsystem.applyRequest(() ->
+    Constants.SwerveSubsystemConstants.drive.withVelocityX(operatorStreamdeck.getXShiftSpeed() * Constants.SwerveSubsystemConstants.MaxCapableSpeed * Constants.SwerveSubsystemConstants.MaxPercentageAllowed) // Drive forward with negative Y (forward)
+        .withVelocityY(operatorStreamdeck.getYShiftSpeed() * Constants.SwerveSubsystemConstants.MaxCapableSpeed * Constants.SwerveSubsystemConstants.MaxPercentageAllowed) // Drive left with negative X (left)
+        .withRotationalRate(-driverController.getRightX() * Constants.SwerveSubsystemConstants.MaxAngularRate / 2)); // Drive counterclockwise with negative X (left)
 
-    // Command operatorShifting = swerveSubsystem.drive(driveAngularVelocity);
-    // this.operatorStreamdeck.shifting.whileTrue(operatorShifting);
-    // this.operatorStreamdeck.shifting.onTrue(rumbleBoth(driverController, 1, 0.125));
+    this.operatorStreamdeck.shifting.whileTrue(operatorControlledShifting);
+    this.operatorStreamdeck.shifting.onTrue(rumbleBoth(driverController, 1, 0.125));
 
     initializeLegacyStreamdeckControls();
 
@@ -196,50 +175,50 @@ public class KrakenDriveRobotContainer {
     this.operatorStreamdeck.semiAlgaeProcessor.whileTrue(this.manualAlgaeProcessorCommand);
 
     // Fully-Auto Control Scheme
-    // Optional<Alliance> allianceOptional = DriverStation.getAlliance();
-    // Alliance alliance = Alliance.Blue;
-    // if (allianceOptional.isPresent())
-    //   alliance = allianceOptional.get();
+    Optional<Alliance> allianceOptional = DriverStation.getAlliance();
+    Alliance alliance = Alliance.Blue;
+    if (allianceOptional.isPresent())
+      alliance = allianceOptional.get();
 
-    // Pose2d targetNet = alliance == Alliance.Red ? FieldConstants.RedSide.NET : FieldConstants.BlueSide.NET;
-    // this.operatorStreamdeck.autoNet
-    //     .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetNet), driverController));
+    Pose2d targetNet = alliance == Alliance.Red ? FieldConstants.RedSide.NET : FieldConstants.BlueSide.NET;
+    this.operatorStreamdeck.autoNet
+        .onTrue(CommandOverrides.addDriverOverride(swerveSubsystem.driveToPose(targetNet), driverController));
 
-    // Pose2d targetProc = alliance == Alliance.Red ? FieldConstants.RedSide.PROC : FieldConstants.BlueSide.PROC;
-    // this.operatorStreamdeck.autoProcessor
-    // .onTrue(CommandOverrides.addDriverOverride(
-    //     new SequentialCommandGroup(
-    //       swerveSubsystem.driveToPose(targetProc), 
-    //     new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem)
-    //   ), 
-    //   driverController));
+    Pose2d targetProc = alliance == Alliance.Red ? FieldConstants.RedSide.PROC : FieldConstants.BlueSide.PROC;
+    this.operatorStreamdeck.autoProcessor
+    .onTrue(CommandOverrides.addDriverOverride(
+        new SequentialCommandGroup(
+          swerveSubsystem.driveToPose(targetProc), 
+        new ManualAlgaeProcessor(algaeManipulatorSubsystem, elevatorSubsystem)
+      ), 
+      driverController));
 
-    // this.operatorStreamdeck.autoLevelOne
-    //     .onTrue(new ManualAlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem));
+    this.operatorStreamdeck.autoLevelOne
+        .onTrue(new ManualAlgaeL1(algaeManipulatorSubsystem, elevatorSubsystem));
 
-    // this.operatorStreamdeck.autoLevelTwo
-    // .onTrue(CommandOverrides.addDriverOverride(
-    //     new SequentialCommandGroup(
-    //       new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
-    //       new ManualCoralL2(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem)
-    //     ),
-    //     driverController));
+    this.operatorStreamdeck.autoLevelTwo
+    .onTrue(CommandOverrides.addDriverOverride(
+        new SequentialCommandGroup(
+          new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
+          new ManualCoralL2(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem)
+        ),
+        driverController));
 
-    // this.operatorStreamdeck.autoLevelThree
-    //     .onTrue(CommandOverrides.addDriverOverride(
-    //         new SequentialCommandGroup(
-    //           new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
-    //           new ManualCoralL3(algaeManipulatorSubsystem, elevatorSubsystem)
-    //         ),
-    //         driverController));
+    this.operatorStreamdeck.autoLevelThree
+        .onTrue(CommandOverrides.addDriverOverride(
+            new SequentialCommandGroup(
+              new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
+              new ManualCoralL3(algaeManipulatorSubsystem, elevatorSubsystem)
+            ),
+            driverController));
 
-    // this.operatorStreamdeck.autoLevelFour
-    // .onTrue(CommandOverrides.addDriverOverride(
-    //   new SequentialCommandGroup(
-    //     new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
-    //     new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem)
-    //   ),
-    //   driverController));
+    this.operatorStreamdeck.autoLevelFour
+    .onTrue(CommandOverrides.addDriverOverride(
+      new SequentialCommandGroup(
+        new DriveToSelectedReef(swerveSubsystem, operatorStreamdeck),
+        new ManualCoralL4(algaeManipulatorSubsystem, elevatorSubsystem, swerveSubsystem)
+      ),
+      driverController));
 
     this.driverController.y().onTrue(Commands.runOnce(() -> {
       this.operatorStreamdeck.setControlScheme(ControlScheme.SEMIAUTO);

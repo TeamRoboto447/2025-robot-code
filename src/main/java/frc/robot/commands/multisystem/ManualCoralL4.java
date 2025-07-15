@@ -5,18 +5,16 @@
 package frc.robot.commands.multisystem;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static frc.robot.Constants.SwerveSubsystemConstants.*;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import swervelib.SwerveInputStream;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ManualCoralL4 extends Command {
@@ -45,14 +43,13 @@ public class ManualCoralL4 extends Command {
     this.waitTimer = new Timer();
     this.waitTimer.stop();
 
-    // TODO: Make work
     // Shifting setup
-    // this.shiftBackCommand = this.swerveSubsystem
-    //     .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.3, () -> 0.00) // -0.2 = -0.3
-    //         .withControllerRotationAxis(() -> 0)
-    //         .deadband(0)
-    //         .scaleTranslation(0.8));
-    this.shiftBackCommand = Commands.run(() -> {});
+    this.shiftBackCommand = swerveSubsystem.applyRequest(() ->
+      drive.withVelocityX(-0.3 * MaxCapableSpeed * MaxPercentageAllowed) // Drive forward with negative Y (forward)
+          .withVelocityY(0) // Drive left with negative X (left)
+          .withRotationalRate(0) // Drive counterclockwise with negative X (left)
+    );
+
     this.shiftBackTrigger = new Trigger(() -> this.shiftBack);
     this.shiftBackTrigger.whileTrue(shiftBackCommand);
   }

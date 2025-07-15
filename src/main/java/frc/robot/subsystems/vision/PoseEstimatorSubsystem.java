@@ -29,16 +29,16 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class PoseEstimatorSubsystem extends SubsystemBase {
-  private final SwerveSubsystem swerveSubsystem;
+  private final CommandSwerveDrivetrain swerveSubsystem;
   private final PhotonCamera frontCamera;
   private final PhotonPoseEstimator poseEstimator;
   private final AprilTagFieldLayout tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
   /** Creates a new PoseEstimatorSubsystem. */
-  public PoseEstimatorSubsystem(SwerveSubsystem swerveSubsystem) {
+  public PoseEstimatorSubsystem(CommandSwerveDrivetrain swerveSubsystem) {
     this.swerveSubsystem = swerveSubsystem;
     frontCamera = new PhotonCamera("FrontCam");
     poseEstimator = new PhotonPoseEstimator(tagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, ROBOT_TO_FRONT_CAM);
@@ -55,7 +55,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         continue;
       Matrix<N3, N1> standardDeviations = calculateStandardDeviations(estimatedPose.get());
       if (RobotState.isDisabled())
-        swerveSubsystem.resetOdometry(estimatedPose.get().estimatedPose);
+        swerveSubsystem.resetPose(estimatedPose.get().estimatedPose.toPose2d());
 
       if (!USE_QUEST_NAV) {
         Pose2d poseEstimate = estimatedPose.get().estimatedPose.toPose2d();
@@ -73,7 +73,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
   }
 
   public void setCurrentPose(Pose2d newPose) {
-    swerveSubsystem.getSwerveDrive().resetOdometry(newPose);
+    swerveSubsystem.resetPose(newPose);
   }
 
   public void resetFieldPosition() {

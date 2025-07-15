@@ -14,17 +14,18 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants;
 import frc.robot.controllers.ReefscapeStreamdeckController;
 import frc.robot.controllers.StreamdeckController.ControlScheme;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class DriveToSelectedReef extends Command {
-  private final SwerveSubsystem swerve;
+  private final CommandSwerveDrivetrain swerve;
   private final ReefscapeStreamdeckController controller;
   private Command driveCommand;
   private boolean done;
 
-  public DriveToSelectedReef(SwerveSubsystem swerve, ReefscapeStreamdeckController controller) {
+  public DriveToSelectedReef(CommandSwerveDrivetrain swerve, ReefscapeStreamdeckController controller) {
     this.swerve = swerve;
     this.controller = controller;
   }
@@ -49,7 +50,7 @@ public class DriveToSelectedReef extends Command {
           // swerve.getSwerveDrive().getMaximumChassisVelocity(),
            Units.feetToMeters(5),
            2,
-          swerve.getSwerveDrive().getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
+          Constants.SwerveSubsystemConstants.MaxAngularRate, Units.degreesToRadians(720));
 
       // Create new command instance with latest pose
       driveCommand = AutoBuilder.pathfindToPose(
