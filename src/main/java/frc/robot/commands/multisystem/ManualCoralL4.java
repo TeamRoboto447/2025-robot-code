@@ -45,7 +45,7 @@ public class ManualCoralL4 extends Command {
 
     // Shifting setup
     this.shiftBackCommand = swerveSubsystem.applyRequest(() ->
-      drive.withVelocityX(-0.3 * MaxCapableSpeed * MaxPercentageAllowed) // Drive forward with negative Y (forward)
+      forwardStraight.withVelocityX(-0.35 * MaxCapableSpeed * MaxPercentageAllowed) // Drive forward with negative Y (forward)
           .withVelocityY(0) // Drive left with negative X (left)
           .withRotationalRate(0) // Drive counterclockwise with negative X (left)
     );

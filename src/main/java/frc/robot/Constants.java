@@ -39,7 +39,7 @@ public final class Constants {
 
   public static class SwerveSubsystemConstants {
     public static double MaxCapableSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    public static double MaxPercentageAllowed = 0.25;
+    public static double MaxPercentageAllowed = 0.4;
     public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
 
     /* Setting up bindings for necessary control of the swerve drive platform */

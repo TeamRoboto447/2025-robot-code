@@ -148,8 +148,8 @@ public class KrakenDriveRobotContainer {
 
   private void initializeStreamdeckBasedControls() {
     Command operatorControlledShifting = swerveSubsystem.applyRequest(() ->
-    Constants.SwerveSubsystemConstants.drive.withVelocityX(operatorStreamdeck.getXShiftSpeed() * Constants.SwerveSubsystemConstants.MaxCapableSpeed * Constants.SwerveSubsystemConstants.MaxPercentageAllowed) // Drive forward with negative Y (forward)
-        .withVelocityY(operatorStreamdeck.getYShiftSpeed() * Constants.SwerveSubsystemConstants.MaxCapableSpeed * Constants.SwerveSubsystemConstants.MaxPercentageAllowed) // Drive left with negative X (left)
+    Constants.SwerveSubsystemConstants.forwardStraight.withVelocityX(operatorStreamdeck.getYShiftSpeed() * Constants.SwerveSubsystemConstants.MaxCapableSpeed * Constants.SwerveSubsystemConstants.MaxPercentageAllowed) // Drive forward with negative Y (forward)
+        .withVelocityY(operatorStreamdeck.getXShiftSpeed() * Constants.SwerveSubsystemConstants.MaxCapableSpeed * Constants.SwerveSubsystemConstants.MaxPercentageAllowed) // Drive left with negative X (left)
         .withRotationalRate(-driverController.getRightX() * Constants.SwerveSubsystemConstants.MaxAngularRate / 2)); // Drive counterclockwise with negative X (left)
 
     this.operatorStreamdeck.shifting.whileTrue(operatorControlledShifting);
