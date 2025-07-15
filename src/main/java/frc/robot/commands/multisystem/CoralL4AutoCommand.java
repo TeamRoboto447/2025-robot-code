@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
@@ -20,7 +21,7 @@ public class CoralL4AutoCommand extends Command {
 
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
-  private final SwerveSubsystem swerveSubsystem;
+  private final CommandSwerveDrivetrain swerveSubsystem;
 
   // private final Trigger shiftForwardTrigger;
   // private Command shiftForwardCommand;
@@ -31,7 +32,7 @@ public class CoralL4AutoCommand extends Command {
 
   /** Creates a new ManualCoralL3AlgaeL1. */
   public CoralL4AutoCommand(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem,
-      SwerveSubsystem sSubsystem) {
+      CommandSwerveDrivetrain sSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
     this.elevatorSubsystem = eSubsystem;
     this.swerveSubsystem = sSubsystem;

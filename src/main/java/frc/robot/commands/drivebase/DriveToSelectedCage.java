@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants;
 import frc.robot.Constants.FieldConstants;
 
 public class DriveToSelectedCage extends Command {
@@ -28,13 +30,13 @@ public class DriveToSelectedCage extends Command {
     DYNAMIC
   }
 
-  private final SwerveSubsystem swerve;
+  private final CommandSwerveDrivetrain swerve;
   private Command driveCommand;
   private boolean done;
   private boolean oppositeSide;
   private SendableChooser<CageNum> targetCage;
 
-  public DriveToSelectedCage(SwerveSubsystem swerve, boolean opposite) {
+  public DriveToSelectedCage(CommandSwerveDrivetrain swerve, boolean opposite) {
     this.swerve = swerve;
     this.oppositeSide = opposite;
     this.targetCage = new SendableChooser<CageNum>();
@@ -112,10 +114,10 @@ public class DriveToSelectedCage extends Command {
     }
     if (cagePosition != null) {
       PathConstraints constraints = new PathConstraints(
-          // swerve.getSwerveDrive().getMaximumChassisVelocity(),
+          Constants.SwerveSubsystemConstants.MaxCapableSpeed,
           Units.feetToMeters(5),
           2,
-          swerve.getSwerveDrive().getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
+          Constants.SwerveSubsystemConstants.MaxAngularRate);
 
       // Create new command instance with latest pose
       driveCommand = AutoBuilder.pathfindToPose(

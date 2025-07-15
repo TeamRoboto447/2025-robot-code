@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.generated.TunerConstants;
 import swervelib.math.Matter;
 
 /**
@@ -34,6 +35,10 @@ public final class Constants {
   }
 
   public static class SwerveSubsystemConstants {
+    public static double MaxCapableSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    public static double MaxPercentageAllowed = 0.25;
+    public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+
     public static final double MAX_SPEED = Units.feetToMeters(11.2); // 12.78 is max speed the robot is capable of
     public static final double ROBOT_MASS = Units.lbsToKilograms(107);
     public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); // TODO:

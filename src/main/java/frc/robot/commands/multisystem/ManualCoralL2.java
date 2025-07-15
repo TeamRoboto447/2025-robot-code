@@ -8,9 +8,11 @@ import static edu.wpi.first.units.Units.Degrees;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveInputStream;
@@ -20,7 +22,7 @@ public class ManualCoralL2 extends Command {
 
   private final AlgaeManipulatorSubsystem algaeManipulatorSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
-  private final SwerveSubsystem swerveSubsystem;
+  private final CommandSwerveDrivetrain swerveSubsystem;
 
   private Timer waitTimer;
   private Trigger shiftBackTrigger;
@@ -29,7 +31,7 @@ public class ManualCoralL2 extends Command {
   private int step;
 
   /** Creates a new ManualCoralL2. */
-  public ManualCoralL2(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem, SwerveSubsystem sSubsystem) {
+  public ManualCoralL2(AlgaeManipulatorSubsystem amSubsystem, ElevatorSubsystem eSubsystem, CommandSwerveDrivetrain sSubsystem) {
     this.algaeManipulatorSubsystem = amSubsystem;
     this.elevatorSubsystem = eSubsystem;
     this.swerveSubsystem = sSubsystem;
@@ -39,11 +41,12 @@ public class ManualCoralL2 extends Command {
     this.waitTimer = new Timer();
 
     // Shifting setup
-    this.shiftBackCommand = this.swerveSubsystem
-        .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.2, () -> 0) // -0.3
-            .withControllerRotationAxis(() -> 0)
-            .deadband(0)
-            .scaleTranslation(0.8));
+    // this.shiftBackCommand = this.swerveSubsystem
+    //     .drive(SwerveInputStream.of(this.swerveSubsystem.getSwerveDrive(), () -> -0.2, () -> 0) // -0.3
+    //         .withControllerRotationAxis(() -> 0)
+    //         .deadband(0)
+    //         .scaleTranslation(0.8));
+    this.shiftBackCommand = Commands.none();
     this.shiftBackTrigger = new Trigger(() -> this.shiftBack);
     this.shiftBackTrigger.whileTrue(shiftBackCommand);
   }
