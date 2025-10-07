@@ -14,7 +14,6 @@ import frc.robot.Constants.ElevatorSubsystemConstants.Level;
 import frc.robot.subsystems.AlgaeManipulatorSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ElevatorSubsystem;
-import swervelib.SwerveInputStream;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ManualCoralL2 extends Command {

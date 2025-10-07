@@ -17,7 +17,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.generated.TunerConstants;
-import swervelib.math.Matter;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -39,8 +38,8 @@ public final class Constants {
 
   public static class SwerveSubsystemConstants {
     public static double MaxCapableSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    public static double MaxPercentageAllowed = 0.4;
-    public static double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond);
+    public static double MaxPercentageAllowed = 0.6;
+    public static double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     public static final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -52,9 +51,9 @@ public final class Constants {
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
 
-    public static final double MAX_SPEED = Units.feetToMeters(11.2); // 12.78 is max speed the robot is capable of
-    public static final double ROBOT_MASS = Units.lbsToKilograms(107);
-    public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); // TODO:
+    // public static final double MAX_SPEED = Units.feetToMeters(11.2); // 12.78 is max speed the robot is capable of
+    // public static final double ROBOT_MASS = Units.lbsToKilograms(107);
+    // public static final Matter CHASSIS = new Matter(new Translation3d(0.0, 0.0, Units.inchesToMeters(8)), ROBOT_MASS); // TODO:
                                                                                                                        // update
                                                                                                                        // with
                                                                                                                        // actual
@@ -129,7 +128,7 @@ public final class Constants {
 
     public static final Distance FLOOR_LEVEL = Inches.of(0);
     public static final Distance FLOOR_COLLECT_LEVEL = Inches.of(4.5); // 4.5
-    public static final Distance CORAL_LOADING_LEVEL = Inches.of(4.5); // 4.5
+    public static final Distance CORAL_LOADING_LEVEL = Inches.of(5); // 4.5
     public static final Distance TROUGH_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L2_LEVEL = FLOOR_LEVEL;
     public static final Distance CORAL_L3_LEVEL = Inches.of(14); // 14
@@ -137,7 +136,7 @@ public final class Constants {
     public static final Distance ALGAE_L1_LEVEL = Inches.of(20); // 20
     public static final Distance ALGAE_L2_LEVEL = Inches.of(30); // 30
 
-    public static final Distance CORAL_L4_LEVEL = Inches.of(43); // 43
+    public static final Distance CORAL_L4_LEVEL = Inches.of(44.5); // 43
     public static final Distance NET_LEVEL = Inches.of(60); //60
   }
 

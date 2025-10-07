@@ -43,13 +43,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move to R6 From NR"
+            "pathName": "Move to Opponent R2 from Net"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "CollectAlgaeFromReefL3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Move to Opponent Side Net from Opponent R2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreInNet"
           }
         }
       ]

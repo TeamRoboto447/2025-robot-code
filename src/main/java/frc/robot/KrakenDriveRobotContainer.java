@@ -37,6 +37,7 @@ import frc.robot.commands.drivebase.DriveToSelectedReef;
 import frc.robot.commands.elevator.ElevatorDebuggingControlCommand;
 import frc.robot.commands.multisystem.ManualAlgaeL1;
 import frc.robot.commands.multisystem.AlgaeL2Command;
+import frc.robot.commands.multisystem.AutoAlgaeL1;
 import frc.robot.commands.multisystem.ManualAlgaeNet;
 import frc.robot.commands.multisystem.ManualAlgaeProcessor;
 import frc.robot.commands.multisystem.ManualCoralL1;
@@ -376,7 +377,7 @@ public class KrakenDriveRobotContainer {
   private void initializeNamedCommands() {
     // Collection Commands
     NamedCommands.registerCommand("AlgaeL1Only",
-        new ManualAlgaeL1(this.algaeManipulatorSubsystem, this.elevatorSubsystem));
+        new AutoAlgaeL1(this.algaeManipulatorSubsystem, this.elevatorSubsystem));
 
     NamedCommands.registerCommand("CollectAlgaeFromReefL2",
         new CoralL3AlgaeL1Command(algaeManipulatorSubsystem, elevatorSubsystem));
@@ -425,7 +426,7 @@ public class KrakenDriveRobotContainer {
             }),
             new WaitCommand(0.25)),
         algaeManipulatorSubsystem.tiltToAngle(Degrees.of(90)),
-        this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR)));
+        this.elevatorSubsystem.nonHaltingMoveElevatorToLevel(Level.ALGAE_L2)));
 
     // Elevator Commands
     NamedCommands.registerCommand("MoveToFloor", this.elevatorSubsystem.moveElevatorToLevel(Level.FLOOR));

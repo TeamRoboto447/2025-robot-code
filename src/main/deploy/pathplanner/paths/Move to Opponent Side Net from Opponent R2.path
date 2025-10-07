@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.1499999999999995,
-        "y": 2.87
+        "x": 12.372750000000002,
+        "y": 5.204749999999999
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.978963607381659,
-        "y": 3.13823241374986
+        "x": 11.7585,
+        "y": 5.4777499999999995
       },
       "isLocked": false,
-      "linkedName": "Right Netside Reef"
+      "linkedName": "Opposing R2"
     },
     {
       "anchor": {
-        "x": 5.9670000000000005,
-        "y": 0.9
+        "x": 10.296,
+        "y": 5.73125
       },
       "prevControl": {
-        "x": 6.149311790543984,
-        "y": 0.5520959550560762
+        "x": 11.193,
+        "y": 5.86775
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Processor"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.42551181102362245,
-      "rotationDegrees": -75.5185696503651
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.97102193107912
+    "rotation": 179.29268063145577
   },
   "reversed": false,
   "folder": "Live",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -58.39249775375104
   },
   "useDefaultConstraints": true
 }

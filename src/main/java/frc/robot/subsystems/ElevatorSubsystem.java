@@ -80,7 +80,10 @@ public class ElevatorSubsystem extends SubsystemBase {
       return true;
     return false;
   }
-  
+  public Command nonHaltingMoveElevatorToLevel(Level level) {
+    return this.runOnce(() -> this.setElevatorTargetHeight(level));
+  }
+
   public Command moveElevatorToLevel(Level level) {
     return new FunctionalCommand(
         // Command init
