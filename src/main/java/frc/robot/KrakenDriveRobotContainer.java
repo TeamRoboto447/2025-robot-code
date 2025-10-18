@@ -246,7 +246,7 @@ public class KrakenDriveRobotContainer {
     this.operatorStreamdeck.algaeOuttake
         .whileTrue(this.algaeManipulatorSubsystem.run(() -> {
           if (this.operatorStreamdeck.getCurrentScheme() == ControlScheme.LEGACY)
-            this.algaeManipulatorSubsystem.outtakeAlgae(0.5);
+            this.algaeManipulatorSubsystem.outtakeAlgae(0.25); // 0.5
         }));
 
     this.operatorStreamdeck.coralIntake

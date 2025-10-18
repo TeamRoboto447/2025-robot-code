@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(this.elevatorLowerLimit.get() && RobotState.isDisabled()) {
+    if(this.elevatorLowerLimit.get() ){ //&& RobotState.isDisabled()) {
       this.elevatorEncoder.setPosition(0);
     }
     // This method will be called once per scheduler run

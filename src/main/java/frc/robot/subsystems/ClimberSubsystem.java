@@ -38,6 +38,7 @@ public class ClimberSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Climber/Position", this.climberMotor.getEncoder().getPosition());
+    SmartDashboard.putBoolean("Climber/Limit Switch", this.lowerLimitSwitch.get());
     moveMotorRaw(currentSpeed);
   }
 
